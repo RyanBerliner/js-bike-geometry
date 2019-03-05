@@ -9,10 +9,12 @@ Geometry that can be changed:
  - chain stay length
  - bb height
  - Seat tube angle
+ - effective top tube
 
 To accomplish the the user needs to locate the following points on the image of the
 bike:
  - front/rear axle
+ - ground
  - bb
  - head tube
  - effective seat tube

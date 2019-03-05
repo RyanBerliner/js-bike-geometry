@@ -12,12 +12,15 @@ export default class PreviewFrame extends React.Component {
   changeImage(e) {
     this.setState({
       image: e.target.value
-    })
+    });
   }
 
   render() {
     return <div>
-      <GeoInitializer img={this.state.image} />
+      <div style={{width: '90%', border: '1px solid black', margin: '10px auto'}}>
+        <GeoInitializer img={this.state.image}/>
+      </div>
+
       <div>
         <input type="text" value={this.state.image} onChange={this.changeImage.bind(this)} />
       </div>
