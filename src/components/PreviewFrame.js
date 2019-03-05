@@ -1,5 +1,6 @@
 import React from 'react'
 import GeoInitializer from './GeoInitializer';
+import GeoPlayground from './GeoPlayground';
 
 export default class PreviewFrame extends React.Component {
   constructor(props) {
@@ -13,7 +14,8 @@ export default class PreviewFrame extends React.Component {
 
   changeImage(e) {
     this.setState({
-      image: e.target.value
+      image: e.target.value,
+      mode: 'initialize'
     });
   }
 
@@ -24,7 +26,7 @@ export default class PreviewFrame extends React.Component {
   }
 
   render() {
-    let windowView = (this.state.mode == 'initialize') ? <GeoInitializer img={this.state.image} changeMode={this.changeMode}/> : 'Done with the things.';
+    let windowView = (this.state.mode == 'initialize') ? <GeoInitializer img={this.state.image} changeMode={this.changeMode}/> : <GeoPlayground />;
     return <div>
       <div style={{width: '90%', border: '1px solid black', margin: '10px auto'}}>
         {windowView}
