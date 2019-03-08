@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { Component } from 'react'
 
-export default class GeoInitializer extends React.Component {
+export default class GeoInitializer extends Component {
   constructor(props) {
     super(props);
     this.processes = [
@@ -75,13 +75,18 @@ export default class GeoInitializer extends React.Component {
   }
 
   done() {
+    let image = document.getElementById('bike-image');
+    let dimensions = this.state.imageMeta;
+    dimensions.height = image.clientHeight;
+    dimensions.width = image.clientWidth;
+    this.props.changeDimensions(dimensions);
     this.props.changeMode('playground');
   }
 
   selectDimension() {
     let currentStep = this.processes[this.state.stepIndex];
     let currentDimens = this.state.imageMeta;
-    currentDimens[this.processes[this.state.stepIndex][1]] = (currentStep[0] == 'x') ? this.state.mouseXPerc : this.state.mouseYPerc;
+    currentDimens[this.processes[this.state.stepIndex][1]] = (currentStep[0] === 'x') ? this.state.mouseXPerc : this.state.mouseYPerc;
     this.setState({
       imageMeta: currentDimens
     });
@@ -89,18 +94,24 @@ export default class GeoInitializer extends React.Component {
       this.setState({
         stepIndex: this.state.stepIndex + 1
       });
+    } else {
+      this.done();
     }
+  }
+
+  componentDidMount() {
+
   }
 
   render() {
     return <div className={'geo-initializer'} style={{position: 'relative', overflow: 'hidden'}} >
-      <img src={this.props.img} width={'100%'} id={'bike-image'} onMouseMove={this.onMouseMove.bind(this)} onClick={this.selectDimension.bind(this)}/>
+      <img ref="img" alt={'bike'} src={this.props.img} width={'100%'} id={'bike-image'} onMouseMove={this.onMouseMove.bind(this)} onClick={this.selectDimension.bind(this)}/>
       {true &&
         <div className={'editing-axis'}>
-          {this.processes[this.state.stepIndex][0] == 'x' &&
+          {this.processes[this.state.stepIndex][0] === 'x' &&
             <div className={'x-axis'} style={{pointerEvents: 'none',position: 'absolute', top: this.state.mouseY, left: 0, height: 1, width: '100%', backgroundColor: 'black'}}></div>
           }
-          {this.processes[this.state.stepIndex][0] == 'y' &&
+          {this.processes[this.state.stepIndex][0] === 'y' &&
             <div className={'y-axis'} style={{pointerEvents: 'none',position: 'absolute', left: this.state.mouseX, top: 0, height: '100%', width: 1, backgroundColor: 'black'}}></div>
           }
         </div>
