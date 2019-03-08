@@ -4,7 +4,7 @@ import GeoCanvas from './../classes/GeoCanvas'
 export default class GeoPlayground extends Component {
 
   initializeCanvas() {
-    this.canvas = new GeoCanvas(this.refs.canvas);
+    this.canvas = new GeoCanvas(this.refs.canvas, this.props.dimensions);
     this.canvas.fixDPI();
   }
 
@@ -13,6 +13,8 @@ export default class GeoPlayground extends Component {
     this.img = this.refs.img;
     this.img.onload = (function() {
       this.canvas.placeImage(this.img);
+      this.canvas.drawGround();
+      this.canvas.drawBike();
     }).bind(this);
   }
 

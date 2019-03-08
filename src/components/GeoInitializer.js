@@ -4,18 +4,18 @@ export default class GeoInitializer extends Component {
   constructor(props) {
     super(props);
     this.processes = [
-      ['x', 'groundY', 'Select the vertical height of the ground'],
-      ['x', 'axlesY', 'Select the vertical height of the axles'],
-      ['x', 'bbY', 'Select the vertical height of the bb'],
-      ['x', 'saddleY', 'Select the vertical height of the top of the saddle'],
-      ['x', 'htTopY', 'Select the vertical height of the top of the head tube'],
-      ['x', 'htBottomY', 'Select the vertical height of the bottom of the head tube'],
-      ['y', 'rAxleX', 'Select the horizontal level of the rear axle'],
-      ['y', 'fAxleX', 'Select the horizontal level of the front axle'],
-      ['y', 'bbX', 'Select the horizontal level of the bb'],
-      ['y', 'saddleX', 'Select the horizontal level directly under the saddle'],
-      ['y', 'htTopX', 'Select the horizontal level of the top of the head tube'],
-      ['y', 'htBottomX', 'Select the horizontal level of the bottom of the head tube']
+      ['y', 'groundY', 'Select the vertical height of the ground'],
+      ['y', 'axlesY', 'Select the vertical height of the axles'],
+      ['y', 'bbY', 'Select the vertical height of the bb'],
+      ['y', 'saddleY', 'Select the vertical height of the top of the saddle'],
+      ['y', 'htTopY', 'Select the vertical height of the top of the head tube'],
+      ['y', 'htBottomY', 'Select the vertical height of the bottom of the head tube'],
+      ['x', 'rAxleX', 'Select the horizontal level of the rear axle'],
+      ['x', 'fAxleX', 'Select the horizontal level of the front axle'],
+      ['x', 'bbX', 'Select the horizontal level of the bb'],
+      ['x', 'saddleX', 'Select the horizontal level directly under the saddle'],
+      ['x', 'htTopX', 'Select the horizontal level of the top of the head tube'],
+      ['x', 'htBottomX', 'Select the horizontal level of the bottom of the head tube']
     ]
     this.state = {
       mouseX: 0,
@@ -36,18 +36,19 @@ export default class GeoInitializer extends Component {
         // htTopX: null,
         // htBottomY: null,
         // htBottomX: null,
-        axlesY:0.5976627712854758,
-        bbX:0.6182336182336182,
-        bbY:0.5976627712854758,
-        fAxleX:0.4843304843304843,
-        groundY:0.6043405676126878,
-        htBottomX:0.7891737891737892,
-        htBottomY:0.9048414023372288,
-        htTopX:0.7977207977207977,
-        htTopY:0.8998330550918197,
-        rAxleX:0.4415954415954416,
-        saddleX:0.7777777777777778,
-        saddleY:0.5692821368948247
+        // These are temps so I don't need to select them every time.
+        axlesY:0.6618589743589743,
+        bbX:0.41611996251171507,
+        bbY:0.6682692307692307,
+        fAxleX:0.795688847235239,
+        groundY:0.9455128205128205,
+        htBottomX:0.6588566073102156,
+        htBottomY:0.24358974358974358,
+        htTopX:0.6307403936269915,
+        htTopY:0.15224358974358973,
+        rAxleX:0.19868791002811623,
+        saddleX:0.3336457357075914,
+        saddleY:0.11378205128205128
       }
     }
   }
@@ -108,10 +109,10 @@ export default class GeoInitializer extends Component {
       <img ref="img" alt={'bike'} src={this.props.img} width={'100%'} id={'bike-image'} onMouseMove={this.onMouseMove.bind(this)} onClick={this.selectDimension.bind(this)}/>
       {true &&
         <div className={'editing-axis'}>
-          {this.processes[this.state.stepIndex][0] === 'x' &&
+          {this.processes[this.state.stepIndex][0] === 'y' &&
             <div className={'x-axis'} style={{pointerEvents: 'none',position: 'absolute', top: this.state.mouseY, left: 0, height: 1, width: '100%', backgroundColor: 'black'}}></div>
           }
-          {this.processes[this.state.stepIndex][0] === 'y' &&
+          {this.processes[this.state.stepIndex][0] === 'x' &&
             <div className={'y-axis'} style={{pointerEvents: 'none',position: 'absolute', left: this.state.mouseX, top: 0, height: '100%', width: 1, backgroundColor: 'black'}}></div>
           }
         </div>
