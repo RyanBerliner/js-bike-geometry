@@ -44,6 +44,8 @@ class GeoCanvas {
    */
   drawBike() {
     this.drawAxlesAndBB();
+    this.drawEffectSeatTube();
+    this.drawHeadTube();
   }
 
   /**
@@ -51,6 +53,7 @@ class GeoCanvas {
    * @return {[type]} [description]
    */
   drawGround() {
+    this.ctx.strokeStyle = "black";
     this.ctx.beginPath();
     this.ctx.moveTo(0, this.percToPix(false, this.bike.groundLevel));
     this.ctx.lineTo(this.canvas.width, this.percToPix(false, this.bike.groundLevel));
@@ -63,6 +66,27 @@ class GeoCanvas {
     this.ctx.fillRect(this.percToPix(true, this.bike.frontAxle.x)-(size/2), this.percToPix(false, this.bike.frontAxle.y)-(size/2), size, size);
     this.ctx.fillRect(this.percToPix(true, this.bike.rearAxle.x)-(size/2), this.percToPix(false, this.bike.rearAxle.y)-(size/2), size, size);
     this.ctx.fillRect(this.percToPix(true, this.bike.bb.x)-(size/2), this.percToPix(false, this.bike.bb.y)-(size/2), size, size);
+  }
+
+  drawEffectSeatTube() {
+    let est = this.bike.effectiveSeatTube();
+    this.ctx.strokeStyle = "yellow";
+    this.ctx.beginPath();
+    this.ctx.lineWidth = 10;
+    this.ctx.moveTo(this.percToPix(true, est.topX), this.percToPix(false, est.topY));
+    this.ctx.lineTo(this.percToPix(true, est.bottomX), this.percToPix(false, est.bottomY));
+    this.ctx.stroke();
+  }
+
+  drawHeadTube() {
+    let ht = this.bike.headTube();
+    console.log(ht);
+    this.ctx.strokeStyle = "yellow";
+    this.ctx.beginPath();
+    this.ctx.lineWidth = 10;
+    this.ctx.moveTo(this.percToPix(true, ht.topX), this.percToPix(false, ht.topY));
+    this.ctx.lineTo(this.percToPix(true, ht.bottomX), this.percToPix(false, ht.bottomY));
+    this.ctx.stroke();
   }
 
   /**
