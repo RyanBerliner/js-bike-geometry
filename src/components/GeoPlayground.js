@@ -15,6 +15,7 @@ export default class GeoPlayground extends Component {
       this.canvas.placeImage(this.img);
       this.canvas.drawGround();
       this.canvas.drawBike();
+      this.canvas.slackFork(40);
     }).bind(this);
   }
 

@@ -46,6 +46,7 @@ class GeoCanvas {
     this.drawAxlesAndBB();
     this.drawEffectSeatTube();
     this.drawHeadTube();
+    this.drawKindaFork();
   }
 
   /**
@@ -80,13 +81,27 @@ class GeoCanvas {
 
   drawHeadTube() {
     let ht = this.bike.headTube();
-    console.log(ht);
     this.ctx.strokeStyle = "yellow";
     this.ctx.beginPath();
     this.ctx.lineWidth = 10;
     this.ctx.moveTo(this.percToPix(true, ht.topX), this.percToPix(false, ht.topY));
     this.ctx.lineTo(this.percToPix(true, ht.bottomX), this.percToPix(false, ht.bottomY));
     this.ctx.stroke();
+  }
+
+  drawKindaFork() {
+    let fork = this.bike.kindaFork();
+    this.ctx.strokeStyle = "red";
+    this.ctx.beginPath();
+    this.ctx.lineWidth = 10;
+    this.ctx.moveTo(this.percToPix(true, fork.topX), this.percToPix(false, fork.topY));
+    this.ctx.lineTo(this.percToPix(true, fork.bottomX), this.percToPix(false, fork.bottomY));
+    this.ctx.stroke();
+  }
+
+  slackFork(units) {
+    this.bike.slackFork(units / this.canvas.width);
+    this.drawBike();
   }
 
   /**
