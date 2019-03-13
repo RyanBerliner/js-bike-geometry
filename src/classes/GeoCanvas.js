@@ -56,17 +56,17 @@ class GeoCanvas {
   drawGround() {
     this.ctx.strokeStyle = "black";
     this.ctx.beginPath();
-    this.ctx.moveTo(0, this.percToPix(false, this.bike.groundLevel));
-    this.ctx.lineTo(this.canvas.width, this.percToPix(false, this.bike.groundLevel));
+    this.ctx.moveTo(0, this.bike.groundLevel);
+    this.ctx.lineTo(this.canvas.width, this.bike.groundLevel);
     this.ctx.stroke();
   }
 
   drawAxlesAndBB() {
     let size = 20;
     this.ctx.fillStyle = "yellow";
-    this.ctx.fillRect(this.percToPix(true, this.bike.frontAxle.x)-(size/2), this.percToPix(false, this.bike.frontAxle.y)-(size/2), size, size);
-    this.ctx.fillRect(this.percToPix(true, this.bike.rearAxle.x)-(size/2), this.percToPix(false, this.bike.rearAxle.y)-(size/2), size, size);
-    this.ctx.fillRect(this.percToPix(true, this.bike.bb.x)-(size/2), this.percToPix(false, this.bike.bb.y)-(size/2), size, size);
+    this.ctx.fillRect(this.bike.frontAxle.x-(size/2), this.bike.frontAxle.y-(size/2), size, size);
+    this.ctx.fillRect(this.bike.rearAxle.x-(size/2), this.bike.rearAxle.y-(size/2), size, size);
+    this.ctx.fillRect(this.bike.bb.x-(size/2), this.bike.bb.y-(size/2), size, size);
   }
 
   drawEffectSeatTube() {
@@ -74,8 +74,8 @@ class GeoCanvas {
     this.ctx.strokeStyle = "yellow";
     this.ctx.beginPath();
     this.ctx.lineWidth = 10;
-    this.ctx.moveTo(this.percToPix(true, est.topX), this.percToPix(false, est.topY));
-    this.ctx.lineTo(this.percToPix(true, est.bottomX), this.percToPix(false, est.bottomY));
+    this.ctx.moveTo(est.topX, est.topY);
+    this.ctx.lineTo(est.bottomX, est.bottomY);
     this.ctx.stroke();
   }
 
@@ -84,8 +84,8 @@ class GeoCanvas {
     this.ctx.strokeStyle = "yellow";
     this.ctx.beginPath();
     this.ctx.lineWidth = 10;
-    this.ctx.moveTo(this.percToPix(true, ht.topX), this.percToPix(false, ht.topY));
-    this.ctx.lineTo(this.percToPix(true, ht.bottomX), this.percToPix(false, ht.bottomY));
+    this.ctx.moveTo(ht.topX, ht.topY);
+    this.ctx.lineTo(ht.bottomX, ht.bottomY);
     this.ctx.stroke();
   }
 
@@ -94,25 +94,14 @@ class GeoCanvas {
     this.ctx.strokeStyle = "red";
     this.ctx.beginPath();
     this.ctx.lineWidth = 10;
-    this.ctx.moveTo(this.percToPix(true, fork.topX), this.percToPix(false, fork.topY));
-    this.ctx.lineTo(this.percToPix(true, fork.bottomX), this.percToPix(false, fork.bottomY));
+    this.ctx.moveTo(fork.topX, fork.topY);
+    this.ctx.lineTo(fork.bottomX, fork.bottomY);
     this.ctx.stroke();
   }
 
   slackFork(units) {
-    this.bike.slackFork(units / this.canvas.width);
+    this.bike.slackFork(units);
     this.drawBike();
-  }
-
-  /**
-   * Converts percentage to pixel amount
-   * @param  {[boolean]} width Are we talking about width?
-   * @param  {[type]} perc  [description]
-   * @return {[type]}       [description]
-   */
-  percToPix(width, perc) {
-    let multipler = (width) ? this.canvas.width : this.canvas.height;
-    return perc * multipler;
   }
 
 }

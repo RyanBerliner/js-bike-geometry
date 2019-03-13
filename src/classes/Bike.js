@@ -48,6 +48,7 @@ class Bike {
   slackFork(units) {
     let kindaForkLength = this.getKindaForkLength();
     let initialAngle = this.getKindaForkAngle();
+    // console.log(this.frontAxle.x);
     this.frontAxle.x += units;
     // let a = this.headTubeTop.x - this.frontAxle.x;
     // let newStack = Math.sqrt(Math.pow(kindaForkLength, 2) - Math.pow(a, 2));
