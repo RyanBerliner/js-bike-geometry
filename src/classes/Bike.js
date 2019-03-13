@@ -47,16 +47,26 @@ class Bike {
    */
   slackFork(units) {
     let kindaForkLength = this.getKindaForkLength();
+    let headTubeLength = this.getHeadTubeLength();
     let initialAngle = this.getKindaForkAngle();
-    console.log("kinda fork length", kindaForkLength);
-    // console.log(this.frontAxle.x);
-    let newFrontAxleX = this.frontAxle.x + units;
-    let a = Math.sqrt(Math.pow(kindaForkLength, 2) - Math.pow(newFrontAxleX - this.headTubeTop.x, 2));
-    let newHeadTubeTopY = this.frontAxle.y - a;
-    this.frontAxle.x = newFrontAxleX;
-    this.headTubeTop.y = newHeadTubeTopY;
-    console.log("front axle x", this.frontAxle.x, newFrontAxleX);
-    console.log("head tube top", this.headTubeTop.x, newHeadTubeTopY);
+    let frontAxle = this.frontAxle;
+    let headTubeTop = this.headTubeTop;
+    let headTubeBottom = this.headTubeBottom;
+
+    frontAxle.x += units;
+    headTubeTop.y = frontAxle.y - Math.sqrt(Math.pow(kindaForkLength, 2) - Math.pow(frontAxle.x - headTubeTop.x, 2));
+
+    // We've moved the front axle, and top of the head tube. Let find where to put the
+    // bottom of the head tube.
+
+    // headTubeBottom.x = (this.headTubeBottom.x * frontAxle.x) / this.frontAxle.x;
+    // headTubeBottom.y = (this.headTubeBottom.y * headTubeTop.y) / this.headTubeTop.y;
+
+    console.log(this.headTubeBottom, headTubeBottom, initialAngle, this.getKindaForkAngleManual(headTubeTop, frontAxle));
+
+    this.frontAxle = frontAxle;
+    this.headTubeTop = headTubeTop;
+    this.headTubeBottom = headTubeBottom;
   }
 
   /**
@@ -65,19 +75,34 @@ class Bike {
    * @return {[type]}          [description]
    */
   getKindaForkLength() {
-    let a = this.frontAxle.x - this.headTubeTop.x;
-    let b = this.frontAxle.y - this.headTubeTop.y;
-    console.log("a", a);
-    console.log("b", b);
-    let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-    console.log("c", c);
-    console.log("dimensions", this.frontAxle, this.headTubeTop);
-    return c;
+    return Bike.getDistance(this.frontAxle, this.headTubeTop);
+  }
+
+  /**
+   * Get the head tube length.
+   * @return {[type]} [description]
+   */
+  getHeadTubeLength() {
+    return Bike.getDistance(this.headTubeBottom, this.headTubeTop);
   }
 
   getKindaForkAngle() {
-    let adjacent = this.frontAxle.x - this.headTubeTop.x;
-    let hypotenuse = this.getKindaForkLength();
+    return this.getKindaForkAngleManual(this.headTubeTop, this.frontAxle);
+  }
+
+  getKindaForkAngleManual(headTubeTop, frontAxle) {
+    return Bike.getAngle(headTubeTop, frontAxle);
+  }
+
+  static getDistance(point1, point2) {
+    let a = point1.x - point2.x;
+    let b = point1.y - point2.y;
+    return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+  }
+
+  static getAngle(point1, point2) {
+    let adjacent = point1.x - point2.x;
+    let hypotenuse = Bike.getDistance(point1, point2);
     let angleRad = Math.acos(adjacent/hypotenuse);
     return angleRad * 180 / Math.PI;
   }

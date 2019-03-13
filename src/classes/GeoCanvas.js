@@ -22,6 +22,7 @@ class GeoCanvas {
    * @return {[type]}     [description]
    */
   placeImage(img) {
+    this.img = img;
     this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
   }
 
@@ -47,6 +48,12 @@ class GeoCanvas {
     this.drawEffectSeatTube();
     this.drawHeadTube();
     this.drawKindaFork();
+  }
+
+  redrawBike() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.placeImage(this.img);
+    this.drawBike();
   }
 
   /**
@@ -101,7 +108,7 @@ class GeoCanvas {
 
   slackFork(units) {
     this.bike.slackFork(units);
-    this.drawBike();
+    this.redrawBike();
   }
 
 }
