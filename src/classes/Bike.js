@@ -48,11 +48,15 @@ class Bike {
   slackFork(units) {
     let kindaForkLength = this.getKindaForkLength();
     let initialAngle = this.getKindaForkAngle();
+    console.log("kinda fork length", kindaForkLength);
     // console.log(this.frontAxle.x);
-    this.frontAxle.x += units;
-    // let a = this.headTubeTop.x - this.frontAxle.x;
-    // let newStack = Math.sqrt(Math.pow(kindaForkLength, 2) - Math.pow(a, 2));
-    // this.headTubeTop.y = this.frontAxle.y + newStack;
+    let newFrontAxleX = this.frontAxle.x + units;
+    let a = Math.sqrt(Math.pow(kindaForkLength, 2) - Math.pow(newFrontAxleX - this.headTubeTop.x, 2));
+    let newHeadTubeTopY = this.frontAxle.y - a;
+    this.frontAxle.x = newFrontAxleX;
+    this.headTubeTop.y = newHeadTubeTopY;
+    console.log("front axle x", this.frontAxle.x, newFrontAxleX);
+    console.log("head tube top", this.headTubeTop.x, newHeadTubeTopY);
   }
 
   /**
@@ -62,8 +66,13 @@ class Bike {
    */
   getKindaForkLength() {
     let a = this.frontAxle.x - this.headTubeTop.x;
-    let b = this.headTubeTop.y - this.frontAxle.y;
-    return Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+    let b = this.frontAxle.y - this.headTubeTop.y;
+    console.log("a", a);
+    console.log("b", b);
+    let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+    console.log("c", c);
+    console.log("dimensions", this.frontAxle, this.headTubeTop);
+    return c;
   }
 
   getKindaForkAngle() {
