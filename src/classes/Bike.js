@@ -1,6 +1,7 @@
 class Bike {
 
   constructor(dimensions) {
+    this.og = dimensions;
     this.frontAxle = {x: dimensions.fAxleX, y: dimensions.axlesY};
     this.rearAxle = {x: dimensions.rAxleX, y: dimensions.axlesY};
     this.bb = {x: dimensions.bbX, y: dimensions.bbY};
@@ -53,7 +54,7 @@ class Bike {
     let headTubeTop = this.headTubeTop;
     let headTubeBottom = this.headTubeBottom;
 
-    frontAxle.x += units;
+    frontAxle.x = this.og.fAxleX + units;
     headTubeTop.y = frontAxle.y - Math.sqrt(Math.pow(kindaForkLength, 2) - Math.pow(frontAxle.x - headTubeTop.x, 2));
 
     // We've moved the front axle, and top of the head tube. Let find where to put the

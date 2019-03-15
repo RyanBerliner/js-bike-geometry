@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import GeoCanvas from './../classes/GeoCanvas'
+import Slider from 'material-ui/Slider'
 
 export default class GeoPlayground extends Component {
 
@@ -10,14 +11,13 @@ export default class GeoPlayground extends Component {
     }
   }
 
-  changeSlack(e) {
+  changeSlack(event, value) {
     this.setState({
-      slack: parseInt(e.target.value)
+      slack: value
     }, this.redraw());
   }
 
   redraw() {
-    console.log(this.state.slack);
     this.canvas.slackFork(this.state.slack);
   }
 
@@ -43,7 +43,13 @@ export default class GeoPlayground extends Component {
         <canvas ref="canvas" style={{position: 'absolute', left: 0, top: 0, width: '100%', height: '100%'}}/>
         <img ref="img" src={this.props.img} style={{display: 'none'}} alt={'bike'}/>
       </div>
-      <input type="number" value={this.state.slack} onChange={this.changeSlack.bind(this)} />
+      <Slider
+          value={this.state.slack}
+          aria-labelledby="label"
+          onChange={this.changeSlack.bind(this)}
+          min={-40}
+          max={40}
+        />
     </div>
   }
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PreviewFrame from './components/PreviewFrame';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class App extends Component {
   constructor(props) {
@@ -11,9 +12,11 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App" style={{backgroundColor: '#efefef'}}>
-        <PreviewFrame mode={this.state.configure}/>
-      </div>
+      <MuiThemeProvider>
+        <div className="App" style={{backgroundColor: '#efefef'}}>
+          <PreviewFrame mode={this.state.configure}/>
+        </div>
+      </MuiThemeProvider>
     );
   }
 }
