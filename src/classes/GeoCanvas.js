@@ -90,7 +90,7 @@ class GeoCanvas {
     let ht = this.bike.headTube();
     this.ctx.strokeStyle = "yellow";
     this.ctx.beginPath();
-    this.ctx.lineWidth = 10;
+    this.ctx.lineWidth = 20;
     this.ctx.moveTo(ht.topX, ht.topY);
     this.ctx.lineTo(ht.bottomX, ht.bottomY);
     this.ctx.stroke();

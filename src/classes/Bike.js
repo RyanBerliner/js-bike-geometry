@@ -9,6 +9,11 @@ class Bike {
     this.headTubeTop = {x: dimensions.htTopX, y: dimensions.htTopY};
     this.headTubeBottom = {x: dimensions.htBottomX, y: dimensions.htBottomY};
     this.groundLevel = dimensions.groundY;
+    this.correctDimensions();
+  }
+
+  correctDimensions() {
+    this.slackFork(0);
   }
 
   effectiveSeatTube() {
@@ -60,10 +65,14 @@ class Bike {
     // We've moved the front axle, and top of the head tube. Let find where to put the
     // bottom of the head tube.
 
-    // headTubeBottom.x = (this.headTubeBottom.x * frontAxle.x) / this.frontAxle.x;
-    // headTubeBottom.y = (this.headTubeBottom.y * headTubeTop.y) / this.headTubeTop.y;
+    let newAngle = Bike.getAngle(frontAxle, headTubeTop);
+    let b = Bike.cosin(newAngle) * headTubeLength;
+    let c = Bike.sin(newAngle) * headTubeLength;
+    console.log(b, c);
 
-    console.log(this.headTubeBottom, headTubeBottom, initialAngle, this.getKindaForkAngleManual(headTubeTop, frontAxle));
+    headTubeBottom.x = headTubeTop.x + b;
+    headTubeBottom.y = headTubeTop.y + c;
+    // console.log(headTubeBottom.y);
 
     this.frontAxle = frontAxle;
     this.headTubeTop = headTubeTop;
@@ -88,7 +97,7 @@ class Bike {
   }
 
   getKindaForkAngle() {
-    return this.getKindaForkAngleManual(this.headTubeTop, this.frontAxle);
+    return this.getKindaForkAngleManual(this.frontAxle, this.headTubeTop);
   }
 
   getKindaForkAngleManual(headTubeTop, frontAxle) {
@@ -105,7 +114,15 @@ class Bike {
     let adjacent = point1.x - point2.x;
     let hypotenuse = Bike.getDistance(point1, point2);
     let angleRad = Math.acos(adjacent/hypotenuse);
-    return angleRad * 180 / Math.PI;
+    return angleRad;
+  }
+
+  static cosin(angle) {
+    return Math.cos(angle);
+  }
+
+  static sin(angle) {
+    return Math.sin(angle);
   }
 
   toString() {
