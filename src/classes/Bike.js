@@ -2,6 +2,11 @@ class Bike {
 
   constructor(dimensions) {
     this.og = dimensions;
+    this.setDimensions(dimensions);
+    this.correctDimensions();
+  }
+
+  setDimensions(dimensions) {
     this.frontAxle = {x: dimensions.fAxleX, y: dimensions.axlesY};
     this.rearAxle = {x: dimensions.rAxleX, y: dimensions.axlesY};
     this.bb = {x: dimensions.bbX, y: dimensions.bbY};
@@ -10,6 +15,10 @@ class Bike {
     this.headTubeBottom = {x: dimensions.htBottomX, y: dimensions.htBottomY};
     this.groundLevel = dimensions.groundY;
     this.correctDimensions();
+  }
+
+  resetDimensions() {
+    this.setDimensions(this.og);
   }
 
   correctDimensions() {
@@ -68,11 +77,9 @@ class Bike {
     let newAngle = Bike.getAngle(frontAxle, headTubeTop);
     let b = Bike.cosin(newAngle) * headTubeLength;
     let c = Bike.sin(newAngle) * headTubeLength;
-    console.log(b, c);
 
     headTubeBottom.x = headTubeTop.x + b;
     headTubeBottom.y = headTubeTop.y + c;
-    // console.log(headTubeBottom.y);
 
     this.frontAxle = frontAxle;
     this.headTubeTop = headTubeTop;

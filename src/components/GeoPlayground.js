@@ -6,15 +6,23 @@ export default class GeoPlayground extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
+    this.initialState = {
       slack: 0
-    }
+    };
+    this.state = this.initialState;
   }
 
   changeSlack(event, value) {
     this.setState({
       slack: value
     }, this.redraw());
+  }
+
+  resetPlayground(event) {
+    this.setState(this.initialState, function() {
+      this.canvas.bike.resetDimensions();
+      this.redraw();
+    }.bind(this));
   }
 
   redraw() {
@@ -50,6 +58,7 @@ export default class GeoPlayground extends Component {
           min={-40}
           max={40}
         />
+      <button onClick={this.resetPlayground.bind(this)}>Reset</button>
     </div>
   }
 
