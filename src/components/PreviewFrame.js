@@ -6,7 +6,7 @@ export default class PreviewFrame extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      image: 'https://www.commencalusa.com/Files/106799/Img/20/19METAAMRSI_2000.jpg',
+      image: 'bike-image-1.jpg',
       mode: 'initialize',
       OGdimensions: {}
     }

@@ -7,7 +7,8 @@ export default class GeoPlayground extends Component {
   constructor(props) {
     super(props);
     this.initialState = {
-      slack: 0
+      slack: 0,
+      distort: 0
     };
     this.state = this.initialState;
   }
@@ -18,11 +19,21 @@ export default class GeoPlayground extends Component {
     }, this.redraw());
   }
 
+  changeDistort(event, value) {
+    this.setState({
+      distort: value
+    }, this.distort());
+  }
+
   resetPlayground(event) {
     this.setState(this.initialState, function() {
       this.canvas.bike.resetDimensions();
       this.redraw();
     }.bind(this));
+  }
+
+  distort() {
+    this.canvas.distort(this.state.distort);
   }
 
   redraw() {
@@ -57,6 +68,14 @@ export default class GeoPlayground extends Component {
           onChange={this.changeSlack.bind(this)}
           min={-40}
           max={40}
+        />
+      <Slider
+          value={this.state.distort}
+          aria-labelledby="label"
+          onChange={this.changeDistort.bind(this)}
+          min={0}
+          max={100}
+          step={5}
         />
       <button onClick={this.resetPlayground.bind(this)}>Reset</button>
     </div>
