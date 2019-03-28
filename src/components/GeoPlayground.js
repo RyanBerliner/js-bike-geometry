@@ -64,6 +64,7 @@ export default class GeoPlayground extends Component {
         <canvas ref="canvas" style={{position: 'absolute', left: 0, top: 0, width: '100%', height: '100%'}}/>
         <img ref="img" src={this.props.img} style={{display: 'none'}} alt={'bike'}/>
       </div>
+      <p>Change bike geo</p>
       <Slider
           value={this.state.slack}
           aria-labelledby="label"
@@ -71,6 +72,7 @@ export default class GeoPlayground extends Component {
           min={-40}
           max={40}
         />
+      <p>Test canvas distort</p>
       <Slider
           value={this.state.distort}
           aria-labelledby="label"
