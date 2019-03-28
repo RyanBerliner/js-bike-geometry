@@ -34,8 +34,8 @@ export default class GeoInitializer extends Component {
         // htTopX: null,
         // htBottomY: null,
         // htBottomX: null,
-        // These are temps so I don't need to select them every time.
 
+        // These are temps so I don't need to select them every time when testing.
         axlesY:332,
         bbX:358,
         bbY:335,

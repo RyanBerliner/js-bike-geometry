@@ -1,4 +1,4 @@
-#JS Bike Geometry
+# JS Bike Geometry
 
 A javascript powered embed that allows you to manipulate the geometry of mountain
 bikes. Does so by letting the user select an image, specify key points on the image,
@@ -22,8 +22,14 @@ bike:
 From this we can build a base 'stick figure' of the bike. Adjustments of the geometry
 will be made to this stick figure, and will acts a a distortion template for the image.
 
+# Image distortion
 
-##DEVELOPMENT
+All image distortion is done with 3 actions.
+- Rotation
+- Translation
+- Stretch/smudge/something/blend to smooth edges??
+
+## DEVELOPMENT
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

@@ -14,15 +14,17 @@ export default class GeoPlayground extends Component {
   }
 
   changeSlack(event, value) {
+    this.redraw(value);
     this.setState({
       slack: value
-    }, this.redraw());
+    });
   }
 
   changeDistort(event, value) {
+    this.distort(value)
     this.setState({
       distort: value
-    }, this.distort());
+    });
   }
 
   resetPlayground(event) {
@@ -32,12 +34,12 @@ export default class GeoPlayground extends Component {
     }.bind(this));
   }
 
-  distort() {
-    this.canvas.distort(this.state.distort);
+  distort(amount) {
+    this.canvas.distort(amount);
   }
 
-  redraw() {
-    this.canvas.slackFork(this.state.slack);
+  redraw(amount) {
+    this.canvas.slackFork(amount);
   }
 
   initializeCanvas() {
@@ -49,7 +51,7 @@ export default class GeoPlayground extends Component {
     this.initializeCanvas();
     this.img = this.refs.img;
     this.img.onload = (function() {
-      this.canvas.placeImage(this.img);
+      this.canvas.placeOrigionalImage(this.img);
       this.canvas.drawGround();
       this.canvas.drawBike();
     }).bind(this);

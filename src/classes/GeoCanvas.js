@@ -1,18 +1,12 @@
 import Bike from './Bike';
+import CanvasDistort from './CanvasDistort';
 
 class GeoCanvas {
 
   constructor(canvas, bikeDimensions) {
     this.canvas = canvas;
     this.bike = new Bike(bikeDimensions);
-    this.setupCanvas()
-  }
-
-  /**
-   * Preps the canvas.
-   * @return {[type]} [description]
-   */
-  setupCanvas() {
+    this.canvasDistort = new CanvasDistort(this.canvas);
     this.ctx = this.canvas.getContext("2d");
   }
 
@@ -21,11 +15,10 @@ class GeoCanvas {
    * @param  {[type]} img [description]
    * @return {[type]}     [description]
    */
-  placeImage(img) {
+  placeOrigionalImage(img) {
     this.img = img;
     this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
-    console.log('set image data');
-    this.ogImageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+    this.canvasDistort.initialize(this.ctx.getImageData(0,0,this.canvas.width, this.canvas.height));
   }
 
   /**
@@ -50,16 +43,12 @@ class GeoCanvas {
     this.drawEffectSeatTube();
     this.drawHeadTube();
     this.drawKindaFork();
-    console.log('set image data');
-    this.ogImageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  redrawBike() {
+  update() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.placeImage(this.img);
+    this.canvasDistort.update();
     this.drawBike();
-    console.log('set image data');
-    this.ogImageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
   }
 
   /**
@@ -114,56 +103,13 @@ class GeoCanvas {
 
   slackFork(units) {
     this.bike.slackFork(units);
-    this.redrawBike();
-  }
-
-  getOrigonalImageData() {
-    return this.ogImageData;
+    this.update();
   }
 
   distort(units) {
-
-    // testing things
-    let imageDataData = Object.assign({}, this.ogImageData);
-    let imageData = this.ctx.createImageData(this.canvas.width, this.canvas.height);
-    for (var i = 0; i < imageDataData.data.length; i++) {
-      imageData.data[i] = imageDataData.data[i];
-    }
-    // loop through rows 200 -> 400
-    for (var y = 200; y < 400; y++) {
-      for (var x = 200; x < 400; x++) {
-        let color = GeoCanvas.getColorForCoord(this.ogImageData, x, y);
-        imageData = GeoCanvas.setColorForCoord(imageData, x + units, y, color);
-      }
-    }
-    this.ctx.putImageData(imageData, 0, 0);
-    
+    this.canvasDistort.translate(units);
+    this.update();
   }
-
-  static getColorIndicesForCoord(imageData, x, y) {
-    const red = y * (imageData.width * 4) + x * 4;
-    return [red, red + 1, red + 2, red + 3];
-  }
-
-  static setColorForCoord(imageData, x, y, color) {
-    const [redIndex, greenIndex, blueIndex, alphaIndex] = GeoCanvas.getColorIndicesForCoord(imageData, x, y);
-    imageData.data[redIndex] = color.r;
-    imageData.data[greenIndex] = color.g;
-    imageData.data[blueIndex] = color.b;
-    imageData.data[alphaIndex] = color.a;
-    return imageData;
-  }
-
-  static getColorForCoord(imageData, x, y) {
-    const [redIndex, greenIndex, blueIndex, alphaIndex] = GeoCanvas.getColorIndicesForCoord(imageData, x, y);
-    return {
-      r: imageData.data[redIndex],
-      g: imageData.data[greenIndex],
-      b: imageData.data[blueIndex],
-      a: imageData.data[alphaIndex]
-    };
-  }
-
 }
 
 export default GeoCanvas;
