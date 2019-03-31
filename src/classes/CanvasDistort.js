@@ -19,10 +19,15 @@ class CanvasDistort {
     }
     for (var i = 0; i < pixels.length; i++) {
       let pixel = pixels[i];
-      let newX = Math.floor(pixel.x + (deltax * pixel.fade));
-      let newY = Math.floor(pixel.y + (deltay * pixel.fade));
+      let trueDeltaX = Math.abs(Math.floor(deltax * pixel.fade));
+      let trueDeltaY = Math.abs(Math.floor(deltay * pixel.fade));
       let color = CanvasDistort.getColorForCoord(this.origionalImageData, pixel.x, pixel.y);
-      imageData = CanvasDistort.setColorForCoord(imageData, newX, newY, color);
+
+      // imageData = CanvasDistort.setColorForCoord(imageData, pixel.x + trueDeltaX, pixel.y + trueDeltaY, color);
+      for (var j = 7; j > 0; j--) {
+        imageData = CanvasDistort.setColorForCoord(imageData, pixel.x + Math.ceil(trueDeltaX / j), pixel.y + Math.ceil(trueDeltaY / j), color);
+      }
+
     }
     this.imageData = imageData;
   }
