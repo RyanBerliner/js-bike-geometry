@@ -107,7 +107,13 @@ class GeoCanvas {
   }
 
   distort(units) {
-    this.canvasDistort.translate(units);
+    let pixels = [];
+    for (var y = 200; y < 400; y++) {
+      for (var x = 200; x < 400; x++) {
+        pixels.push({x: x, y: y});
+      }
+    }
+    this.canvasDistort.translate(pixels, units, units);
     this.update();
   }
 }

@@ -11,18 +11,16 @@ class CanvasDistort {
     this.origionalImageData = imageData;
   }
 
-  translate(units) {
+  translate(pixels, deltax, deltay) {
     let imageDataData = Object.assign({}, this.origionalImageData);
     let imageData = this.ctx.createImageData(this.canvas.width, this.canvas.height);
     for (var i = 0; i < imageDataData.data.length; i++) {
       imageData.data[i] = imageDataData.data[i];
     }
-    // loop through rows 200 -> 400
-    for (var y = 200; y < 400; y++) {
-      for (var x = 200; x < 400; x++) {
-        let color = CanvasDistort.getColorForCoord(this.origionalImageData, x, y);
-        imageData = CanvasDistort.setColorForCoord(imageData, x + units, y, color);
-      }
+    for (var i = 0; i < pixels.length; i++) {
+      let pixel = pixels[i];
+      let color = CanvasDistort.getColorForCoord(this.origionalImageData, pixel.x, pixel.y);
+      imageData = CanvasDistort.setColorForCoord(imageData, pixel.x + deltax, pixel.y + deltay, color);
     }
     this.imageData = imageData;
   }
