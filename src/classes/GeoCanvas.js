@@ -110,11 +110,22 @@ class GeoCanvas {
     let pixels = [];
     for (var y = 200; y < 400; y++) {
       for (var x = 200; x < 400; x++) {
-        let fade = (y - x) / 200;
+        // Calculate the fade based on the distance from an edge
+        let rightDistance = 400 - x;
+        let leftDistance = x - 200;
+        let minDistance = Math.min(rightDistance, leftDistance);
+
+        function smoothstep(min, max, value) {
+          var x = Math.max(0, Math.min(1, (value-min)/(max-min)));
+          return x*x*(3 - 2*x);
+        }
+
+        let fade = smoothstep(0, 100, minDistance);
+        // let fade = (dist) / 200;
         pixels.push({x: x, y: y, fade: fade});
       }
     }
-    this.canvasDistort.translate(pixels, units, units);
+    this.canvasDistort.translate(pixels, units, 0);
     this.update();
   }
 }

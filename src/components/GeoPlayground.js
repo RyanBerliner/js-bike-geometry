@@ -70,7 +70,7 @@ export default class GeoPlayground extends Component {
           value={this.state.distort}
           aria-labelledby="label"
           onChange={this.changeDistort.bind(this)}
-          min={0}
+          min={-100}
           max={100}
           step={5}
         />
