@@ -19,8 +19,10 @@ class CanvasDistort {
     }
     for (var i = 0; i < pixels.length; i++) {
       let pixel = pixels[i];
+      let newX = Math.floor(pixel.x + (deltax * pixel.fade));
+      let newY = Math.floor(pixel.y + (deltay * pixel.fade));
       let color = CanvasDistort.getColorForCoord(this.origionalImageData, pixel.x, pixel.y);
-      imageData = CanvasDistort.setColorForCoord(imageData, pixel.x + deltax, pixel.y + deltay, color);
+      imageData = CanvasDistort.setColorForCoord(imageData, newX, newY, color);
     }
     this.imageData = imageData;
   }

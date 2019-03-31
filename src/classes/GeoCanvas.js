@@ -110,7 +110,8 @@ class GeoCanvas {
     let pixels = [];
     for (var y = 200; y < 400; y++) {
       for (var x = 200; x < 400; x++) {
-        pixels.push({x: x, y: y});
+        let fade = (y - x) / 200;
+        pixels.push({x: x, y: y, fade: fade});
       }
     }
     this.canvasDistort.translate(pixels, units, units);
