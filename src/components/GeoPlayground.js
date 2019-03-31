@@ -27,13 +27,6 @@ export default class GeoPlayground extends Component {
     });
   }
 
-  resetPlayground(event) {
-    this.setState(this.initialState, function() {
-      this.canvas.bike.resetDimensions();
-      this.redraw();
-    }.bind(this));
-  }
-
   distort(amount) {
     this.canvas.distort(amount);
   }
@@ -81,7 +74,6 @@ export default class GeoPlayground extends Component {
           max={100}
           step={5}
         />
-      <button onClick={this.resetPlayground.bind(this)}>Reset</button>
     </div>
   }
 
