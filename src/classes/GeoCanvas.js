@@ -111,9 +111,17 @@ class GeoCanvas {
     for (var y = 200; y < 400; y++) {
       for (var x = 200; x < 400; x++) {
         // Calculate the fade based on the distance from an edge
-        let rightDistance = 400 - x;
-        let leftDistance = x - 200;
-        let minDistance = Math.min(rightDistance, leftDistance);
+        let rightXDistance = 400 - x;
+        let leftXDistance = x - 200;
+
+        let minXDistance = Math.min(rightXDistance, leftXDistance);
+
+        let topYDistance = 400 - y;
+        let bottomYDistance = y - 200;
+
+        let minYDistance = Math.min(topYDistance, bottomYDistance);
+
+        let minDistance = Math.min(minXDistance, minYDistance);
 
         function smoothstep(min, max, value) {
           var x = Math.max(0, Math.min(1, (value-min)/(max-min)));
@@ -125,7 +133,7 @@ class GeoCanvas {
         pixels.push({x: x, y: y, fade: fade});
       }
     }
-    this.canvasDistort.translate(pixels, units, 0);
+    this.canvasDistort.translate(pixels, units, units);
     this.update();
   }
 }
