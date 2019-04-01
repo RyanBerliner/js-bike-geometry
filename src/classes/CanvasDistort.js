@@ -17,15 +17,33 @@ class CanvasDistort {
     for (var i = 0; i < imageDataData.data.length; i++) {
       imageData.data[i] = imageDataData.data[i];
     }
+
     for (var i = 0; i < pixels.length; i++) {
       let pixel = pixels[i];
-      let trueDeltaX = Math.abs(Math.floor(deltax * pixel.fade));
-      let trueDeltaY = Math.abs(Math.floor(deltay * pixel.fade));
+      let trueDeltaX = Math.floor(deltax * pixel.fade);
+      let trueDeltaY = Math.floor(deltay * pixel.fade);
       let color = CanvasDistort.getColorForCoord(this.origionalImageData, pixel.x, pixel.y);
 
       // imageData = CanvasDistort.setColorForCoord(imageData, pixel.x + trueDeltaX, pixel.y + trueDeltaY, color);
-      for (var j = 7; j > 0; j--) {
-        imageData = CanvasDistort.setColorForCoord(imageData, pixel.x + Math.ceil(trueDeltaX / j), pixel.y + Math.ceil(trueDeltaY / j), color);
+      // if (deltax < 0) {
+      //   for (var j = 0; j < 10; j++) {
+      //     let dx = Math.floor(trueDeltaX / 10 * j);
+      //     let dy = Math.floor(trueDeltaY / 10 * j);
+      //     imageData = CanvasDistort.setColorForCoord(imageData, pixel.x + dx, pixel.y + dy, color);
+      //   }
+      // } else {
+      //   for (var j = 0; j < 10; j++) {
+      //     let dx = Math.floor(trueDeltaX / 10 * j);
+      //     let dy = Math.floor(trueDeltaY / 10 * j);
+      //     imageData = CanvasDistort.setColorForCoord(imageData, pixel.x + dx, pixel.y + dy, color);
+      //   }
+      // }
+
+      let maxDelta = Math.max(Math.abs(trueDeltaX), Math.abs(trueDeltaY));
+      for (var j = 0; j < maxDelta; j++) {
+        let dx = Math.floor(trueDeltaX / maxDelta * j);
+        let dy = Math.floor(trueDeltaY / maxDelta * j);
+        imageData = CanvasDistort.setColorForCoord(imageData, pixel.x + dx, pixel.y + dy, color);
       }
 
     }

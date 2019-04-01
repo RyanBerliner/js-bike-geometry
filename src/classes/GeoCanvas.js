@@ -108,32 +108,33 @@ class GeoCanvas {
 
   distort(units) {
     let pixels = [];
-    for (var y = 200; y < 400; y++) {
-      for (var x = 200; x < 400; x++) {
-        // Calculate the fade based on the distance from an edge
-        let rightXDistance = 400 - x;
-        let leftXDistance = x - 200;
+    let leftTop = 200;
+    let rightBottom = 400;
 
+    function smoothstep(min, max, value) {
+      var x = Math.max(0, Math.min(1, (value-min)/(max-min)));
+      return x * x * (3 - 2 * x);
+    }
+
+    for (var y = leftTop; y < rightBottom; y++) {
+      for (var x = leftTop; x < rightBottom; x++) {
+        // Calculate the fade based on the distance from an edge
+        let rightXDistance = rightBottom - x;
+        let leftXDistance = x - leftTop;
         let minXDistance = Math.min(rightXDistance, leftXDistance);
 
-        let topYDistance = 400 - y;
-        let bottomYDistance = y - 200;
-
+        let topYDistance = rightBottom - y;
+        let bottomYDistance = y - leftTop;
         let minYDistance = Math.min(topYDistance, bottomYDistance);
 
         let minDistance = Math.min(minXDistance, minYDistance);
 
-        function smoothstep(min, max, value) {
-          var x = Math.max(0, Math.min(1, (value-min)/(max-min)));
-          return x*x*(3 - 2*x);
-        }
-
-        let fade = smoothstep(0, 100, minDistance);
-        // let fade = (dist) / 200;
+        let fade = smoothstep(0, ((rightBottom - leftTop) / 2), minDistance);
+        // pixels.push({x: x, y: y, fade: fade});
         pixels.push({x: x, y: y, fade: fade});
       }
     }
-    this.canvasDistort.translate(pixels, units, units);
+    this.canvasDistort.translate(pixels, units, 0);
     this.update();
   }
 }
