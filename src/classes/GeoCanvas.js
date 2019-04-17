@@ -131,7 +131,7 @@ class GeoCanvas {
 
         let fade = smoothstep(0, ((rightBottom - leftTop) / 2), minDistance);
         // pixels.push({x: x, y: y, fade: fade});
-        pixels.push({x: x, y: y, fade: fade});
+        pixels.push({x: x, y: y, fade: 1});
       }
     }
     this.canvasDistort.translate(pixels, units, 0);

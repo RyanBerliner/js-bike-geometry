@@ -24,21 +24,6 @@ class CanvasDistort {
       let trueDeltaY = Math.floor(deltay * pixel.fade);
       let color = CanvasDistort.getColorForCoord(this.origionalImageData, pixel.x, pixel.y);
 
-      // imageData = CanvasDistort.setColorForCoord(imageData, pixel.x + trueDeltaX, pixel.y + trueDeltaY, color);
-      // if (deltax < 0) {
-      //   for (var j = 0; j < 10; j++) {
-      //     let dx = Math.floor(trueDeltaX / 10 * j);
-      //     let dy = Math.floor(trueDeltaY / 10 * j);
-      //     imageData = CanvasDistort.setColorForCoord(imageData, pixel.x + dx, pixel.y + dy, color);
-      //   }
-      // } else {
-      //   for (var j = 0; j < 10; j++) {
-      //     let dx = Math.floor(trueDeltaX / 10 * j);
-      //     let dy = Math.floor(trueDeltaY / 10 * j);
-      //     imageData = CanvasDistort.setColorForCoord(imageData, pixel.x + dx, pixel.y + dy, color);
-      //   }
-      // }
-
       let maxDelta = Math.max(Math.abs(trueDeltaX), Math.abs(trueDeltaY));
       for (var j = 0; j < maxDelta; j++) {
         let dx = Math.floor(trueDeltaX / maxDelta * j);
