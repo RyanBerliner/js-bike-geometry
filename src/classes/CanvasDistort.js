@@ -18,17 +18,17 @@ class CanvasDistort {
       imageData.data[i] = imageDataData.data[i];
     }
 
+    console.log(Math.floor(deltax));
+
     for (var i = 0; i < pixels.length; i++) {
       let pixel = pixels[i];
-      let trueDeltaX = Math.floor(deltax * pixel.fade);
-      let trueDeltaY = Math.floor(deltay * pixel.fade);
+      let trueDeltaX = Math[deltax > 0 ? 'floor' : 'ceil'](deltax * pixel.fade);
+      let trueDeltaY = Math[deltay > 0 ? 'floor' : 'ceil'](deltay * pixel.fade);
       let color = CanvasDistort.getColorForCoord(this.origionalImageData, pixel.x, pixel.y);
 
-      let maxDelta = Math.max(Math.abs(trueDeltaX), Math.abs(trueDeltaY));
-      for (var j = 0; j < maxDelta; j++) {
-        let dx = Math.floor(trueDeltaX / maxDelta * j);
-        let dy = Math.floor(trueDeltaY / maxDelta * j);
-        imageData = CanvasDistort.setColorForCoord(imageData, pixel.x + dx, pixel.y + dy, color);
+      for (var j = 0; trueDeltaX > 0 ? j < trueDeltaX: j > trueDeltaX; trueDeltaX > 0 ? j++ : j--) {
+        let color = CanvasDistort.getColorForCoord(this.origionalImageData, pixel.x + j, pixel.y);
+        imageData = CanvasDistort.setColorForCoord(imageData, pixel.x, pixel.y + trueDeltaY, color);
       }
 
     }

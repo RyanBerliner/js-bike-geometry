@@ -8,7 +8,8 @@ export default class GeoPlayground extends Component {
     super(props);
     this.initialState = {
       slack: 0,
-      distort: 0
+      distortX: 0,
+      distortY: 0,
     };
     this.state = this.initialState;
   }
@@ -20,15 +21,22 @@ export default class GeoPlayground extends Component {
     });
   }
 
-  changeDistort(event, value) {
-    this.distort(value)
+  changeDistortX(event, value) {
+    this.distort(value, this.state.distortY);
     this.setState({
-      distort: value
+      distortX: value
     });
   }
 
-  distort(amount) {
-    this.canvas.distort(amount);
+  changeDistortY(event, value) {
+    this.distort(this.state.distortX, value);
+    this.setState({
+      distortY: value
+    });
+  }
+
+  distort(x, y) {
+    this.canvas.distort(x, y);
   }
 
   redraw(amount) {
@@ -66,10 +74,20 @@ export default class GeoPlayground extends Component {
           max={40}
         />
       <p>Test canvas distort</p>
+      <p>Distory X</p>
       <Slider
-          value={this.state.distort}
+          value={this.state.distortX}
           aria-labelledby="label"
-          onChange={this.changeDistort.bind(this)}
+          onChange={this.changeDistortX.bind(this)}
+          min={-50}
+          max={50}
+          step={1}
+        />
+      <p>Distory Y</p>
+      <Slider
+          value={this.state.distortY}
+          aria-labelledby="label"
+          onChange={this.changeDistortY.bind(this)}
           min={-50}
           max={50}
           step={1}
