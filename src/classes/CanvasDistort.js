@@ -34,17 +34,6 @@ class CanvasDistort {
     this.ctx.putImageData(this.imageData, 0, 0);
   }
 
-  static arraysEqual(arr1, arr2) {
-      if(arr1.length !== arr2.length)
-          return false;
-      for(var i = arr1.length; i--;) {
-          if(arr1[i] !== arr2[i])
-              return false;
-      }
-
-      return true;
-  }
-
   static getColorIndicesForCoord(imageData, x, y) {
     const red = y * (imageData.width * 4) + x * 4;
     return [red, red + 1, red + 2, red + 3];
