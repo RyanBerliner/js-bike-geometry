@@ -12,26 +12,21 @@ class CanvasDistort {
   }
 
   translate(pixels, deltax, deltay) {
-    let imageDataData = Object.assign({}, this.origionalImageData);
     let imageData = this.ctx.createImageData(this.canvas.width, this.canvas.height);
-    for (var i = 0; i < imageDataData.data.length; i++) {
-      imageData.data[i] = imageDataData.data[i];
-    }
 
-    console.log(Math.floor(deltax));
+    this.imageData.data.forEach((data, i) => {
+      imageData.data[i] = data;
+    });
 
     for (var i = 0; i < pixels.length; i++) {
       let pixel = pixels[i];
       let trueDeltaX = Math[deltax > 0 ? 'floor' : 'ceil'](deltax * pixel.fade);
       let trueDeltaY = Math[deltay > 0 ? 'floor' : 'ceil'](deltay * pixel.fade);
-      let color = CanvasDistort.getColorForCoord(this.origionalImageData, pixel.x, pixel.y);
 
-      for (var j = 0; trueDeltaX > 0 ? j < trueDeltaX: j > trueDeltaX; trueDeltaX > 0 ? j++ : j--) {
-        let color = CanvasDistort.getColorForCoord(this.origionalImageData, pixel.x + j, pixel.y);
-        imageData = CanvasDistort.setColorForCoord(imageData, pixel.x, pixel.y + trueDeltaY, color);
-      }
-
+      let color = CanvasDistort.getColorForCoord(this.origionalImageData, pixel.x - trueDeltaX, pixel.y - trueDeltaY);
+      imageData = CanvasDistort.setColorForCoord(imageData, pixel.x, pixel.y, color);
     }
+
     this.imageData = imageData;
   }
 

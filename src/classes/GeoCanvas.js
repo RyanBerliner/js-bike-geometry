@@ -106,7 +106,7 @@ class GeoCanvas {
     this.update();
   }
 
-  distort(units) {
+  distort(xunits, yunits) {
     let pixels = [];
     let leftTop = 200;
     let rightBottom = 400;
@@ -134,7 +134,7 @@ class GeoCanvas {
       }
     }
 
-    this.canvasDistort.translate(pixels, units, 0);
+    this.canvasDistort.translate(pixels, xunits, yunits);
     this.update();
   }
 }
