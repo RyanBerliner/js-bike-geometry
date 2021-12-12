@@ -20,7 +20,6 @@ class CanvasDistort {
     });
 
     angle = angle * (Math.PI / 180);
-    console.log(angle);
 
     for (var i = 0; i < pixels.length; i++) {
       let pixel = pixels[i];

@@ -11,6 +11,7 @@ export default class GeoPlayground extends Component {
       distortX: 0,
       distortY: 0,
       rotationDeg: 0,
+      rotationOrigin: 300,
     };
     this.state = this.initialState;
   }
@@ -37,9 +38,16 @@ export default class GeoPlayground extends Component {
   }
 
   changeRotationDeg(event, value) {
-    this.rotate(value)
+    this.rotate(value, this.state.rotationOrigin)
     this.setState({
       rotationDeg: value
+    });
+  }
+
+  changeRotationOrigin(event) {
+    this.rotate(this.state.rotationDeg, event.target.value);
+    this.setState({
+      rotationOrigin: event.target.value
     });
   }
 
@@ -47,8 +55,9 @@ export default class GeoPlayground extends Component {
     this.canvas.distort(x, y);
   }
 
-  rotate(deg) {
-    this.canvas.rotate(deg);
+  rotate(deg, origin) {
+    origin = parseInt(origin);
+    this.canvas.rotate(deg, {x: origin, y: origin});
   } 
 
   redraw(amount) {
@@ -78,6 +87,13 @@ export default class GeoPlayground extends Component {
         <img ref="img" src={this.props.img} style={{display: 'none'}} alt={'bike'}/>
       </div>
       <p>Test canvas distort</p>
+      <p>Rotation origin</p>
+      <input
+        type="number"
+        value={this.state.rotationOrigin}
+        onChange={this.changeRotationOrigin.bind(this)}
+        step={25}
+      />
       <p>Rotation Degrees</p>
       <Slider
           value={this.state.rotationDeg}

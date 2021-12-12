@@ -106,7 +106,7 @@ class GeoCanvas {
     this.update();
   }
 
-  rotate(deg) {
+  rotate(deg, origin) {
     let pixels = [];
     let leftTop = 200;
     let rightBottom = 400;
@@ -134,7 +134,7 @@ class GeoCanvas {
       }
     }
 
-    this.canvasDistort.rotate(pixels, {x: 300, y: 300}, deg);
+    this.canvasDistort.rotate(pixels, origin, deg);
     this.update();
   }
 
