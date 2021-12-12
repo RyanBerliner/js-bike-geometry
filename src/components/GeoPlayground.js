@@ -10,6 +10,7 @@ export default class GeoPlayground extends Component {
       slack: 0,
       distortX: 0,
       distortY: 0,
+      rotationDeg: 0,
     };
     this.state = this.initialState;
   }
@@ -35,9 +36,20 @@ export default class GeoPlayground extends Component {
     });
   }
 
+  changeRotationDeg(event, value) {
+    this.rotate(value)
+    this.setState({
+      rotationDeg: value
+    });
+  }
+
   distort(x, y) {
     this.canvas.distort(x, y);
   }
+
+  rotate(deg) {
+    this.canvas.rotate(deg);
+  } 
 
   redraw(amount) {
     this.canvas.slackFork(amount);
@@ -65,15 +77,16 @@ export default class GeoPlayground extends Component {
         <canvas ref="canvas" style={{position: 'absolute', left: 0, top: 0, width: '100%', height: '100%'}}/>
         <img ref="img" src={this.props.img} style={{display: 'none'}} alt={'bike'}/>
       </div>
-      <p>Change bike geo</p>
-      <Slider
-          value={this.state.slack}
-          aria-labelledby="label"
-          onChange={this.changeSlack.bind(this)}
-          min={-40}
-          max={40}
-        />
       <p>Test canvas distort</p>
+      <p>Rotation Degrees</p>
+      <Slider
+          value={this.state.rotationDeg}
+          aria-labelledby="label"
+          onChange={this.changeRotationDeg.bind(this)}
+          min={-359}
+          max={359}
+          step={1}
+        />
       <p>Distory X</p>
       <Slider
           value={this.state.distortX}
@@ -91,6 +104,14 @@ export default class GeoPlayground extends Component {
           min={-50}
           max={50}
           step={1}
+        />
+            <p>Change bike geo</p>
+      <Slider
+          value={this.state.slack}
+          aria-labelledby="label"
+          onChange={this.changeSlack.bind(this)}
+          min={-40}
+          max={40}
         />
     </div>
   }

@@ -11,6 +11,38 @@ class CanvasDistort {
     this.origionalImageData = imageData;
   }
 
+  // todo: implement
+  rotate(pixels, {x: originX, y: originY}, angle) {
+    let imageData = this.ctx.createImageData(this.canvas.width, this.canvas.height);
+
+    this.imageData.data.forEach((data, i) => {
+      imageData.data[i] = data;
+    });
+
+    angle = angle * (Math.PI / 180);
+    console.log(angle);
+
+    for (var i = 0; i < pixels.length; i++) {
+      let pixel = pixels[i];
+      // translate to do rotation around origin
+      let [tempx, tempy] = [pixel.x - originX, pixel.y - originY]
+      let rotatedx = (tempx * Math.cos(angle)) - (tempy * Math.sin(angle));
+      let rotatedy = (tempy * Math.cos(angle)) + (tempx * Math.sin(angle));
+      // re-apply translation
+      let newX = rotatedx + originX, deltax = newX - pixel.x;
+      let newY = rotatedy + originY, deltay = newY - pixel.y;
+
+
+      let trueDeltaX = Math[deltax > 0 ? 'floor' : 'ceil'](deltax * pixel.fade);
+      let trueDeltaY = Math[deltay > 0 ? 'floor' : 'ceil'](deltay * pixel.fade);
+
+      let color = CanvasDistort.getColorForCoord(this.origionalImageData, pixel.x - trueDeltaX, pixel.y - trueDeltaY);
+      imageData = CanvasDistort.setColorForCoord(imageData, pixel.x, pixel.y, color);
+    }
+
+    this.imageData = imageData;
+  }
+
   translate(pixels, deltax, deltay) {
     let imageData = this.ctx.createImageData(this.canvas.width, this.canvas.height);
 

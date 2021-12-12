@@ -106,6 +106,38 @@ class GeoCanvas {
     this.update();
   }
 
+  rotate(deg) {
+    let pixels = [];
+    let leftTop = 200;
+    let rightBottom = 400;
+
+    function smoothstep(min, max, value) {
+      var x = Math.max(0, Math.min(1, (value-min)/(max-min)));
+      return x * x * (3 - 2 * x);
+    }
+
+    for (var y = leftTop; y < rightBottom; y++) {
+      for (var x = leftTop; x < rightBottom; x++) {
+        // Calculate the fade based on the distance from an edge
+        let rightXDistance = rightBottom - x;
+        let leftXDistance = x - leftTop;
+        let minXDistance = Math.min(rightXDistance, leftXDistance);
+
+        let topYDistance = rightBottom - y;
+        let bottomYDistance = y - leftTop;
+        let minYDistance = Math.min(topYDistance, bottomYDistance);
+
+        let minDistance = Math.min(minXDistance, minYDistance);
+
+        let fade = smoothstep(0, ((rightBottom - leftTop) / 2), minDistance);
+        pixels.push({x: x, y: y, fade: fade});
+      }
+    }
+
+    this.canvasDistort.rotate(pixels, {x: 300, y: 300}, deg);
+    this.update();
+  }
+
   distort(xunits, yunits) {
     let pixels = [];
     let leftTop = 200;
