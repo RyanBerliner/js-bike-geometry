@@ -4,6 +4,8 @@ class CanvasDistort {
     this.origionalImageData = null;
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
+
+    this.transformations = [{}, {}];  // temp, initialize 1 for each type. eventually this will be arbitraty and created on the fly
   }
 
   initialize(imageData) {
@@ -11,8 +13,47 @@ class CanvasDistort {
     this.origionalImageData = imageData;
   }
 
-  // todo: implement
-  rotate(pixels, {x: originX, y: originY}, angle) {
+  rotate(pixels, origin, angle) {
+    this.transformations[0] = {
+      type: 'rotation',
+      data: {
+        pixels,
+        origin,
+        angle
+      }
+    }
+
+    this.applyTransformations();
+  }
+
+  translate(pixels, deltax, deltay) {
+    this.transformations[1] = {
+      type: 'translate',
+      data: {
+        pixels,
+        deltax,
+        deltay
+      }
+    }
+
+    this.applyTransformations();
+  }
+
+  applyTransformations() {
+    let refImageData = this.origionalImageData;
+    this.transformations.forEach(transformation => {
+      if (transformation.type === 'rotation') {
+        refImageData = this.applyRotationTransformation(transformation.data, refImageData);
+      } else if (transformation.type === 'translate') {
+        refImageData = this.applyTranslateTransformation(transformation.data, refImageData);
+      }
+
+      this.update();
+    });
+  }
+
+  applyRotationTransformation(transformation, refImageData) {
+    let {pixels, origin: { x: originX, y: originY }, angle} = transformation;
     let imageData = this.ctx.createImageData(this.canvas.width, this.canvas.height);
 
     this.imageData.data.forEach((data, i) => {
@@ -35,14 +76,16 @@ class CanvasDistort {
       let trueDeltaX = Math[deltax > 0 ? 'floor' : 'ceil'](deltax * pixel.fade);
       let trueDeltaY = Math[deltay > 0 ? 'floor' : 'ceil'](deltay * pixel.fade);
 
-      let color = CanvasDistort.getColorForCoord(this.origionalImageData, pixel.x - trueDeltaX, pixel.y - trueDeltaY);
+      let color = CanvasDistort.getColorForCoord(refImageData, pixel.x - trueDeltaX, pixel.y - trueDeltaY);
       imageData = CanvasDistort.setColorForCoord(imageData, pixel.x, pixel.y, color);
     }
 
     this.imageData = imageData;
+    return imageData;
   }
 
-  translate(pixels, deltax, deltay) {
+  applyTranslateTransformation(transformation, refImageData) {
+    const {pixels, deltax, deltay} = transformation;
     let imageData = this.ctx.createImageData(this.canvas.width, this.canvas.height);
 
     this.imageData.data.forEach((data, i) => {
@@ -54,11 +97,12 @@ class CanvasDistort {
       let trueDeltaX = Math[deltax > 0 ? 'floor' : 'ceil'](deltax * pixel.fade);
       let trueDeltaY = Math[deltay > 0 ? 'floor' : 'ceil'](deltay * pixel.fade);
 
-      let color = CanvasDistort.getColorForCoord(this.origionalImageData, pixel.x - trueDeltaX, pixel.y - trueDeltaY);
+      let color = CanvasDistort.getColorForCoord(refImageData, pixel.x - trueDeltaX, pixel.y - trueDeltaY);
       imageData = CanvasDistort.setColorForCoord(imageData, pixel.x, pixel.y, color);
     }
 
     this.imageData = imageData;
+    return imageData;
   }
 
   update() {
