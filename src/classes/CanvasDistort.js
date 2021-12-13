@@ -28,8 +28,8 @@ class CanvasDistort {
       let rotatedx = (tempx * Math.cos(angle)) - (tempy * Math.sin(angle));
       let rotatedy = (tempy * Math.cos(angle)) + (tempx * Math.sin(angle));
       // re-apply translation
-      let newX = rotatedx + originX, deltax = newX - pixel.x;
-      let newY = rotatedy + originY, deltay = newY - pixel.y;
+      let newX = rotatedx + originX, deltax = pixel.x - newX;
+      let newY = rotatedy + originY, deltay = pixel.y - newY;
 
 
       let trueDeltaX = Math[deltax > 0 ? 'floor' : 'ceil'](deltax * pixel.fade);
