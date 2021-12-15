@@ -11,12 +11,17 @@ class GeoCanvas {
     this.cords = {};
   }
 
-  addCord(x, y, single = false) {
+  addCord(x, y, value = 1, single = false) {
     if (!this.cords[y]) {
       this.cords[y] = {};
     }
 
-    this.cords[y][x] = true;
+    if (!this.cords[y][x]) {
+      this.cords[y][x] = 0;
+    }
+
+    value += this.cords[y][x];
+    this.cords[y][x] = value > 1 ? 1 : value;
 
     if (single) {
       return;
@@ -24,7 +29,10 @@ class GeoCanvas {
 
     for (var i = -25; i < 25; i++) {
       for (var o = -25; o < 25; o++) {
-        this.addCord(x + i, y + o, true);
+        const absi = Math.abs(i);
+        const abso = Math.abs(o);
+        let val = 1 / (Math.max(absi, abso));
+        this.addCord(x + i, y + o, val > 1 ? 1 : val, true);
       }
     }
   }
@@ -58,10 +66,10 @@ class GeoCanvas {
    * @return {[type]} [description]
    */
   drawBike() {
-    this.drawAxlesAndBB();
-    this.drawEffectSeatTube();
-    this.drawHeadTube();
-    this.drawKindaFork();
+    // this.drawAxlesAndBB();
+    // this.drawEffectSeatTube();
+    // this.drawHeadTube();
+    // this.drawKindaFork();
   }
 
   update() {
@@ -130,7 +138,7 @@ class GeoCanvas {
 
     Object.keys(this.cords).forEach(y => {
       Object.keys(this.cords[y]).forEach(x => {
-        pixels.push({x: x, y: y, fade: 1});
+        pixels.push({x: x, y: y, fade: this.cords[y][x]});
       })
     });
 
