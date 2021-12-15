@@ -1,5 +1,6 @@
 import Bike from './Bike';
 import CanvasDistort from './CanvasDistort';
+import {mapdata} from './../forkdistortionmap';
 
 class GeoCanvas {
 
@@ -8,7 +9,7 @@ class GeoCanvas {
     this.bike = new Bike(bikeDimensions);
     this.canvasDistort = new CanvasDistort(this.canvas);
     this.ctx = this.canvas.getContext("2d");
-    this.cords = {};
+    this.cords = mapdata;
   }
 
   addCord(x, y, value = 1, single = false) {
