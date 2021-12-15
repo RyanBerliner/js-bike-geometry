@@ -8,6 +8,25 @@ class GeoCanvas {
     this.bike = new Bike(bikeDimensions);
     this.canvasDistort = new CanvasDistort(this.canvas);
     this.ctx = this.canvas.getContext("2d");
+    this.cords = {};
+  }
+
+  addCord(x, y, single = false) {
+    if (!this.cords[y]) {
+      this.cords[y] = {};
+    }
+
+    this.cords[y][x] = true;
+
+    if (single) {
+      return;
+    }
+
+    for (var i = -25; i < 25; i++) {
+      for (var o = -25; o < 25; o++) {
+        this.addCord(x + i, y + o, true);
+      }
+    }
   }
 
   /**
@@ -108,31 +127,12 @@ class GeoCanvas {
 
   rotate(deg, origin) {
     let pixels = [];
-    let leftTop = 200;
-    let rightBottom = 400;
 
-    function smoothstep(min, max, value) {
-      var x = Math.max(0, Math.min(1, (value-min)/(max-min)));
-      return x * x * (3 - 2 * x);
-    }
-
-    for (var y = leftTop; y < rightBottom; y++) {
-      for (var x = leftTop; x < rightBottom; x++) {
-        // Calculate the fade based on the distance from an edge
-        let rightXDistance = rightBottom - x;
-        let leftXDistance = x - leftTop;
-        let minXDistance = Math.min(rightXDistance, leftXDistance);
-
-        let topYDistance = rightBottom - y;
-        let bottomYDistance = y - leftTop;
-        let minYDistance = Math.min(topYDistance, bottomYDistance);
-
-        let minDistance = Math.min(minXDistance, minYDistance);
-
-        let fade = smoothstep(0, ((rightBottom - leftTop) / 2), minDistance);
-        pixels.push({x: x, y: y, fade: fade});
-      }
-    }
+    Object.keys(this.cords).forEach(y => {
+      Object.keys(this.cords[y]).forEach(x => {
+        pixels.push({x: x, y: y, fade: 1});
+      })
+    });
 
     this.canvasDistort.rotate(pixels, origin, deg);
     this.update();

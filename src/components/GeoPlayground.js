@@ -16,6 +16,8 @@ export default class GeoPlayground extends Component {
     };
     this.state = this.initialState;
     this.canvasEl = React.createRef();
+    this.position = {x: 0, y: 0};
+    this.drawing = false;
   }
 
   changeSlack(event, value) {
@@ -59,7 +61,8 @@ export default class GeoPlayground extends Component {
 
   rotate(deg, origin) {
     origin = parseInt(origin);
-    this.canvas.rotate(deg, {x: origin, y: origin});
+    const {htTopX, htTopY, htBottomX, htBottomY} = this.props.dimensions;
+    this.canvas.rotate(deg, {x: (htTopX + htBottomX) / 2, y: (htTopY + htBottomY) / 2});
   } 
 
   redraw(amount) {
@@ -84,12 +87,50 @@ export default class GeoPlayground extends Component {
     }).bind(this);
   }
 
+  startDraw = e => {
+    this.drawing = true;
+    this.setPosition(e);
+  }
+
+  stopDraw = () => {
+    this.drawing = false;
+  }
+
+  setPosition = e => {
+    const {scale} = this.state;
+    const rect = this.canvasEl.current.getBoundingClientRect();
+    const leftStart = rect.left;
+    const topStart = rect.top;
+    this.position.x = Math.floor((e.clientX - leftStart) * (1/scale));
+    this.position.y = Math.floor((e.clientY - topStart) * (1/scale));
+  }
+
+  draw = (e) => {
+    if (!this.drawing) {
+      return
+    }
+
+    this.canvas.ctx.beginPath(); // begin
+
+    this.canvas.ctx.lineWidth = 50;
+    this.canvas.ctx.lineCap = 'round';
+    this.canvas.ctx.strokeStyle = 'rgba(255,0,0,1)';
+
+    this.canvas.ctx.moveTo(this.position.x, this.position.y);
+    this.setPosition(e);
+    this.canvas.ctx.lineTo(this.position.x, this.position.y);
+
+    this.canvas.addCord(this.position.x, this.position.y);
+
+    this.canvas.ctx.stroke();
+  }
+
   render() {
     const {height, width} = this.props.dimensions;
     let aspectRatio = height / width * 100;
     return <div>
       <div className={'stage'} style={{width: '100%', height: 0, paddingBottom: aspectRatio + '%', position: 'relative', overflow: 'hidden'}}>
-        <canvas ref={this.canvasEl} style={{position: 'absolute', left: '50%', top: '50%', width, height, transformOrigin: 'center', transform: `translate(-50%, -50%) scale(${this.state.scale})`}}/>
+        <canvas onMouseDown={this.startDraw} onMouseUp={this.stopDraw} onMouseMove={this.draw} ref={this.canvasEl} style={{position: 'absolute', left: '50%', top: '50%', width, height, transformOrigin: 'center', transform: `translate(-50%, -50%) scale(${this.state.scale})`}}/>
         <img ref="img" src={this.props.img} style={{display: 'none'}} alt={'bike'}/>
       </div>
       <p>Test canvas distort</p>
