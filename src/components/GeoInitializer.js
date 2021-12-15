@@ -74,8 +74,8 @@ export default class GeoInitializer extends Component {
   done() {
     let image = document.getElementById('bike-image');
     let dimensions = this.state.imageMeta;
-    dimensions.height = image.clientHeight;
-    dimensions.width = image.clientWidth;
+    dimensions.height = image.naturalHeight;
+    dimensions.width = image.naturalWidth;
     this.props.changeDimensions(dimensions);
     this.props.changeMode('playground');
   }

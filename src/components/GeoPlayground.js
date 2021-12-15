@@ -12,8 +12,10 @@ export default class GeoPlayground extends Component {
       distortY: 0,
       rotationDeg: 0,
       rotationOrigin: 300,
+      scale: 1
     };
     this.state = this.initialState;
+    this.canvasEl = React.createRef();
   }
 
   changeSlack(event, value) {
@@ -65,7 +67,7 @@ export default class GeoPlayground extends Component {
   }
 
   initializeCanvas() {
-    this.canvas = new GeoCanvas(this.refs.canvas, this.props.dimensions);
+    this.canvas = new GeoCanvas(this.canvasEl.current, this.props.dimensions);
     this.canvas.fixDPI();
   }
 
@@ -76,14 +78,18 @@ export default class GeoPlayground extends Component {
       this.canvas.placeOrigionalImage(this.img);
       this.canvas.drawGround();
       this.canvas.drawBike();
+      this.setState({
+        scale: this.canvasEl.current.parentElement.offsetWidth / this.props.dimensions.width
+      })
     }).bind(this);
   }
 
   render() {
-    let aspectRatio = this.props.dimensions.height / this.props.dimensions.width * 100;
+    const {height, width} = this.props.dimensions;
+    let aspectRatio = height / width * 100;
     return <div>
-      <div className={'stage'} style={{width: '100%', height: 0, paddingBottom: aspectRatio + '%', position: 'relative'}}>
-        <canvas ref="canvas" style={{position: 'absolute', left: 0, top: 0, width: '100%', height: '100%'}}/>
+      <div className={'stage'} style={{width: '100%', height: 0, paddingBottom: aspectRatio + '%', position: 'relative', overflow: 'hidden'}}>
+        <canvas ref={this.canvasEl} style={{position: 'absolute', left: '50%', top: '50%', width, height, transformOrigin: 'center', transform: `translate(-50%, -50%) scale(${this.state.scale})`}}/>
         <img ref="img" src={this.props.img} style={{display: 'none'}} alt={'bike'}/>
       </div>
       <p>Test canvas distort</p>
