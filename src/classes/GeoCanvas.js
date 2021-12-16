@@ -44,22 +44,11 @@ class GeoCanvas {
    * @return {[type]}     [description]
    */
   placeOrigionalImage(img) {
+    this.canvas.setAttribute("height", img.naturalHeight);
+    this.canvas.setAttribute("width", img.naturalWidth);
     this.img = img;
     this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
     this.canvasDistort.initialize(this.ctx.getImageData(0,0,this.canvas.width, this.canvas.height));
-  }
-
-  /**
-   * Fixes the canvas blur.
-   * https://medium.com/wdstack/fixing-html5-2d-canvas-blur-8ebe27db07da
-   * @return {[type]} [description]
-   */
-  fixDPI() {
-    let dpi = window.devicePixelRatio;
-    let styleHeight = + getComputedStyle(this.canvas).getPropertyValue("height").slice(0, -2);
-    let styleWidth = + getComputedStyle(this.canvas).getPropertyValue("width").slice(0, -2);
-    this.canvas.setAttribute("height", styleHeight * dpi);
-    this.canvas.setAttribute("width", styleWidth * dpi);
   }
 
   /**

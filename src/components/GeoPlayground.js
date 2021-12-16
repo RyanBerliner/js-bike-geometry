@@ -71,7 +71,6 @@ export default class GeoPlayground extends Component {
 
   initializeCanvas() {
     this.canvas = new GeoCanvas(this.canvasEl.current, this.props.dimensions);
-    this.canvas.fixDPI();
   }
 
   componentDidMount() {
