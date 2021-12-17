@@ -64,7 +64,7 @@ class GeoCanvas {
 
   update() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.canvasDistort.update();
+    this.canvasDistort.redraw();
     this.drawBike();
   }
 
@@ -133,7 +133,6 @@ class GeoCanvas {
     });
 
     this.canvasDistort.rotate(pixels, origin, deg);
-    this.update();
   }
 
   distort(xunits, yunits) {
@@ -165,7 +164,6 @@ class GeoCanvas {
     }
 
     this.canvasDistort.translate(pixels, xunits, yunits);
-    this.update();
   }
 }
 

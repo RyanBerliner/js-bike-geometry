@@ -47,16 +47,16 @@ class CanvasDistort {
       } else if (transformation.type === 'translate') {
         refImageData = this.applyTranslateTransformation(transformation.data, refImageData);
       }
-
-      this.update();
     });
+    this.imageData = refImageData;
+    this.redraw()
   }
 
   applyRotationTransformation(transformation, refImageData) {
     let {pixels, origin: { x: originX, y: originY }, angle} = transformation;
     let imageData = this.ctx.createImageData(this.canvas.width, this.canvas.height);
 
-    this.imageData.data.forEach((data, i) => {
+    refImageData.data.forEach((data, i) => {
       imageData.data[i] = data;
     });
 
@@ -88,7 +88,7 @@ class CanvasDistort {
     const {pixels, deltax, deltay} = transformation;
     let imageData = this.ctx.createImageData(this.canvas.width, this.canvas.height);
 
-    this.imageData.data.forEach((data, i) => {
+    refImageData.data.forEach((data, i) => {
       imageData.data[i] = data;
     });
 
@@ -101,11 +101,10 @@ class CanvasDistort {
       imageData = CanvasDistort.setColorForCoord(imageData, pixel.x, pixel.y, color);
     }
 
-    this.imageData = imageData;
     return imageData;
   }
 
-  update() {
+  redraw() {
     this.ctx.putImageData(this.imageData, 0, 0);
   }
 
