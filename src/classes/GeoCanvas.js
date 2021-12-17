@@ -43,7 +43,7 @@ class GeoCanvas {
    * @param  {[type]} img [description]
    * @return {[type]}     [description]
    */
-  placeOrigionalImage(img) {
+  placeOriginalImage(img) {
     this.canvas.setAttribute("height", img.naturalHeight);
     this.canvas.setAttribute("width", img.naturalWidth);
     this.img = img;

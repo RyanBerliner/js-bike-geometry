@@ -1,7 +1,7 @@
 class CanvasDistort {
   constructor(canvas) {
     this.imageData = null;
-    this.origionalImageData = null;
+    this.originalImageData = null;
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
 
@@ -10,7 +10,7 @@ class CanvasDistort {
 
   initialize(imageData) {
     this.imageData = imageData;
-    this.origionalImageData = imageData;
+    this.originalImageData = imageData;
   }
 
   rotate(pixels, origin, angle) {
@@ -40,7 +40,7 @@ class CanvasDistort {
   }
 
   applyTransformations() {
-    let refImageData = this.origionalImageData;
+    let refImageData = this.originalImageData;
     this.transformations.forEach(transformation => {
       if (transformation.type === 'rotation') {
         refImageData = this.applyRotationTransformation(transformation.data, refImageData);

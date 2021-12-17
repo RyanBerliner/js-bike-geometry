@@ -77,7 +77,7 @@ export default class GeoPlayground extends Component {
     this.initializeCanvas();
     this.img = this.refs.img;
     this.img.onload = (function() {
-      this.canvas.placeOrigionalImage(this.img);
+      this.canvas.placeOriginalImage(this.img);
       this.canvas.drawGround();
       this.canvas.drawBike();
       this.setState({
