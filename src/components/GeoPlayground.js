@@ -18,6 +18,7 @@ export default class GeoPlayground extends Component {
     this.canvasEl = React.createRef();
     this.position = {x: 0, y: 0};
     this.drawing = false;
+    this.coordsQueue = [];
   }
 
   changeSlack(event, value) {
@@ -88,11 +89,28 @@ export default class GeoPlayground extends Component {
 
   startDraw = e => {
     this.drawing = true;
+    this.coordsQueue = [];
     this.setPosition(e);
+    this.pushCoordsQueue();
+  }
+
+  pushCoordsQueue() {
+    this.coordsQueue.push([this.position.x, this.position.y, 1]);
   }
 
   stopDraw = () => {
     this.drawing = false;
+    this.canvas.update();
+    this.canvas.processCoordsQueue(this.coordsQueue);
+
+    Object.keys(this.canvas.cords).forEach(y => {
+      Object.keys(this.canvas.cords[y]).forEach(x => {
+        this.canvas.ctx.beginPath();
+        this.canvas.ctx.rect(x, y, 1, 1);
+        this.canvas.ctx.fillStyle = `rgba(255,0,0,${this.canvas.cords[y][x]})`;
+        this.canvas.ctx.fill();
+      })
+    });
   }
 
   setPosition = e => {
@@ -113,13 +131,14 @@ export default class GeoPlayground extends Component {
 
     this.canvas.ctx.lineWidth = 50;
     this.canvas.ctx.lineCap = 'round';
-    this.canvas.ctx.strokeStyle = 'rgba(255,0,0,1)';
+    this.canvas.ctx.strokeStyle = 'rgba(255,0,0,0.2)';
 
     this.canvas.ctx.moveTo(this.position.x, this.position.y);
     this.setPosition(e);
     this.canvas.ctx.lineTo(this.position.x, this.position.y);
+    this.pushCoordsQueue();
 
-    this.canvas.addCord(this.position.x, this.position.y);
+    // this.canvas.addCord(this.position.x, this.position.y, 0.5);
 
     this.canvas.ctx.stroke();
   }

@@ -12,6 +12,114 @@ class GeoCanvas {
     this.cords = mapdata;
   }
 
+  processCoordsQueue(coords) {
+    let prevCord = null;
+    function getLineFunc (x1, x2, y1, y2) {
+      const m = (y1 - y2) / (x1 - x2);
+      const b = y1 - (m * x1);
+
+      return {
+        func: function(x) {
+          return (m * x) + b;
+        },
+        m,
+        b
+      }
+    }
+
+    function perpLine (line1, x1, y1) {
+      const m = -1 / line1.m;
+      const b = y1 - (m * x1)
+      
+      return {
+        func: function(x) {
+          return (m * x) + b
+        },
+        m,
+        b,
+      }
+    }
+
+    function lineIntersection(line1, line2) {
+      const {m: m1, b: b1, func} = line1;
+      const {m: m2, b: b2} = line2
+
+      const intersectX = (b1 - b2) / (m2 - m1),
+            intersectY = func(intersectX);
+
+      return [intersectX, intersectY];
+    }
+
+    function distanceFromLine(line, x1, y1) {
+      const perp = perpLine(line, x1, y1);
+      const [x2, y2] = lineIntersection(line, perp);
+      return [
+        Math.sqrt(Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2)),
+        x2,
+        y2
+      ];
+    }
+
+    function between(num, a, b) {
+      const min = Math.min(a, b);
+      const max = Math.max(a, b);
+      return num >= min && num <= max;
+    }
+
+    coords.forEach(([x, y, value]) => {
+      if (!this.cords[y]) {
+        this.cords[y] = {};
+      }
+
+      if (!this.cords[y][x]) {
+        this.cords[y][x] = 0;
+      }
+
+      this.addCord(x, y, value, true)
+
+      let lineFunc = null;
+      if (prevCord) {
+        lineFunc = getLineFunc(prevCord[0], x, prevCord[1], y);
+      }
+
+      for (var i = -100; i < 100; i++) {
+        for (var o = -100; o < 100; o++) {
+          const pointx = x + i, pointy = y + o;
+          let dFromPoint = Math.sqrt(Math.pow(i, 2) + Math.pow(o, 2));
+          let dFromLine = Infinity;
+          if (lineFunc) {
+            // This isn't quite right becase we need to do line "segment" not just line
+            let [distance, intersectx, intersecty] = distanceFromLine(lineFunc, pointx, pointy);
+            let dFromPrevPoint = Math.sqrt(Math.pow(prevCord[0] - pointx, 2) + Math.pow(prevCord[1] - pointy, 2));
+
+            // If not on the line segment, lets check either start or end radius
+            if (!(between(intersectx, x, prevCord[0]) && between(intersecty, y, prevCord[1]))) {
+              distance = Math.min(dFromPoint,dFromPrevPoint);
+            }
+
+            dFromLine = distance;
+          }
+
+          const validDFromLine = !isNaN(dFromLine) && dFromLine < 25;
+          const validDFromPoint = dFromPoint < 25
+          if (!validDFromLine && !validDFromPoint) {
+            continue;
+          }
+
+          let offset = dFromPoint;
+          if (validDFromLine) {
+            offset = Math.min(dFromLine, dFromPoint);
+          }
+
+          let val = ((25 - offset) / 25) * value * (!validDFromPoint ? 0.2 : 1);
+          this.addCord(pointx, pointy, val, true);
+        }
+      }
+
+      prevCord = [x, y];
+    });
+  }
+
   addCord(x, y, value = 1, single = false) {
     if (!this.cords[y]) {
       this.cords[y] = {};
@@ -22,7 +130,7 @@ class GeoCanvas {
     }
 
     value += this.cords[y][x];
-    this.cords[y][x] = value > 1 ? 1 : value;
+    this.cords[y][x] = value > 1 ? 1 : value
 
     if (single) {
       return;
@@ -30,10 +138,13 @@ class GeoCanvas {
 
     for (var i = -25; i < 25; i++) {
       for (var o = -25; o < 25; o++) {
-        const absi = Math.abs(i);
-        const abso = Math.abs(o);
-        let val = 1 / (Math.max(absi, abso));
-        this.addCord(x + i, y + o, val > 1 ? 1 : val, true);
+        const distance = Math.sqrt(Math.pow(i, 2) + Math.pow(o, 2));
+        if (distance > 25) {
+          continue;
+        }
+
+        let val = ((25 - distance) / 25) * value;
+        this.addCord(x + i, y + o, Math.min(val , 1), true);
       }
     }
   }
