@@ -10,6 +10,7 @@ class GeoCanvas {
     this.canvasDistort = new CanvasDistort(this.canvas);
     this.ctx = this.canvas.getContext("2d");
     this.cords = mapdata;
+    this.tempCords = {};
   }
 
   processCoordsQueue(coords) {
@@ -93,10 +94,10 @@ class GeoCanvas {
         this.cords[y][x] = 0;
       }
 
-      this.addCord(x, y, value, true)
+      this.simpAddTempCord(x, y, 0.5);
 
       let lineFunc = null;
-      let radius = 5;
+      let radius = 25;
       let box = radius;
       if (prevCord) {
         lineFunc = getLineFunc(prevCord[0], x, prevCord[1], y);
@@ -134,24 +135,45 @@ class GeoCanvas {
           }
 
           let val = ((radius - offset) / radius) * value;
-          this.simpAddCord(pointx, pointy, 0.5);
+          this.simpAddTempCord(pointx, pointy, val);
         }
       }
 
       prevCord = [x, y];
     });
+
+    this.applyTempCords();
   }
 
-  simpAddCord(x, y, val) {
-    if (!this.cords[y]) {
-      this.cords[y] = {};
+  simpAddTempCord(x, y, val) {
+    if (!this.tempCords[y]) {
+      this.tempCords[y] = {};
     }
 
-    if (!this.cords[y][x]) {
-      this.cords[y][x] = 0;
+    if (!this.tempCords[y][x]) {
+      this.tempCords[y][x] = 0;
     }
 
-    this.cords[y][x] = val;
+    // This is where we can add some mixing logic per stroke
+    this.tempCords[y][x] = Math.max(val, this.tempCords[y][x]);
+  }
+
+  applyTempCords() {
+    Object.keys(this.tempCords).forEach(y => {
+      Object.keys(this.tempCords[y]).forEach(x => {
+        if (!this.cords[y]) {
+          this.cords[y] = {};
+        }
+    
+        if (!this.cords[y][x]) {
+          this.cords[y][x] = 0;
+        }
+
+        this.cords[y][x] += this.tempCords[y][x];
+      })
+    });
+
+    this.tempCords = {};
   }
 
   addCord(x, y, value = 1, single = false) {
