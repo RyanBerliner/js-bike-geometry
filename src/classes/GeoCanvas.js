@@ -155,6 +155,7 @@ class GeoCanvas {
     }
 
     // This is where we can add some mixing logic per stroke
+    // IDEA: time based mixing? If short time period favor current value, otherwise if long period add them together
     this.tempCords[y][x] = Math.max(val, this.tempCords[y][x]);
   }
 
