@@ -78,12 +78,16 @@ class GeoCanvas {
       this.addCord(x, y, value, true)
 
       let lineFunc = null;
+      let radius = 5;
+      let box = radius;
       if (prevCord) {
         lineFunc = getLineFunc(prevCord[0], x, prevCord[1], y);
+        const dist = Math.sqrt(Math.pow(prevCord[0] - x, 2) + Math.pow(prevCord[1] - y, 2));
+        box = Math.ceil(Math.max(box, dist + radius));
       }
 
-      for (var i = -100; i < 100; i++) {
-        for (var o = -100; o < 100; o++) {
+      for (var i = -1 * box; i < box; i++) {
+        for (var o = -1 * box; o < box; o++) {
           const pointx = x + i, pointy = y + o;
           let dFromPoint = Math.sqrt(Math.pow(i, 2) + Math.pow(o, 2));
           let dFromLine = Infinity;
@@ -100,8 +104,8 @@ class GeoCanvas {
             dFromLine = distance;
           }
 
-          const validDFromLine = !isNaN(dFromLine) && dFromLine < 25;
-          const validDFromPoint = dFromPoint < 25
+          const validDFromLine = !isNaN(dFromLine) && dFromLine < radius;
+          const validDFromPoint = dFromPoint < radius
           if (!validDFromLine && !validDFromPoint) {
             continue;
           }
@@ -111,13 +115,25 @@ class GeoCanvas {
             offset = Math.min(dFromLine, dFromPoint);
           }
 
-          let val = ((25 - offset) / 25) * value * (!validDFromPoint ? 0.2 : 1);
-          this.addCord(pointx, pointy, val, true);
+          let val = ((radius - offset) / radius) * value;
+          this.simpAddCord(pointx, pointy, 0.5);
         }
       }
 
       prevCord = [x, y];
     });
+  }
+
+  simpAddCord(x, y, val) {
+    if (!this.cords[y]) {
+      this.cords[y] = {};
+    }
+
+    if (!this.cords[y][x]) {
+      this.cords[y][x] = 0;
+    }
+
+    this.cords[y][x] = val;
   }
 
   addCord(x, y, value = 1, single = false) {
