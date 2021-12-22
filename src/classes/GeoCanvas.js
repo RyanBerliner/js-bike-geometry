@@ -15,37 +15,55 @@ class GeoCanvas {
   processCoordsQueue(coords) {
     let prevCord = null;
     function getLineFunc (x1, x2, y1, y2) {
-      const m = (y1 - y2) / (x1 - x2);
+      let m = (y1 - y2) / (x1 - x2);
       const b = y1 - (m * x1);
 
-      return {
-        func: function(x) {
-          return (m * x) + b;
-        },
-        m,
-        b
+      let func = x => {
+        return (m * x) + b;
       }
+
+      if (Math.abs(m) === Infinity) {
+        func = x1;
+        m = Math.abs(m);
+      }
+
+      return { func, m, b }
     }
 
     function perpLine (line1, x1, y1) {
-      const m = -1 / line1.m;
+      let m = -1 / line1.m;
       const b = y1 - (m * x1)
-      
-      return {
-        func: function(x) {
-          return (m * x) + b
-        },
-        m,
-        b,
+
+      let func = x => {
+        return (m * x) + b
       }
+
+      if (Math.abs(m) === Infinity) {
+        func = x1;
+        m = Math.abs(m);
+      }
+
+      return { func, m, b }
     }
 
     function lineIntersection(line1, line2) {
-      const {m: m1, b: b1, func} = line1;
-      const {m: m2, b: b2} = line2
+      const {m: m1, b: b1, func: func1} = line1;
+      const {m: m2, b: b2, func: func2} = line2
+
+      if (m1 === Infinity || m2 === Infinity) {
+        if (m1 === Infinity && m2 === Infinity) {
+          return [undefined, undefined];
+        }
+
+        if (m1 === Infinity) {
+          return [func1, func2(func1)]
+        }
+
+        return [func2, func1(func2)]
+      }
 
       const intersectX = (b1 - b2) / (m2 - m1),
-            intersectY = func(intersectX);
+            intersectY = func1(intersectX);
 
       return [intersectX, intersectY];
     }
