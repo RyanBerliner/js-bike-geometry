@@ -163,7 +163,7 @@ class GeoCanvas {
     const diffMix = fullMix - noMix;
     const adjVal = noMix + (diffMix * timediffAdj);
 
-    this.tempCords[y][x][0] = adjVal;
+    this.tempCords[y][x][0] = Math.min(adjVal, 1);
     this.tempCords[y][x][1] = timestamp;
   }
 
@@ -178,7 +178,7 @@ class GeoCanvas {
           this.cords[y][x] = 0;
         }
 
-        this.cords[y][x] += this.tempCords[y][x][0];
+        this.cords[y][x] = Math.min(this.cords[y][x] + this.tempCords[y][x][0], 1);
       })
     });
 
