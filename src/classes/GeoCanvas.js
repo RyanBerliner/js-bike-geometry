@@ -85,7 +85,7 @@ class GeoCanvas {
       return num >= min && num <= max;
     }
 
-    coords.forEach(([x, y, value]) => {
+    coords.forEach(([x, y, value, time]) => {
       if (!this.cords[y]) {
         this.cords[y] = {};
       }
@@ -94,7 +94,7 @@ class GeoCanvas {
         this.cords[y][x] = 0;
       }
 
-      this.simpAddTempCord(x, y, 0.5);
+      this.simpAddTempCord(x, y, 0.5, time);
 
       let lineFunc = null;
       let radius = 25;
@@ -135,7 +135,7 @@ class GeoCanvas {
           }
 
           let val = ((radius - offset) / radius) * value;
-          this.simpAddTempCord(pointx, pointy, val);
+          this.simpAddTempCord(pointx, pointy, val, time);
         }
       }
 
@@ -145,18 +145,26 @@ class GeoCanvas {
     this.applyTempCords();
   }
 
-  simpAddTempCord(x, y, val) {
+  simpAddTempCord(x, y, val, timestamp) {
     if (!this.tempCords[y]) {
       this.tempCords[y] = {};
     }
 
     if (!this.tempCords[y][x]) {
-      this.tempCords[y][x] = 0;
+      this.tempCords[y][x] = [0, timestamp];
     }
 
-    // This is where we can add some mixing logic per stroke
-    // IDEA: time based mixing? If short time period favor current value, otherwise if long period add them together
-    this.tempCords[y][x] = Math.max(val, this.tempCords[y][x]);
+    // 500 ms ago means full mix, 0 ms ago means no mix
+    const fullMixMs = 500;
+    const timediff = timestamp - this.tempCords[y][x][1];
+    const timediffAdj = Math.min((timediff / fullMixMs), 1)
+    const fullMix = Math.min(1, this.tempCords[y][x][0] + val);
+    const noMix = Math.max(val, this.tempCords[y][x][0]);
+    const diffMix = fullMix - noMix;
+    const adjVal = noMix + (diffMix * timediffAdj);
+
+    this.tempCords[y][x][0] = adjVal;
+    this.tempCords[y][x][1] = timestamp;
   }
 
   applyTempCords() {
@@ -170,40 +178,11 @@ class GeoCanvas {
           this.cords[y][x] = 0;
         }
 
-        this.cords[y][x] += this.tempCords[y][x];
+        this.cords[y][x] += this.tempCords[y][x][0];
       })
     });
 
     this.tempCords = {};
-  }
-
-  addCord(x, y, value = 1, single = false) {
-    if (!this.cords[y]) {
-      this.cords[y] = {};
-    }
-
-    if (!this.cords[y][x]) {
-      this.cords[y][x] = 0;
-    }
-
-    value += this.cords[y][x];
-    this.cords[y][x] = value > 1 ? 1 : value
-
-    if (single) {
-      return;
-    }
-
-    for (var i = -25; i < 25; i++) {
-      for (var o = -25; o < 25; o++) {
-        const distance = Math.sqrt(Math.pow(i, 2) + Math.pow(o, 2));
-        if (distance > 25) {
-          continue;
-        }
-
-        let val = ((25 - distance) / 25) * value;
-        this.addCord(x + i, y + o, Math.min(val , 1), true);
-      }
-    }
   }
 
   /**

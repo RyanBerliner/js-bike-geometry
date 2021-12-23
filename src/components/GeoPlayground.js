@@ -95,7 +95,7 @@ export default class GeoPlayground extends Component {
   }
 
   pushCoordsQueue() {
-    this.coordsQueue.push([this.position.x, this.position.y, 1]);
+    this.coordsQueue.push([this.position.x, this.position.y, 1, new Date().getTime()]);
   }
 
   stopDraw = () => {
@@ -137,8 +137,6 @@ export default class GeoPlayground extends Component {
     this.setPosition(e);
     this.canvas.ctx.lineTo(this.position.x, this.position.y);
     this.pushCoordsQueue();
-
-    // this.canvas.addCord(this.position.x, this.position.y, 0.5);
 
     this.canvas.ctx.stroke();
   }
