@@ -131,7 +131,7 @@ export default class GeoPlayground extends Component {
 
     this.canvas.ctx.lineWidth = 50;
     this.canvas.ctx.lineCap = 'round';
-    this.canvas.ctx.strokeStyle = 'rgba(0,255,0,0.1)';
+    this.canvas.ctx.strokeStyle = 'rgba(255,0,0,1)';
 
     this.canvas.ctx.moveTo(this.position.x, this.position.y);
     this.setPosition(e);
