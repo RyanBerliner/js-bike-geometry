@@ -94,7 +94,7 @@ class GeoCanvas {
         this.cords[y][x] = 0;
       }
 
-      this.simpAddTempCord(x, y, 0.5, time);
+      this.simpAddTempCord(x, y, value, time);
 
       let lineFunc = null;
       let radius = 25;
