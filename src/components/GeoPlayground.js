@@ -194,7 +194,7 @@ export default class GeoPlayground extends Component {
     let aspectRatio = height / width * 100;
     return <div>
       <div className={'stage'} style={{width: '100%', height: 0, paddingBottom: aspectRatio + '%', position: 'relative', overflow: 'hidden', cursor:'none'}}>
-        <span ref={this.cursor} style={{position:'absolute', width:strokeWidth, height:strokeWidth, borderRadius:'50%', display:'block', border:'1px solid black', zIndex:1, pointerEvents:'none',backgroundImage:`radial-gradient(red ${strokeFade}%, transparent)`}}></span>
+        <span class="cursor" data-width={strokeWidth} data-fade={strokeFade} ref={this.cursor} style={{position:'absolute', width:strokeWidth, height:strokeWidth, borderRadius:'50%', display:'block', border:'1px solid black', zIndex:1, pointerEvents:'none',backgroundImage:`radial-gradient(red ${strokeFade}%, transparent)`}}></span>
         <canvas onMouseDown={this.startDraw} onMouseUp={this.stopDraw} onMouseMove={this.draw} ref={this.canvasEl} style={{position: 'absolute', left: '50%', top: '50%', width, height, transformOrigin: 'center', transform: `translate(-50%, -50%) scale(${this.state.scale})`}}/>
         <img ref="img" src={this.props.img} style={{display: 'none'}} alt={'bike'}/>
       </div>
