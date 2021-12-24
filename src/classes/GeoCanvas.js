@@ -1,7 +1,7 @@
 import Bike from './Bike';
 import CanvasDistort from './CanvasDistort';
-// import {mapdata} from './../forkdistortionmap';
-const mapdata = {};
+import {mapdata} from './../forkdistortionmap';
+// const mapdata = {};
 
 class GeoCanvas {
 

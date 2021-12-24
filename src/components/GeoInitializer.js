@@ -36,20 +36,18 @@ export default class GeoInitializer extends Component {
         // htBottomX: null,
 
         // These are temps so I don't need to select them every time when testing.
-        axlesY:332,
-        bbX:358,
-        bbY:335,
-        fAxleX:681,
-        groundY:474,
-        height:501,
-        htBottomX:564,
-        htBottomY:121,
-        htTopX:539,
-        htTopY:79,
-        rAxleX:170,
-        saddleX:291,
-        saddleY:55
-
+        axlesY: 521.505376344086,
+        bbX: 655.9139784946236,
+        bbY: 528.673835125448,
+        fAxleX: 1034.0501792114696,
+        groundY: 682.7956989247311,
+        htBottomX: 903.2258064516129,
+        htBottomY: 290.3225806451613,
+        htTopX: 879.9283154121864,
+        htTopY: 241.93548387096774,
+        rAxleX: 458.78136200716847,
+        saddleX: 598.5663082437276,
+        saddleY: 243.72759856630825,
       }
     }
   }
@@ -83,7 +81,9 @@ export default class GeoInitializer extends Component {
   selectDimension() {
     let currentStep = this.processes[this.state.stepIndex];
     let currentDimens = this.state.imageMeta;
-    currentDimens[this.processes[this.state.stepIndex][1]] = (currentStep[0] === 'x') ? this.state.mouseX : this.state.mouseY;
+    let image = document.getElementById('bike-image');
+    const scale = image.naturalWidth / image.clientWidth;
+    currentDimens[this.processes[this.state.stepIndex][1]] = ((currentStep[0] === 'x') ? this.state.mouseX : this.state.mouseY) * scale;
     this.setState({
       imageMeta: currentDimens
     });
