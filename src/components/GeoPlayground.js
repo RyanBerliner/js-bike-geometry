@@ -12,10 +12,12 @@ export default class GeoPlayground extends Component {
       distortY: 0,
       rotationDeg: 0,
       rotationOrigin: 300,
-      scale: 1
+      scale: 1,
+      strokeWidth: 50,
     };
     this.state = this.initialState;
     this.canvasEl = React.createRef();
+    this.cursor = React.createRef();
     this.position = {x: 0, y: 0};
     this.drawing = false;
     this.coordsQueue = [];
@@ -71,7 +73,7 @@ export default class GeoPlayground extends Component {
   }
 
   initializeCanvas() {
-    this.canvas = new GeoCanvas(this.canvasEl.current, this.props.dimensions);
+    this.canvas = new GeoCanvas(this.canvasEl.current, this.props.dimensions, this.state.strokeWidth);
   }
 
   componentDidMount() {
@@ -121,13 +123,23 @@ export default class GeoPlayground extends Component {
   }
 
   draw = (e) => {
+    const rect = this.canvasEl.current.getBoundingClientRect();
+    const canvLeft = rect.left;
+    const canvTop = rect.top;
+    const cursorx = e.clientX - canvLeft;
+    const cursory = e.clientY - canvTop;
+
+    this.cursor.current.style.left = cursorx + 'px';
+    this.cursor.current.style.top = cursory + 'px';
+    this.cursor.current.style.transform = `translate(-50%, -50%) scale(${this.state.scale})`;
+
     if (!this.drawing) {
       return
     }
 
     this.canvas.ctx.beginPath(); // begin
 
-    this.canvas.ctx.lineWidth = 50;
+    this.canvas.ctx.lineWidth = this.state.strokeWidth;
     this.canvas.ctx.lineCap = 'round';
     this.canvas.ctx.strokeStyle = 'rgba(255,0,0,1)';
 
@@ -141,9 +153,11 @@ export default class GeoPlayground extends Component {
 
   render() {
     const {height, width} = this.props.dimensions;
+    const {strokeWidth} = this.state;
     let aspectRatio = height / width * 100;
     return <div>
-      <div className={'stage'} style={{width: '100%', height: 0, paddingBottom: aspectRatio + '%', position: 'relative', overflow: 'hidden'}}>
+      <div className={'stage'} style={{width: '100%', height: 0, paddingBottom: aspectRatio + '%', position: 'relative', overflow: 'hidden', cursor:'none'}}>
+        <span ref={this.cursor} style={{position:'absolute', width:strokeWidth, height:strokeWidth, borderRadius:'50%', display:'block', border:'1px solid black', zIndex:1, pointerEvents:'none'}}></span>
         <canvas onMouseDown={this.startDraw} onMouseUp={this.stopDraw} onMouseMove={this.draw} ref={this.canvasEl} style={{position: 'absolute', left: '50%', top: '50%', width, height, transformOrigin: 'center', transform: `translate(-50%, -50%) scale(${this.state.scale})`}}/>
         <img ref="img" src={this.props.img} style={{display: 'none'}} alt={'bike'}/>
       </div>

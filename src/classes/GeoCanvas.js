@@ -1,16 +1,18 @@
 import Bike from './Bike';
 import CanvasDistort from './CanvasDistort';
-import {mapdata} from './../forkdistortionmap';
+// import {mapdata} from './../forkdistortionmap';
+const mapdata = {};
 
 class GeoCanvas {
 
-  constructor(canvas, bikeDimensions) {
+  constructor(canvas, bikeDimensions, strokeWidth) {
     this.canvas = canvas;
     this.bike = new Bike(bikeDimensions);
     this.canvasDistort = new CanvasDistort(this.canvas);
     this.ctx = this.canvas.getContext("2d");
     this.cords = mapdata;
     this.tempCords = {};
+    this.strokeWidth = strokeWidth;
   }
 
   processCoordsQueue(coords) {
@@ -97,7 +99,7 @@ class GeoCanvas {
       this.simpAddTempCord(x, y, value, time);
 
       let lineFunc = null;
-      let radius = 25;
+      let radius = Math.floor(this.strokeWidth / 2);
       let box = radius;
       if (prevCord) {
         lineFunc = getLineFunc(prevCord[0], x, prevCord[1], y);
