@@ -18,7 +18,7 @@ export default class GeoPlayground extends Component {
     this.state = this.initialState;
     this.canvasEl = React.createRef();
     this.cursor = React.createRef();
-    this.position = {x: 0, y: 0};
+    this.position = {x: 0, y: 0, direction: 'down'};
     this.drawing = false;
     this.coordsQueue = [];
   }
@@ -118,11 +118,33 @@ export default class GeoPlayground extends Component {
     const rect = this.canvasEl.current.getBoundingClientRect();
     const leftStart = rect.left;
     const topStart = rect.top;
-    this.position.x = Math.floor((e.clientX - leftStart) * (1/scale));
-    this.position.y = Math.floor((e.clientY - topStart) * (1/scale));
+
+    const newx = Math.floor((e.clientX - leftStart) * (1/scale))
+    const newy = Math.floor((e.clientY - topStart) * (1/scale));
+
+    const dx = Math.abs(this.position.x - newx);
+    const dy = Math.abs(this.position.y - newy);
+    const newdirection = dx > dy ? (this.position.x < newx ? 'right' : 'left') : (this.position.y < newy ? 'down' : 'up');
+
+
+    this.position.x = newx;
+    this.position.y = newy;
+    this.position.direction = newdirection;
   }
 
   draw = (e) => {
+    if(e.metaKey) {
+      this.setPosition(e);
+      if (this.position.direction === 'right' || this.position.direction === 'left') {
+        const newWidth = this.state.strokeWidth + (this.position.direction === 'right' ? 1 : -1);
+        this.canvas.strokeWidth = newWidth;
+        this.setState({
+          strokeWidth: newWidth
+        });
+      }
+      return;
+    }
+
     const rect = this.canvasEl.current.getBoundingClientRect();
     const canvLeft = rect.left;
     const canvTop = rect.top;
@@ -134,6 +156,7 @@ export default class GeoPlayground extends Component {
     this.cursor.current.style.transform = `translate(-50%, -50%) scale(${this.state.scale})`;
 
     if (!this.drawing) {
+      this.setPosition(e);
       return
     }
 
