@@ -9,7 +9,7 @@ body {
 }
 
 .cursor:before {
-  content: attr(data-width) "/" attr(data-fade);
+  content: attr(data-width) "/" attr(data-fade) "/" attr(data-opacity);
   position: absolute;
   top: 100%;
   left: 50%;

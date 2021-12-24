@@ -15,6 +15,7 @@ export default class GeoPlayground extends Component {
       scale: 1,
       strokeWidth: 50,
       strokeFade: 0,
+      opacity: 1,
     };
     this.state = this.initialState;
     this.canvasEl = React.createRef();
@@ -89,6 +90,14 @@ export default class GeoPlayground extends Component {
         scale: this.canvasEl.current.parentElement.offsetWidth / this.props.dimensions.width
       })
     }).bind(this);
+
+    document.addEventListener('keypress', e => {
+      if (e.key === 'r') {
+        this.setState({
+          opacity: this.state.opacity * -1
+        });
+      }
+    })
   }
 
   startDraw = e => {
@@ -99,7 +108,7 @@ export default class GeoPlayground extends Component {
   }
 
   pushCoordsQueue() {
-    this.coordsQueue.push([this.position.x, this.position.y, 1, new Date().getTime()]);
+    this.coordsQueue.push([this.position.x, this.position.y, this.state.opacity, new Date().getTime()]);
   }
 
   stopDraw = () => {
@@ -190,11 +199,11 @@ export default class GeoPlayground extends Component {
 
   render() {
     const {height, width} = this.props.dimensions;
-    const {strokeWidth, strokeFade} = this.state;
+    const {strokeWidth, strokeFade, opacity} = this.state;
     let aspectRatio = height / width * 100;
     return <div>
       <div className={'stage'} style={{width: '100%', height: 0, paddingBottom: aspectRatio + '%', position: 'relative', overflow: 'hidden', cursor:'none'}}>
-        <span class="cursor" data-width={strokeWidth} data-fade={strokeFade} ref={this.cursor} style={{position:'absolute', width:strokeWidth, height:strokeWidth, borderRadius:'50%', display:'block', border:'1px solid black', zIndex:1, pointerEvents:'none',backgroundImage:`radial-gradient(red ${strokeFade}%, transparent)`}}></span>
+        <span class="cursor" data-opacity={opacity} data-width={strokeWidth} data-fade={strokeFade} ref={this.cursor} style={{position:'absolute', width:strokeWidth, height:strokeWidth, borderRadius:'50%', display:'block', border:'1px solid black', zIndex:1, pointerEvents:'none',backgroundImage:`radial-gradient(red ${strokeFade}%, transparent)`}}></span>
         <canvas onMouseDown={this.startDraw} onMouseUp={this.stopDraw} onMouseMove={this.draw} ref={this.canvasEl} style={{position: 'absolute', left: '50%', top: '50%', width, height, transformOrigin: 'center', transform: `translate(-50%, -50%) scale(${this.state.scale})`}}/>
         <img ref="img" src={this.props.img} style={{display: 'none'}} alt={'bike'}/>
       </div>

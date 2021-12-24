@@ -164,16 +164,7 @@ class GeoCanvas {
       this.tempCords[y][x] = [0, timestamp];
     }
 
-    // 500 ms ago means full mix, 0 ms ago means no mix
-    const fullMixMs = 500;
-    const timediff = timestamp - this.tempCords[y][x][1];
-    const timediffAdj = Math.min((timediff / fullMixMs), 1)
-    const fullMix = Math.min(1, this.tempCords[y][x][0] + val);
-    const noMix = Math.max(val, this.tempCords[y][x][0]);
-    const diffMix = fullMix - noMix;
-    const adjVal = noMix + (diffMix * timediffAdj);
-
-    this.tempCords[y][x][0] = Math.min(adjVal, 1);
+    this.tempCords[y][x][0] = val > 0 ? Math.max(val, this.tempCords[y][x][0]) : Math.min(val, this.tempCords[y][x][0]);
     this.tempCords[y][x][1] = timestamp;
   }
 
@@ -188,7 +179,7 @@ class GeoCanvas {
           this.cords[y][x] = 0;
         }
 
-        this.cords[y][x] = Math.min(this.cords[y][x] + this.tempCords[y][x][0], 1);
+        this.cords[y][x] = Math.max(0, Math.min(this.cords[y][x] + this.tempCords[y][x][0], 1));
       })
     });
 
