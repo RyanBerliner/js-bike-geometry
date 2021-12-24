@@ -105,10 +105,8 @@ export default class GeoPlayground extends Component {
 
     Object.keys(this.canvas.cords).forEach(y => {
       Object.keys(this.canvas.cords[y]).forEach(x => {
-        this.canvas.ctx.beginPath();
-        this.canvas.ctx.rect(x, y, 1, 1);
-        this.canvas.ctx.fillStyle = `rgba(255,0,0,${this.canvas.cords[y][x]})`;
-        this.canvas.ctx.fill();
+        this.canvas.ctx.fillStyle = "rgba(255,0,0,"+this.canvas.cords[y][x]+")";
+        this.canvas.ctx.fillRect( x, y, 1, 1 );
       })
     });
   }
