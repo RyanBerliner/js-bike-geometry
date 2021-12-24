@@ -5,7 +5,7 @@ const mapdata = {};
 
 class GeoCanvas {
 
-  constructor(canvas, bikeDimensions, strokeWidth) {
+  constructor(canvas, bikeDimensions, strokeWidth, strokeFade) {
     this.canvas = canvas;
     this.bike = new Bike(bikeDimensions);
     this.canvasDistort = new CanvasDistort(this.canvas);
@@ -13,6 +13,7 @@ class GeoCanvas {
     this.cords = mapdata;
     this.tempCords = {};
     this.strokeWidth = strokeWidth;
+    this.strokeFade = strokeFade;
   }
 
   processCoordsQueue(coords) {
@@ -136,7 +137,14 @@ class GeoCanvas {
             offset = Math.min(dFromLine, dFromPoint);
           }
 
-          let val = ((radius - offset) / radius) * value;
+          const startFade = radius * (this.strokeFade / 100);
+          let val = value;
+          if (offset > startFade) {
+            const adjRad = radius - startFade;
+            const adjOff = offset - startFade;
+            val = ((adjRad - adjOff) / adjRad) * value;
+          }
+
           this.simpAddTempCord(pointx, pointy, val, time);
         }
       }

@@ -14,6 +14,7 @@ export default class GeoPlayground extends Component {
       rotationOrigin: 300,
       scale: 1,
       strokeWidth: 50,
+      strokeFade: 0,
     };
     this.state = this.initialState;
     this.canvasEl = React.createRef();
@@ -73,7 +74,8 @@ export default class GeoPlayground extends Component {
   }
 
   initializeCanvas() {
-    this.canvas = new GeoCanvas(this.canvasEl.current, this.props.dimensions, this.state.strokeWidth);
+    const { strokeWidth, strokeFade } = this.state;
+    this.canvas = new GeoCanvas(this.canvasEl.current, this.props.dimensions, strokeWidth, strokeFade);
   }
 
   componentDidMount() {
@@ -135,13 +137,25 @@ export default class GeoPlayground extends Component {
   draw = (e) => {
     if(e.metaKey) {
       this.setPosition(e);
-      if (this.position.direction === 'right' || this.position.direction === 'left') {
-        const newWidth = this.state.strokeWidth + (this.position.direction === 'right' ? 1 : -1);
+      const {direction} = this.position;
+      if (direction === 'right' || direction === 'left') {
+        let newWidth = this.state.strokeWidth + (direction === 'right' ? 1 : -1);
+        if (newWidth < 2) newWidth = 2;
         this.canvas.strokeWidth = newWidth;
         this.setState({
           strokeWidth: newWidth
         });
       }
+      if (direction === 'up' || direction === 'down') {
+        let newFade = this.state.strokeFade + (direction === 'up' ? 1 : -1);
+        if (newFade < 0) newFade = 0;
+        if (newFade > 100) newFade = 100;
+        this.canvas.strokeFade = newFade;
+        this.setState({
+          strokeFade: newFade
+        });
+      }
+
       return;
     }
 
@@ -176,11 +190,11 @@ export default class GeoPlayground extends Component {
 
   render() {
     const {height, width} = this.props.dimensions;
-    const {strokeWidth} = this.state;
+    const {strokeWidth, strokeFade} = this.state;
     let aspectRatio = height / width * 100;
     return <div>
       <div className={'stage'} style={{width: '100%', height: 0, paddingBottom: aspectRatio + '%', position: 'relative', overflow: 'hidden', cursor:'none'}}>
-        <span ref={this.cursor} style={{position:'absolute', width:strokeWidth, height:strokeWidth, borderRadius:'50%', display:'block', border:'1px solid black', zIndex:1, pointerEvents:'none'}}></span>
+        <span ref={this.cursor} style={{position:'absolute', width:strokeWidth, height:strokeWidth, borderRadius:'50%', display:'block', border:'1px solid black', zIndex:1, pointerEvents:'none',backgroundImage:`radial-gradient(red ${strokeFade}%, transparent)`}}></span>
         <canvas onMouseDown={this.startDraw} onMouseUp={this.stopDraw} onMouseMove={this.draw} ref={this.canvasEl} style={{position: 'absolute', left: '50%', top: '50%', width, height, transformOrigin: 'center', transform: `translate(-50%, -50%) scale(${this.state.scale})`}}/>
         <img ref="img" src={this.props.img} style={{display: 'none'}} alt={'bike'}/>
       </div>
