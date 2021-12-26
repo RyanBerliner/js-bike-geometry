@@ -60,7 +60,7 @@ class CanvasDistort {
       imageData.data[i] = data;
     });
 
-    angle = angle * (Math.PI / 180);
+    angle = angle * -(Math.PI / 180);  // negative is a hack to make it rotate what i feel is the right direction
 
     for (var i = 0; i < pixels.length; i++) {
       let pixel = pixels[i];

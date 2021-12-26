@@ -11,11 +11,12 @@ export default class GeoPlayground extends Component {
       distortX: 0,
       distortY: 0,
       rotationDeg: 0,
-      rotationOrigin: 300,
       scale: 1,
       strokeWidth: 50,
       strokeFade: 0,
       opacity: 1,
+      masterRotation: 0,
+      masterWB: 0,
     };
     this.state = this.initialState;
     this.canvasEl = React.createRef();
@@ -47,16 +48,9 @@ export default class GeoPlayground extends Component {
   }
 
   changeRotationDeg(event, value) {
-    this.rotate(value, this.state.rotationOrigin)
+    this.rotate(value)
     this.setState({
       rotationDeg: value
-    });
-  }
-
-  changeRotationOrigin(event) {
-    this.rotate(this.state.rotationDeg, event.target.value);
-    this.setState({
-      rotationOrigin: event.target.value
     });
   }
 
@@ -64,10 +58,30 @@ export default class GeoPlayground extends Component {
     this.canvas.distort(x, y);
   }
 
-  rotate(deg, origin) {
-    origin = parseInt(origin);
-    const {htTopX, htTopY, htBottomX, htBottomY} = this.props.dimensions;
-    this.canvas.rotate(deg, {x: (htTopX + htBottomX) / 2, y: (htTopY + htBottomY) / 2});
+  rotate(deg) {
+    let {axlesY, fAxleX, htTopX, htTopY, htBottomX, htBottomY, rAxleX} = this.props.dimensions;
+    const centerHeadtube = {x: (htTopX + htBottomX) / 2, y: (htTopY + htBottomY) / 2};
+    this.canvas.rotate(deg, centerHeadtube);
+
+    // calc master rotation
+    const ogA = axlesY - centerHeadtube.y;
+    const ogB = fAxleX - centerHeadtube.x;
+    const c = Math.sqrt(Math.pow(ogA, 2) + Math.pow(ogB, 2));
+    // const ogAngle = Soh Cah Toa
+    const degPerRad = 180 / Math.PI;
+    const ogAngleDeg = 90 - (Math.asin(ogB / c) * degPerRad);
+    const newAngleDeg = ogAngleDeg + deg;
+    const newAngleRad = newAngleDeg / degPerRad;
+    const newB = Math.cos(newAngleRad) * c;
+    const newA = Math.sin(newAngleRad) * c;
+    const diffA = newA - ogA;
+    const diffB = newB - ogB;
+    const newWB = fAxleX - rAxleX + diffB;
+    console.log(newWB, diffA);
+    const newMasterAngle = Math.asin(diffA / newWB) * degPerRad;
+    this.setState({
+      masterRotation: newMasterAngle
+    })
   } 
 
   redraw(amount) {
@@ -198,23 +212,16 @@ export default class GeoPlayground extends Component {
   }
 
   render() {
-    const {height, width} = this.props.dimensions;
-    const {strokeWidth, strokeFade, opacity} = this.state;
+    const {height, width, axlesY, rAxleX} = this.props.dimensions;
+    const {strokeWidth, strokeFade, opacity, masterRotation} = this.state;
     let aspectRatio = height / width * 100;
     return <div>
       <div className={'stage'} style={{width: '100%', height: 0, paddingBottom: aspectRatio + '%', position: 'relative', overflow: 'hidden', cursor:'none'}}>
         <span class="cursor" data-opacity={opacity} data-width={strokeWidth} data-fade={strokeFade} ref={this.cursor} style={{position:'absolute', width:strokeWidth, height:strokeWidth, borderRadius:'50%', display:'block', border:'1px solid black', zIndex:1, pointerEvents:'none',backgroundImage:`radial-gradient(red ${strokeFade}%, transparent)`}}></span>
-        <canvas onMouseDown={this.startDraw} onMouseUp={this.stopDraw} onMouseMove={this.draw} ref={this.canvasEl} style={{position: 'absolute', left: '50%', top: '50%', width, height, transformOrigin: 'center', transform: `translate(-50%, -50%) scale(${this.state.scale})`}}/>
+        <canvas onMouseDown={this.startDraw} onMouseUp={this.stopDraw} onMouseMove={this.draw} ref={this.canvasEl} style={{position: 'absolute', left: '50%', top: '50%', width, height, transformOrigin: `${rAxleX}px ${axlesY}px`, transform: `translate(-50%, -50%) scale(${this.state.scale}) rotate(${-1 * this.state.masterRotation}deg)`}}/>
         <img ref="img" src={this.props.img} style={{display: 'none'}} alt={'bike'}/>
       </div>
-      <p>Test canvas distort</p>
-      <p>Rotation origin</p>
-      <input
-        type="number"
-        value={this.state.rotationOrigin}
-        onChange={this.changeRotationOrigin.bind(this)}
-        step={25}
-      />
+      <p>Test canvas distort (master rotation: {masterRotation})</p>
       <p>Rotation Degrees</p>
       <Slider
           value={this.state.rotationDeg}
