@@ -77,7 +77,6 @@ export default class GeoPlayground extends Component {
     const diffA = newA - ogA;
     const diffB = newB - ogB;
     const newWB = fAxleX - rAxleX + diffB;
-    console.log(newWB, diffA);
     const newMasterAngle = Math.asin(diffA / newWB) * degPerRad;
     this.setState({
       masterRotation: newMasterAngle
