@@ -1,7 +1,7 @@
 import Bike from './Bike';
 import CanvasDistort from './CanvasDistort';
-import {mapdata} from './../forkdistortionmap';
-// const mapdata = {};
+import {forkmap} from './../forkdistortionmap';
+import {seatmap} from './../seatdistortionmap';
 
 class GeoCanvas {
 
@@ -10,13 +10,14 @@ class GeoCanvas {
     this.bike = new Bike(bikeDimensions);
     this.canvasDistort = new CanvasDistort(this.canvas);
     this.ctx = this.canvas.getContext("2d");
-    this.cords = mapdata;
+    this.cords = forkmap;
+    this.seatCords = seatmap;
     this.tempCords = {};
     this.strokeWidth = strokeWidth;
     this.strokeFade = strokeFade;
   }
 
-  processCoordsQueue(coords) {
+  processCoordsQueue(coords, mode) {
     let prevCord = null;
     function getLineFunc (x1, x2, y1, y2) {
       let m = (y1 - y2) / (x1 - x2);
@@ -152,7 +153,7 @@ class GeoCanvas {
       prevCord = [x, y];
     });
 
-    this.applyTempCords();
+    this.applyTempCords(mode);
   }
 
   simpAddTempCord(x, y, val, timestamp) {
@@ -168,21 +169,35 @@ class GeoCanvas {
     this.tempCords[y][x][1] = timestamp;
   }
 
-  applyTempCords() {
+  applyTempCords(mode) {
     Object.keys(this.tempCords).forEach(y => {
       Object.keys(this.tempCords[y]).forEach(x => {
-        if (!this.cords[y]) {
-          this.cords[y] = {};
+        if (mode === 'h') {
+          if (!this.cords[y]) {
+            this.cords[y] = {};
+          }
+      
+          if (!this.cords[y][x]) {
+            this.cords[y][x] = 0;
+          }
+  
+          this.cords[y][x] = Math.max(0, Math.min(this.cords[y][x] + this.tempCords[y][x][0], 1));
+        } else {
+          if (!this.seatCords[y]) {
+            this.seatCords[y] = {};
+          }
+      
+          if (!this.seatCords[y][x]) {
+            this.seatCords[y][x] = 0;
+          }
+  
+          this.seatCords[y][x] = Math.max(0, Math.min(this.seatCords[y][x] + this.tempCords[y][x][0], 1));
         }
-    
-        if (!this.cords[y][x]) {
-          this.cords[y][x] = 0;
-        }
-
-        this.cords[y][x] = Math.max(0, Math.min(this.cords[y][x] + this.tempCords[y][x][0], 1));
       })
     });
 
+
+    console.log(this.seatCords);
     this.tempCords = {};
   }
 
@@ -271,7 +286,7 @@ class GeoCanvas {
     this.update();
   }
 
-  rotate(deg, origin) {
+  rotateFork(deg, origin) {
     let pixels = [];
 
     Object.keys(this.cords).forEach(y => {
@@ -280,7 +295,19 @@ class GeoCanvas {
       })
     });
 
-    this.canvasDistort.rotate(pixels, origin, deg);
+    this.canvasDistort.rotate('fork', pixels, origin, deg);
+  }
+
+  rotateSeat(deg, origin) {
+    let pixels = [];
+
+    Object.keys(this.seatCords).forEach(y => {
+      Object.keys(this.seatCords[y]).forEach(x => {
+        pixels.push({x: x, y: y, fade: this.seatCords[y][x]});
+      })
+    });
+
+    this.canvasDistort.rotate('seat', pixels, origin, deg);
   }
 
   distort(xunits, yunits) {

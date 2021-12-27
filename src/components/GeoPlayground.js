@@ -17,6 +17,7 @@ export default class GeoPlayground extends Component {
       opacity: 1,
       masterRotation: 0,
       masterWB: 0,
+      mode: 'h',
     };
     this.state = this.initialState;
     this.canvasEl = React.createRef();
@@ -59,9 +60,9 @@ export default class GeoPlayground extends Component {
   }
 
   rotate(deg) {
-    let {axlesY, fAxleX, htTopX, htTopY, htBottomX, htBottomY, rAxleX} = this.props.dimensions;
+    let {axlesY, fAxleX, htTopX, htTopY, htBottomX, htBottomY, rAxleX, saddleX, saddleY} = this.props.dimensions;
     const centerHeadtube = {x: (htTopX + htBottomX) / 2, y: (htTopY + htBottomY) / 2};
-    this.canvas.rotate(deg, centerHeadtube);
+    this.canvas.rotateFork(deg, centerHeadtube);
 
     // calc master rotation
     const ogA = axlesY - centerHeadtube.y;
@@ -81,6 +82,8 @@ export default class GeoPlayground extends Component {
     this.setState({
       masterRotation: newMasterAngle
     })
+
+    this.canvas.rotateSeat(newMasterAngle, {x: saddleX, y: saddleY});
   } 
 
   redraw(amount) {
@@ -110,6 +113,11 @@ export default class GeoPlayground extends Component {
           opacity: this.state.opacity * -1
         });
       }
+      if (e.key === 'h' || e.key === 's') {
+        this.setState({
+          mode: e.key
+        });
+      }
     })
   }
 
@@ -127,14 +135,23 @@ export default class GeoPlayground extends Component {
   stopDraw = () => {
     this.drawing = false;
     this.canvas.update();
-    this.canvas.processCoordsQueue(this.coordsQueue);
+    this.canvas.processCoordsQueue(this.coordsQueue, this.state.mode);
 
-    Object.keys(this.canvas.cords).forEach(y => {
-      Object.keys(this.canvas.cords[y]).forEach(x => {
-        this.canvas.ctx.fillStyle = "rgba(255,0,0,"+this.canvas.cords[y][x]+")";
-        this.canvas.ctx.fillRect( x, y, 1, 1 );
-      })
-    });
+    if (this.state.mode === 'h') {
+      Object.keys(this.canvas.cords).forEach(y => {
+        Object.keys(this.canvas.cords[y]).forEach(x => {
+          this.canvas.ctx.fillStyle = "rgba(255,0,0,"+this.canvas.cords[y][x]+")";
+          this.canvas.ctx.fillRect( x, y, 1, 1 );
+        })
+      });
+    } else {
+      Object.keys(this.canvas.seatCords).forEach(y => {
+        Object.keys(this.canvas.seatCords[y]).forEach(x => {
+          this.canvas.ctx.fillStyle = "rgba(255,0,0,"+this.canvas.seatCords[y][x]+")";
+          this.canvas.ctx.fillRect( x, y, 1, 1 );
+        })
+      });
+    }
   }
 
   setPosition = e => {
@@ -212,15 +229,15 @@ export default class GeoPlayground extends Component {
 
   render() {
     const {height, width, axlesY, rAxleX} = this.props.dimensions;
-    const {strokeWidth, strokeFade, opacity, masterRotation} = this.state;
+    const {strokeWidth, strokeFade, opacity, masterRotation, mode} = this.state;
     let aspectRatio = height / width * 100;
     return <div>
       <div className={'stage'} style={{width: '100%', height: 0, paddingBottom: aspectRatio + '%', position: 'relative', overflow: 'hidden', cursor:'none'}}>
         <span class="cursor" data-opacity={opacity} data-width={strokeWidth} data-fade={strokeFade} ref={this.cursor} style={{position:'absolute', width:strokeWidth, height:strokeWidth, borderRadius:'50%', display:'block', border:'1px solid black', zIndex:1, pointerEvents:'none',backgroundImage:`radial-gradient(red ${strokeFade}%, transparent)`}}></span>
-        <canvas onMouseDown={this.startDraw} onMouseUp={this.stopDraw} onMouseMove={this.draw} ref={this.canvasEl} style={{position: 'absolute', left: '50%', top: '50%', width, height, transformOrigin: `${rAxleX}px ${axlesY}px`, transform: `translate(-50%, -50%) scale(${this.state.scale}) rotate(${-1 * this.state.masterRotation}deg)`}}/>
+        <canvas onMouseDown={this.startDraw} onMouseUp={this.stopDraw} onMouseMove={this.draw} ref={this.canvasEl} style={{position: 'absolute', left: '50%', top: '50%', width, height, transformOriginss: `${rAxleX}px ${axlesY}px`, transform: `translate(-50%, -50%) scale(${this.state.scale}) rotate(${-1 * this.state.masterRotation}deg)`}}/>
         <img ref="img" src={this.props.img} style={{display: 'none'}} alt={'bike'}/>
       </div>
-      <p>Test canvas distort (master rotation: {masterRotation})</p>
+      <p>Test canvas distort (master rotation: {masterRotation}) (draw mode: {mode})</p>
       <p>Rotation Degrees</p>
       <Slider
           value={this.state.rotationDeg}

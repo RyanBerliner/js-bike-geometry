@@ -5,7 +5,7 @@ class CanvasDistort {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
 
-    this.transformations = [{}, {}];  // temp, initialize 1 for each type. eventually this will be arbitraty and created on the fly
+    this.transformations = {order: [], data: {}};  // temp, initialize 1 for each type. eventually this will be arbitraty and created on the fly
   }
 
   initialize(imageData) {
@@ -13,14 +13,18 @@ class CanvasDistort {
     this.originalImageData = imageData;
   }
 
-  rotate(pixels, origin, angle) {
-    this.transformations[0] = {
+  rotate(id, pixels, origin, angle) {
+    this.transformations.data[id] = {
       type: 'rotation',
       data: {
         pixels,
         origin,
         angle
       }
+    }
+
+    if (this.transformations.order.indexOf(id) < 0) {
+      this.transformations.order.push(id);
     }
 
     this.applyTransformations();
@@ -41,7 +45,8 @@ class CanvasDistort {
 
   applyTransformations() {
     let refImageData = this.originalImageData;
-    this.transformations.forEach(transformation => {
+    this.transformations.order.forEach(transformationId => {
+      const transformation = this.transformations.data[transformationId];
       if (transformation.type === 'rotation') {
         refImageData = this.applyRotationTransformation(transformation.data, refImageData);
       } else if (transformation.type === 'translate') {
