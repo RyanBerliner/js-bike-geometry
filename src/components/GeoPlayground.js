@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import GeoCanvas from './../classes/GeoCanvas'
-import Slider from 'material-ui/Slider'
 
 export default class GeoPlayground extends Component {
 
@@ -48,10 +47,11 @@ export default class GeoPlayground extends Component {
     });
   }
 
-  changeRotationDeg(event, value) {
-    this.rotate(value)
+  changeRotationDeg(event) {
+    const val = parseInt(event.target.value);
+    this.rotate(val)
     this.setState({
-      rotationDeg: value
+      rotationDeg: val
     });
   }
 
@@ -100,7 +100,7 @@ export default class GeoPlayground extends Component {
     this.img = this.refs.img;
     this.img.onload = (function() {
       this.canvas.placeOriginalImage(this.img);
-      this.canvas.drawGround();
+      // this.canvas.drawGround();
       this.canvas.drawBike();
       this.setState({
         scale: this.canvasEl.current.parentElement.offsetWidth / this.props.dimensions.width
@@ -229,51 +229,16 @@ export default class GeoPlayground extends Component {
 
   render() {
     const {height, width, axlesY, rAxleX} = this.props.dimensions;
-    const {strokeWidth, strokeFade, opacity, masterRotation, mode} = this.state;
+    // const {strokeWidth, strokeFade, opacity} = this.state;
     let aspectRatio = height / width * 100;
-    return <div>
-      <div className={'stage'} style={{width: '100%', height: 0, paddingBottom: aspectRatio + '%', position: 'relative', overflow: 'hidden', cursor:'none'}}>
-        <span class="cursor" data-opacity={opacity} data-width={strokeWidth} data-fade={strokeFade} ref={this.cursor} style={{position:'absolute', width:strokeWidth, height:strokeWidth, borderRadius:'50%', display:'block', border:'1px solid black', zIndex:1, pointerEvents:'none',backgroundImage:`radial-gradient(red ${strokeFade}%, transparent)`}}></span>
-        <canvas onMouseDown={this.startDraw} onMouseUp={this.stopDraw} onMouseMove={this.draw} ref={this.canvasEl} style={{position: 'absolute', left: '50%', top: '50%', width, height, transformOriginss: `${rAxleX}px ${axlesY}px`, transform: `translate(-50%, -50%) scale(${this.state.scale}) rotate(${-1 * this.state.masterRotation}deg)`}}/>
+    return <>
+      <div className={'stage'} style={{width: '100%', height: 0, paddingBottom: aspectRatio + '%', position: 'relative', overflow: 'hidden'}}>
+        {/* <span class="cursor" data-opacity={opacity} data-width={strokeWidth} data-fade={strokeFade} ref={this.cursor} style={{position:'absolute', width:strokeWidth, height:strokeWidth, borderRadius:'50%', display:'block', border:'1px solid black', zIndex:1, pointerEvents:'none',backgroundImage:`radial-gradient(red ${strokeFade}%, transparent)`}}></span> */}
+        <canvas ref={this.canvasEl} style={{position: 'absolute', left: '50%', top: '50%', width, height, transformOrigin: `${rAxleX}px ${axlesY}px`, transform: `translate(-50%, -50%) scale(${this.state.scale}) rotate(${-1 * this.state.masterRotation}deg)`}}/>
         <img ref="img" src={this.props.img} style={{display: 'none'}} alt={'bike'}/>
       </div>
-      <p>Test canvas distort (master rotation: {masterRotation}) (draw mode: {mode})</p>
-      <p>Rotation Degrees</p>
-      <Slider
-          value={this.state.rotationDeg}
-          aria-labelledby="label"
-          onChange={this.changeRotationDeg.bind(this)}
-          min={-359}
-          max={359}
-          step={1}
-        />
-      <p>Distory X</p>
-      <Slider
-          value={this.state.distortX}
-          aria-labelledby="label"
-          onChange={this.changeDistortX.bind(this)}
-          min={-50}
-          max={50}
-          step={1}
-        />
-      <p>Distory Y</p>
-      <Slider
-          value={this.state.distortY}
-          aria-labelledby="label"
-          onChange={this.changeDistortY.bind(this)}
-          min={-50}
-          max={50}
-          step={1}
-        />
-            <p>Change bike geo</p>
-      <Slider
-          value={this.state.slack}
-          aria-labelledby="label"
-          onChange={this.changeSlack.bind(this)}
-          min={-40}
-          max={40}
-        />
-    </div>
+      <input type="range" value={this.state.rotationDeg} min={-10} max={3} step={1} onChange={this.changeRotationDeg.bind(this)} />
+    </>
   }
 
 }

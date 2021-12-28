@@ -13,7 +13,7 @@ class App extends Component {
   render() {
     return (
       <MuiThemeProvider>
-        <div className="App" style={{backgroundColor: '#efefef'}}>
+        <div className="App">
           <PreviewFrame mode={this.state.configure}/>
         </div>
       </MuiThemeProvider>

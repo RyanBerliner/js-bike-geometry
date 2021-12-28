@@ -196,8 +196,6 @@ class GeoCanvas {
       })
     });
 
-
-    console.log(this.seatCords);
     this.tempCords = {};
   }
 

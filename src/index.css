@@ -1,3 +1,13 @@
+html {
+  padding: 0;
+  margin: 0;
+  background-color: white;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -8,10 +18,15 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.cursor:before {
+#root {
+  border: 1px solid black;
+  margin: 5px;
+}
+
+/* .cursor:before {
   content: attr(data-width) "/" attr(data-fade) "/" attr(data-opacity);
   position: absolute;
   top: 100%;
   left: 50%;
   transform: translate(-50%, 50%);
-}
+} */
