@@ -234,10 +234,15 @@ export default class GeoPlayground extends Component {
     return <>
       <div className={'stage'} style={{width: '100%', height: 0, paddingBottom: aspectRatio + '%', position: 'relative', overflow: 'hidden'}}>
         {/* <span class="cursor" data-opacity={opacity} data-width={strokeWidth} data-fade={strokeFade} ref={this.cursor} style={{position:'absolute', width:strokeWidth, height:strokeWidth, borderRadius:'50%', display:'block', border:'1px solid black', zIndex:1, pointerEvents:'none',backgroundImage:`radial-gradient(red ${strokeFade}%, transparent)`}}></span> */}
-        <canvas ref={this.canvasEl} style={{position: 'absolute', left: '50%', top: '50%', width, height, transformOrigin: `${rAxleX}px ${axlesY}px`, transform: `translate(-50%, -50%) scale(${this.state.scale}) rotate(${-1 * this.state.masterRotation}deg)`}}/>
+        <div style={{transform: `translate(-50%, -50%) scale(${this.state.scale})`}}>
+          <canvas ref={this.canvasEl} style={{position: 'absolute', left: '50%', top: '50%', width, height, transformOrigin: `${rAxleX}px ${axlesY}px`, transform: `rotate(${-1 * this.state.masterRotation}deg)`}}/>
+        </div>
         <img ref="img" src={this.props.img} style={{display: 'none'}} alt={'bike'}/>
       </div>
-      <input type="range" value={this.state.rotationDeg} min={-10} max={3} step={1} onChange={this.changeRotationDeg.bind(this)} />
+      <div style={{margin: '20px auto', textAlign: 'center'}}>
+        <input style={{marginRight: '10px'}} type="range" value={this.state.rotationDeg} min={-10} max={3} step={1} onChange={this.changeRotationDeg.bind(this)} />
+        <button onClick={this.changeRotationDeg.bind(this)} value={0}>Reset</button>
+      </div>
     </>
   }
 
