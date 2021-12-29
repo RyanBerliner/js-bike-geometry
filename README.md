@@ -1,5 +1,7 @@
 # JS Bike Geometry
 
+> [v0 explaination blog post](https://ryanberliner.com/v0-js-bike-geometry) -- see `v0` and `v0-demo` branch
+
 A javascript powered embed that allows you to manipulate the geometry of mountain
 bikes. Does so by letting the user select an image, specify key points on the image,
 and when the geo is manipulated, the image will warp and move to match the geometry.
