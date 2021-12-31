@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import GeoCanvas from './../classes/GeoCanvas'
-import Slider from 'material-ui/Slider'
 
 export default class GeoPlayground extends Component {
 
@@ -27,28 +26,32 @@ export default class GeoPlayground extends Component {
     this.coordsQueue = [];
   }
 
-  changeSlack(event, value) {
+  changeSlack(event) {
+    const value = parseInt(event.target.value);
     this.redraw(value);
     this.setState({
       slack: value
     });
   }
 
-  changeDistortX(event, value) {
+  changeDistortX(event) {
+    const value = parseInt(event.target.value);
     this.distort(value, this.state.distortY);
     this.setState({
       distortX: value
     });
   }
 
-  changeDistortY(event, value) {
+  changeDistortY(event) {
+    const value = parseInt(event.target.value);
     this.distort(this.state.distortX, value);
     this.setState({
       distortY: value
     });
   }
 
-  changeRotationDeg(event, value) {
+  changeRotationDeg(event) {
+    const value = parseInt(event.target.value);
     this.rotate(value)
     this.setState({
       rotationDeg: value
@@ -239,7 +242,8 @@ export default class GeoPlayground extends Component {
       </div>
       <p>Test canvas distort (master rotation: {masterRotation}) (draw mode: {mode})</p>
       <p>Rotation Degrees</p>
-      <Slider
+      <input
+          type="range"
           value={this.state.rotationDeg}
           aria-labelledby="label"
           onChange={this.changeRotationDeg.bind(this)}
@@ -248,7 +252,8 @@ export default class GeoPlayground extends Component {
           step={1}
         />
       <p>Distory X</p>
-      <Slider
+      <input
+          type="range"
           value={this.state.distortX}
           aria-labelledby="label"
           onChange={this.changeDistortX.bind(this)}
@@ -257,7 +262,8 @@ export default class GeoPlayground extends Component {
           step={1}
         />
       <p>Distory Y</p>
-      <Slider
+      <input
+          type="range"
           value={this.state.distortY}
           aria-labelledby="label"
           onChange={this.changeDistortY.bind(this)}
@@ -266,7 +272,8 @@ export default class GeoPlayground extends Component {
           step={1}
         />
             <p>Change bike geo</p>
-      <Slider
+      <input
+          type="range"
           value={this.state.slack}
           aria-labelledby="label"
           onChange={this.changeSlack.bind(this)}
