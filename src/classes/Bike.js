@@ -63,7 +63,7 @@ class Bike {
   slackFork(units) {
     let kindaForkLength = this.getKindaForkLength();
     let headTubeLength = this.getHeadTubeLength();
-    let initialAngle = this.getKindaForkAngle();
+    // let initialAngle = this.getKindaForkAngle();
     let frontAxle = this.frontAxle;
     let headTubeTop = this.headTubeTop;
     let headTubeBottom = this.headTubeBottom;

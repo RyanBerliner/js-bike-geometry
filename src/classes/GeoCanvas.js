@@ -1,7 +1,7 @@
 import Bike from './Bike';
 import CanvasDistort from './CanvasDistort';
-import {forkmap} from './../forkdistortionmap';
-import {seatmap} from './../seatdistortionmap';
+import {forkmap} from '../data/forkdistortionmap';
+import {seatmap} from '../data/seatdistortionmap';
 
 class GeoCanvas {
 
