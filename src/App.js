@@ -1,21 +1,17 @@
-import React, { Component } from 'react';
-import PreviewFrame from './components/PreviewFrame';
+import React, { useState } from 'react';
+import LegacyWorkbench from './legacy/components/PreviewFrame';
+import Workbench from './Workbench';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      mode: 'configure'
-    }
-  }
+function App() {
+  const [isLegacy, setIsLegacy] = useState(false);
+  const AppComponent = isLegacy ? LegacyWorkbench : Workbench;
 
-  render() {
-    return (
-      <div className="App" style={{backgroundColor: '#efefef'}}>
-        <PreviewFrame mode={this.state.configure}/>
-      </div>
-    );
-  }
+  return <div className="App">
+    <button onClick={() => setIsLegacy(!isLegacy)}>
+      View {isLegacy ? 'new' : 'old'} workbench
+    </button>
+    <AppComponent />
+  </div>
 }
 
 export default App;

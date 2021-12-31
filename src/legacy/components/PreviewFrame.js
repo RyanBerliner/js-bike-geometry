@@ -6,7 +6,7 @@ export default class PreviewFrame extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      image: 'bike-image-3.jpg',
+      image: 'legacy/bike-image-3.jpg',
       mode: 'initialize',
       OGdimensions: {}
     }
@@ -36,6 +36,15 @@ export default class PreviewFrame extends Component {
   render() {
     let windowView = (this.state.mode === 'initialize') ? <GeoInitializer img={this.state.image} changeMode={this.changeMode} changeDimensions={this.changeDimensions}/> : <GeoPlayground img={this.state.image} dimensions={this.state.OGdimensions} />;
     return <div>
+      <style>
+        {`.cursor:before {
+          content: attr(data-width) "/" attr(data-fade) "/" attr(data-opacity);
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          transform: translate(-50%, 50%);
+        }`}
+      </style>
       <div style={{width: '90%', border: '1px solid black', margin: '10px auto'}}>
         {windowView}
       </div>
