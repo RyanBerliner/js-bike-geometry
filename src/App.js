@@ -9,7 +9,7 @@ function App() {
   return <div className="App">
     <div className="alert alert-primary d-md-flex justify-content-between border-0 rounded-0 mb-0">
       <p className="mb-0">You are {isLegacy ? 'viewing the old' : 'previewing the new'} workbench.</p>
-      <a href="#workbench" role="button" onClick={() => setIsLegacy(!isLegacy)} className="alert-link">
+      <a href="#workbench" role="button" onClick={() => setIsLegacy(!isLegacy)} className="alert-link" data-testid="switch-workbench">
         View {isLegacy ? 'new' : 'old'} workbench
       </a>
     </div>

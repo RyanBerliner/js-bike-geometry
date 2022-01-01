@@ -35,7 +35,7 @@ export default class PreviewFrame extends Component {
 
   render() {
     let windowView = (this.state.mode === 'initialize') ? <GeoInitializer img={this.state.image} changeMode={this.changeMode} changeDimensions={this.changeDimensions}/> : <GeoPlayground img={this.state.image} dimensions={this.state.OGdimensions} />;
-    return <div>
+    return <div data-testid="old-workbench">
       <style>
         {`.cursor:before {
           content: attr(data-width) "/" attr(data-fade) "/" attr(data-opacity);
