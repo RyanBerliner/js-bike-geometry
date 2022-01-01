@@ -1,0 +1,24 @@
+name: Test
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+
+      # cypress' github action will install dependencies, which is why we never
+      # have to do this manually ourselves
+      - name: End-to-End Tests
+        uses: cypress-io/github-action@v2
+        with:
+          start: npm start
+
+      - name: Javascript Tests
+        run: npm run test

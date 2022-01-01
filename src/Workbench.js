@@ -5,7 +5,7 @@ import Stage from './Stage';
 import Toolbar from './Toolbar';
 
 export default function Workbench() {
-  return <div className="vh-100 d-flex">
+  return <div className="vh-100 d-flex" data-testid="workbench">
     <div className="container-fluid flex-grow-1 d-flex">
       <div className="row flex-grow-1">
         <div className="col-md-8 col-lg-9 d-flex flex-column">
