@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import App from './App';
 
 describe('app', () => {
-  it('renders new view by default', () => {
+  it('renders new workbench by default', () => {
     render(<App />);
     expect(screen.getByTestId('workbench')).toBeInTheDocument();
     expect(screen.getByTestId('switch-workbench')).toHaveTextContent('View old workbench')
