@@ -57,6 +57,6 @@ export const reducer = produce((draft, { type, payload }) => {
 
 export const setImgUrl = url => ({ type: SET_IMG_URL, payload: url });
 export const setImgDetails = details => ({ type: SET_IMG_DETAILS, payload: details });
-export const addLayer = (name, type) => ({ type: ADD_LAYER, payload: {name, type} });
+export const addLayer = details => ({ type: ADD_LAYER, payload: details });
 export const removeLayer = id => ({ type: REMOVE_LAYER, payload: id });
 export const updateLayer = (id, details) => ({ type: UPDATE_LAYER, payload: {id, details} });

@@ -31,11 +31,11 @@ describe('workbench reducer', () => {
   })
 
   it('has working addLayer action creator', () => {
-    let newState = reducer(state, addLayer('layer 1', DISTORTION_ROTATIONAL));
+    let newState = reducer(state, addLayer({name: 'layer 1', type: DISTORTION_ROTATIONAL}));
     expect(newState.layerIds).toStrictEqual(['1']);
     expect(newState.layerData['1']).toStrictEqual({name: 'layer 1', type: DISTORTION_ROTATIONAL});
 
-    newState = reducer(newState, addLayer('layer 2', DISTORTION_TRANSLATIONAL));
+    newState = reducer(newState, addLayer({name: 'layer 2', type: DISTORTION_TRANSLATIONAL}));
     expect(newState.layerIds).toStrictEqual(['1', '2']);
     expect(newState.layerData['2']).toStrictEqual({name: 'layer 2', type: DISTORTION_TRANSLATIONAL});
   })
@@ -50,7 +50,7 @@ describe('workbench reducer', () => {
       }
     }
 
-    const newState = reducer(state, addLayer('new layer', DISTORTION_ROTATIONAL));
+    const newState = reducer(state, addLayer({name: 'new layer', type: DISTORTION_ROTATIONAL}));
     expect(newState.layerIds).toStrictEqual(['2', '3', '4']);
     expect(newState.layerData['4']).toStrictEqual({name: 'new layer', type: DISTORTION_ROTATIONAL});
   })
