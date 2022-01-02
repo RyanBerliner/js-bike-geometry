@@ -1,4 +1,4 @@
-a {
+a, .btn-link {
   text-decoration-thickness: 2px;
   text-underline-offset: 2px;
 }

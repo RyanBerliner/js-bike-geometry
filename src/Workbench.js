@@ -18,7 +18,7 @@ export default function Workbench() {
             <Stage />
           </div>
         </div>
-        <div className="col-md-4 col-lg-3 border-start">
+        <div className="col-md-4 col-lg-3 border-start mh-100 overflow-auto">
           <Sidebar />
         </div>
       </div>
