@@ -55,7 +55,13 @@ export default function Sidebar({data, dispatch}) {
     <h2 className="ms-2 mt-4 h4 fw-bold">Distortion Layers</h2>
     <ul className="list-unstyled">
       {data.layerIds.map(id => {
-        return <LayerListItem key={id} id={id} layerData={data.layerData[id]} />
+        return <LayerListItem
+          key={id}
+          id={id}
+          layerData={data.layerData[id]}
+          dispatch={dispatch}
+          isDrawing={data.drawingLayer === id}
+        />
       })}
     </ul>
     <button className="btn btn-light mb-4" data-bs-target="#layer-modal" data-bs-toggle="modal" data-bs-layerid={NEW_LAYER}>

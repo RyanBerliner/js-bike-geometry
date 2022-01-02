@@ -1,15 +1,22 @@
 import React from 'react';
+import { setDrawingLayer } from './workbenchReducer';
 
-export function LayerListItem({id, layerData, ...props}) {
-  return <li className="py-3 px-2 border-bottom" {...props}>
-    <div className="d-flex justify-content-between align-items-center">
-      <div>
+export function LayerListItem({id, layerData, dispatch, isDrawing}) {
+  const toggleDraw = () => {
+    dispatch(setDrawingLayer(isDrawing ? null : id))
+  }
+
+  return <li className="py-3 px-2 border-bottom" id={`layer-${id}`}>
+    <div className="d-xl-flex justify-content-between align-items-center">
+      <div className="text-truncate">
         <strong>{layerData.name}</strong><br />
         <span className="text-muted">{layerData.type}</span>
       </div>
-      <div>
-        <button className="btn ms-2 btn-light" data-bs-target="#layer-modal" data-bs-toggle="modal" data-bs-layerid={id}>Edit</button>
-        {/* <button className="btn ms-2 btn-light"><i className="bi bi-droplet-half me-1 opacity-50"></i> Draw Map</button> */}
+      <div className="text-nowrap mt-xl-0 mt-2">
+        <button className="btn ms-xl-2 me-2 btn-light" data-bs-target="#layer-modal" data-bs-toggle="modal" data-bs-layerid={id}>Edit</button>
+        <button className={`btn ${isDrawing ? 'btn-danger' : 'btn-light'}`} onClick={toggleDraw}>
+          <i className={`bi me-1 ${isDrawing ? 'opacity-75 bi-x-lg' : 'opacity-50 bi-brush-fill'}`}></i> {isDrawing ? 'Stop' : 'Draw'}
+        </button>
       </div>
     </div>
     {/* <div className="row align-items-center">

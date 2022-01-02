@@ -40,4 +40,20 @@ describe('layer ui', () => {
     cy.get('#layer-modal').should('not.be.visible');
     cy.get('li').contains(/layer 1/i).should('not.exist');
   });
+
+  it('can select and unselect layer to draw', () => {
+    // toggle a single one on and off
+    cy.get('#layer-2 button').contains(/draw/i).click();
+    cy.get('#layer-2 button').contains(/stop/i).should('exist');
+    cy.get('#layer-2 button').contains(/stop/i).click();
+    cy.get('#layer-2 button').contains(/draw/i).should('exist');
+
+    // stop drawing by starting to draw another
+    cy.get('#layer-2 button').contains(/draw/i).click();
+    cy.get('#layer-2 button').contains(/stop/i).should('exist');
+    cy.get('#layer-3 button').contains(/draw/i).click();
+    cy.get('#layer-2 button').contains(/stop/i).should('not.exist');
+    cy.get('#layer-3 button').contains(/stop/i).should('exist');
+    cy.get('#layer-3 button').contains(/stop/i).click();
+  });
 })

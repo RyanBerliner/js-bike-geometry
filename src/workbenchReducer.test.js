@@ -7,7 +7,8 @@ import {
   addLayer,
   removeLayer,
   updateLayer,
-  reducer
+  reducer,
+  setDrawingLayer
 } from './workbenchReducer';
 
 describe('workbench reducer', () => {
@@ -77,6 +78,12 @@ describe('workbench reducer', () => {
     expect(newState.layerData).toHaveProperty('3');
     expect(newState.layerData).not.toHaveProperty('1');
     expect(newState.layerData).not.toHaveProperty('2');
+
+    // If the drawing layer is deleted, the drawing layer should be set null
+    newState = reducer({ ...newState, drawingLayer: '3' }, removeLayer('3'));
+    expect(newState.layerIds).toStrictEqual([]);
+    expect(newState.layerData).not.toHaveProperty('3');
+    expect(newState.drawingLayer).toBe(null);
   })
 
   it('has working updateLayer action creator', () => {
@@ -103,5 +110,13 @@ describe('workbench reducer', () => {
       type: DISTORTION_ROTATIONAL,
       extra: 'lorem'
     });
+  })
+
+  it('has working setDrawingLayer action creator', () => {
+    let newState = reducer(state, setDrawingLayer('1'));
+    expect(newState.drawingLayer).toBe('1');
+
+    newState = reducer(newState, setDrawingLayer(null));
+    expect(newState.drawingLayer).toBe(null);
   })
 });
