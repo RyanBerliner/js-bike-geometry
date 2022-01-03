@@ -1,5 +1,9 @@
 import {DISTORTION_ROTATIONAL, DISTORTION_TRANSLATIONAL} from '../../src/workbenchReducer';
 
+// needs extra help setting range slider value
+// https://github.com/cypress-io/cypress/issues/1570#issuecomment-450966053
+const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+
 describe('layer ui', () => {
   before(() => {
     cy.visit('/');
@@ -9,10 +13,26 @@ describe('layer ui', () => {
     for (var i = 1; i <= 3; i++) {
       cy.get('button').contains(/add distortion layer/i).click();
       cy.get('#layer-modal input[name="name"]').clear().type(`layer ${i}`, {delay:0});
-      cy.get('#layer-modal select[name="type"]').select(DISTORTION_TRANSLATIONAL);
-      cy.get('#layer-modal button[type="submit"]').click();
 
-      // new layer should exist in the list
+      if (i >= 2) {
+        cy.get('#layer-modal select[name="type"]').select(DISTORTION_TRANSLATIONAL);
+        cy.get('#layer-modal input[name="translationalx"]').clear().type('20', {delay:0});
+        cy.get('#layer-modal input[name="translationaly"]').clear().type('30', {delay:0});
+      } else {
+        cy.get('#layer-modal input[name="rotationalangle"]').then(($range) => {
+          const range = $range[0];
+          nativeInputValueSetter.call(range, 25);
+          range.dispatchEvent(new Event('change', { value: 25, bubbles: true }));
+        });
+
+        cy.get('#layer-modal label').contains(/25 deg/i).should('exist');
+        cy.get('#layer-modal input[name="rotationaloriginx"]').clear().type('10', {delay:0});
+        cy.get('#layer-modal input[name="rotationaloriginy"]').clear().type('15', {delay:0});
+      }
+
+      
+      // new layer should exist in the list after submitting
+      cy.get('#layer-modal button[type="submit"]').click();
       cy.get('li').contains(`layer ${i}`).should('exist');
     }
   });

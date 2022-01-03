@@ -10,7 +10,7 @@ import {
 } from './workbenchReducer';
 
 const NEW_LAYER = 'new-layer';
-const NEW_LAYER_DATA = {name: 'new layer', type: DISTORTION_ROTATIONAL};
+const NEW_LAYER_DATA = {name: 'new layer', type: DISTORTION_ROTATIONAL, rotationalangle: 0, rotationaloriginx: 0, rotationaloriginy: 0};
 
 export default function Sidebar({data, dispatch}) {
   const modal = useRef();
@@ -94,6 +94,32 @@ export default function Sidebar({data, dispatch}) {
                 <option value={DISTORTION_TRANSLATIONAL}>Translational</option>
               </select>
             </div>
+            {modalData.type === DISTORTION_ROTATIONAL && <>
+              <div className="mb-3">
+                <label htmlFor="layer-rotationalangle" className="form-label">Rotational Angle ({modalData.rotationalangle} deg)</label>
+                <input type="range" className="form-range" id="layer-rotationalangle" name="rotationalangle" value={modalData.rotationalangle} onChange={updateModalData} min={-359} max={359} step={1} required={modalData.type === DISTORTION_ROTATIONAL} />
+              </div>
+              <div className="row mb-3">
+                <div className="col-6">
+                  <label htmlFor="layer-rotationaloriginx" className="form-label">Origin X</label>
+                  <input type="number" className="form-control" id="layer-rotationaloriginx" name="rotationaloriginx" value={modalData.rotationaloriginx} onChange={updateModalData} step={1} required={modalData.type === DISTORTION_ROTATIONAL} />
+                </div>
+                <div className="col-6">
+                  <label htmlFor="layer-rotationaloriginy" className="form-label">Origin Y</label>
+                  <input type="number" className="form-control" id="layer-rotationaloriginy" name="rotationaloriginy" value={modalData.rotationaloriginy} onChange={updateModalData} step={1} required={modalData.type === DISTORTION_ROTATIONAL} />
+                </div>
+              </div>
+            </>}
+            {modalData.type === DISTORTION_TRANSLATIONAL && <div className="row mb-3">
+              <div className="col-6">
+                <label htmlFor="layer-translationalx" className="form-label">Translate X</label>
+                <input type="number" className="form-control" id="layer-translationalx" name="translationalx" value={modalData.translationalx} onChange={updateModalData} step={1} required={modalData.type === DISTORTION_TRANSLATIONAL} />
+              </div>
+              <div className="col-6">
+                <label htmlFor="layer-translationaly" className="form-label">Translate Y</label>
+                <input type="number" className="form-control" id="layer-translationaly" name="translationaly" value={modalData.translationaly} onChange={updateModalData} step={1} required={modalData.type === DISTORTION_TRANSLATIONAL} />
+              </div>
+            </div>}
           </div>
           <div className="modal-footer">
             {modalId !== NEW_LAYER && <button type="button" className="btn btn-link text-danger me-auto" onClick={removeLayer}>Delete</button>}
