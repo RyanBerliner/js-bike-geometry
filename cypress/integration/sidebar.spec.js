@@ -76,4 +76,18 @@ describe('layer ui', () => {
     cy.get('#layer-3 button').contains(/stop/i).should('exist');
     cy.get('#layer-3 button').contains(/stop/i).click();
   });
+
+  it('can quick edit disortion layer adjustments inline', () => {
+    cy.get('#layer-2 input[name="rotationalangle"]').then(($range) => {
+      const range = $range[0];
+      nativeInputValueSetter.call(range, 50);
+      range.dispatchEvent(new Event('change', { value: 50, bubbles: true }));
+    });
+    cy.get('#layer-2 label').contains(/50 deg/i).should('exist');
+    cy.get('#layer-2 input[name="rotationaloriginx"]').clear().type('1', {delay:0});
+    cy.get('#layer-2 input[name="rotationaloriginy"]').clear().type('3', {delay:0});
+
+    cy.get('#layer-3 input[name="translationalx"]').clear().type('99', {delay:0});
+    cy.get('#layer-3 input[name="translationaly"]').clear().type('100', {delay:0});
+  })
 })
