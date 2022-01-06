@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "cypress": "^9.2.0",
-    "eslint-plugin-cypress": "^2.12.1"
+    "eslint-plugin-cypress": "^2.12.1",
+    "snapshot-diff": "^0.9.0"
   }
 }

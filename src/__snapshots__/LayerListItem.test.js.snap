@@ -1,6 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`layer list item rotational layer renders rotational layer 1`] = `
+exports[`layer list item drawing control renders button properly when drawing and not drawing 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ --- --- @@
+-           class=\\"btn btn-light\\"
++           class=\\"btn btn-danger\\"
+@@ --- --- @@
+-             class=\\"bi me-1 opacity-50 bi-brush-fill\\"
++             class=\\"bi me-1 opacity-75 bi-x-lg\\"
+@@ --- --- @@
+-            Draw
++            Stop"
+`;
+
+exports[`layer list item rotational layer renders properly 1`] = `
 <DocumentFragment>
   <li
     class="py-3 px-2 border-bottom"
@@ -124,7 +140,7 @@ exports[`layer list item rotational layer renders rotational layer 1`] = `
 </DocumentFragment>
 `;
 
-exports[`layer list item translational layer renders translational layer 1`] = `
+exports[`layer list item translational layer renders properly 1`] = `
 <DocumentFragment>
   <li
     class="py-3 px-2 border-bottom"
