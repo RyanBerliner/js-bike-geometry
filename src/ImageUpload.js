@@ -21,6 +21,7 @@ export function ImageUpload() {
   }
 
   const remove = () => {
+    window.URL.revokeObjectURL(imageSrc);
     setImageSrc(null);
     setImageDetails(null);
   }
