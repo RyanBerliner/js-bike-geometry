@@ -8,11 +8,8 @@ export function ImageUpload() {
   const onChange = event => {
     const {files} = event.target;
     if (files && files[0]) {
-      const reader = new FileReader();
-      reader.onload = e => {
-        setImageSrc(e.target.result);
-      }
-      reader.readAsDataURL(files[0]);
+      const localImageURL = window.URL.createObjectURL(files[0]);
+      setImageSrc(localImageURL);
     }
   }
 
