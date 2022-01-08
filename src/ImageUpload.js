@@ -47,8 +47,8 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails }) {
     </div>
     <img src={imageUrl} alt="" className={`w-100 ${imageUrl ? 'mb-3' : 'd-none'}`} onLoad={onLoad} />
     {imageDetails && <div className="d-flex justify-content-between align-items-center">
-      <button className="btn btn-sm btn-link text-danger" onClick={remove}>Remove</button>
-      <span className="text-muted small mt-1">{imageDetails.width} x {imageDetails.height}</span>
+      <button className="btn btn-sm btn-link text-danger" onClick={remove} data-testid="remove-upload">Remove</button>
+      <span className="text-muted small mt-1" data-testid="upload-dimensions">{imageDetails.width} x {imageDetails.height}</span>
     </div>}
   </>
 }

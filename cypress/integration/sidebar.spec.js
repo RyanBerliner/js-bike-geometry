@@ -1,8 +1,33 @@
+import 'cypress-file-upload';
 import {DISTORTION_ROTATIONAL, DISTORTION_TRANSLATIONAL} from '../../src/workbenchReducer';
 
 // needs extra help setting range slider value
 // https://github.com/cypress-io/cypress/issues/1570#issuecomment-450966053
 const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+
+describe('image upload ui', () => {
+  before(() => {
+    cy.visit('/');
+  });
+
+  it('can upload image', () => {
+    cy.get('input[type="file"]')
+      .attachFile("pic-transition-patrol.jpeg")
+    cy.get('img[src^="blob"]').should('exist');
+    cy.get('[data-testid="remove-upload"]').should('exist');
+    cy.get('[data-testid="upload-dimensions"]').contains(/2400 x 1464/i).should('exist');
+  })
+
+  it('can remove existing image, upload new one', () => {
+    cy.get('[data-testid="remove-upload"]').click();
+    cy.get('input[type="file"]').should('be.focused');
+    cy.get('input[type="file"]')
+      .attachFile("pic-commencal-meta-sx.jpeg")
+    cy.get('img[src^="blob"]').should('exist');
+    cy.get('[data-testid="remove-upload"]').should('exist');
+    cy.get('[data-testid="upload-dimensions"]').contains(/2000 x 1280/i).should('exist');
+  })
+})
 
 describe('layer ui', () => {
   before(() => {
