@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useRef } from 'react';
 import {Modal} from 'bs5-react-elements';
 import { LayerListItem } from './LayerListItem';
+import { ImageUpload } from './ImageUpload';
 import {
   DISTORTION_ROTATIONAL,
   DISTORTION_TRANSLATIONAL,
@@ -48,8 +49,7 @@ export default function Sidebar({data, dispatch}) {
   return <>
     <h2 className="ms-2 mt-4 h4 fw-bold">Image Details</h2>
     <div className="my-3 mx-2">
-      <label htmlFor="image-select-input" className="form-label">Select an image</label>
-      <input className="form-control" type="file" id="image-select-input" />
+      <ImageUpload />
     </div>
 
     <h2 className="ms-2 mt-4 h4 fw-bold">Distortion Layers</h2>
