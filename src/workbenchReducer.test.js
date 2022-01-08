@@ -29,6 +29,10 @@ describe('workbench reducer', () => {
 
     newState = reducer(newState, setImgDetails({name2: 'value2'}));
     expect(newState.imageDetails).toStrictEqual({name: 'value', name2: 'value2'});
+
+    // should be able to clear by passing null
+    newState = reducer(newState, setImgDetails(null));
+    expect(newState.imageDetails).toStrictEqual(null);
   })
 
   it('has working addLayer action creator', () => {

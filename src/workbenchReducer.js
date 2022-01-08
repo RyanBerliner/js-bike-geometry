@@ -12,7 +12,7 @@ export const DISTORTION_TRANSLATIONAL = 'translational';
 
 export const INITIAL_DATA = {
   imageUrl: null,
-  imageDetails: {},
+  imageDetails: null,
   layerIds: [],
   layerData: {},
   drawingLayer: null,
@@ -24,7 +24,7 @@ export const reducer = produce((draft, { type, payload }) => {
       draft.imageUrl = payload;
       break;
     case SET_IMG_DETAILS:
-      draft.imageDetails = {
+      draft.imageDetails = payload === null ? null : {
         ...draft.imageDetails,
         ...payload
       };

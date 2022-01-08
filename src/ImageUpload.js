@@ -1,29 +1,28 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
+import {setImgDetails, setImgUrl} from './workbenchReducer';
 
-export function ImageUpload() {
+export function ImageUpload({ dispatch, imageUrl, imageDetails }) {
   const inputRef = useRef();
-  const [imageSrc, setImageSrc] = useState(null);
-  const [imageDetails, setImageDetails] = useState(null);
 
   const onChange = event => {
     const {files} = event.target;
     if (files && files[0]) {
       const localImageURL = window.URL.createObjectURL(files[0]);
-      setImageSrc(localImageURL);
+      dispatch(setImgUrl(localImageURL));
     }
   }
 
   const onLoad = event => {
-    setImageDetails({
+    dispatch(setImgDetails({
       height: event.target.naturalHeight,
       width: event.target.naturalWidth,
-    })
+    }))
   }
 
   const remove = () => {
-    window.URL.revokeObjectURL(imageSrc);
-    setImageSrc(null);
-    setImageDetails(null);
+    window.URL.revokeObjectURL(imageUrl);
+    dispatch(setImgUrl(null));
+    dispatch(setImgDetails(null));
   }
 
   const firstRender = useRef(true);
@@ -33,20 +32,20 @@ export function ImageUpload() {
       return;
     }
 
-    if (imageSrc !== null) {
+    if (imageUrl !== null) {
       return;
     }
 
     inputRef.current.value = null;
     inputRef.current.focus();
-  }, [imageSrc]);
+  }, [imageUrl]);
 
   return <>
-    <div className={imageSrc ? 'd-none' : ''}>
+    <div className={imageUrl ? 'd-none' : ''}>
       <label htmlFor="image-select-input" className="form-label">Select an image</label>
       <input className="form-control" type="file" id="image-select-input" onChange={onChange} ref={inputRef} />
     </div>
-    <img src={imageSrc} alt="" className={`w-100 ${imageSrc ? 'mb-3' : 'd-none'}`} onLoad={onLoad} />
+    <img src={imageUrl} alt="" className={`w-100 ${imageUrl ? 'mb-3' : 'd-none'}`} onLoad={onLoad} />
     {imageDetails && <div className="d-flex justify-content-between align-items-center">
       <button className="btn btn-sm btn-link text-danger" onClick={remove}>Remove</button>
       <span className="text-muted small mt-1">{imageDetails.width} x {imageDetails.height}</span>

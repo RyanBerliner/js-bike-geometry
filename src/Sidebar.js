@@ -49,7 +49,7 @@ export default function Sidebar({data, dispatch}) {
   return <>
     <h2 className="ms-2 mt-4 h4 fw-bold">Image Details</h2>
     <div className="my-3 mx-2">
-      <ImageUpload />
+      <ImageUpload dispatch={dispatch} imageUrl={data.imageUrl} imageDetails={data.imageDetails} />
     </div>
 
     <h2 className="ms-2 mt-4 h4 fw-bold">Distortion Layers</h2>
