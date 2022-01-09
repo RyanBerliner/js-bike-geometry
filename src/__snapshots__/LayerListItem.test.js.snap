@@ -1,0 +1,234 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`layer list item drawing control renders button properly when drawing and not drawing 1`] = `
+"Snapshot Diff:
+- First value
++ Second value
+
+@@ --- --- @@
+-           class=\\"btn btn-light\\"
++           class=\\"btn btn-danger\\"
+@@ --- --- @@
+-             class=\\"bi me-1 opacity-50 bi-brush-fill\\"
++             class=\\"bi me-1 opacity-75 bi-x-lg\\"
+@@ --- --- @@
+-            Draw
++            Stop"
+`;
+
+exports[`layer list item rotational layer renders properly 1`] = `
+<DocumentFragment>
+  <li
+    class="py-3 px-2 border-bottom"
+    id="layer-1"
+  >
+    <div
+      class="d-xl-flex justify-content-between align-items-center mb-3"
+    >
+      <div
+        class="text-truncate lh-sm"
+      >
+        <strong>
+          layer name
+        </strong>
+        <br />
+        <span
+          class="text-muted"
+        >
+          rotational
+        </span>
+      </div>
+      <div
+        class="text-nowrap mt-xl-0 mt-2"
+      >
+        <button
+          class="btn ms-xl-2 me-2 btn-light"
+          data-bs-layerid="1"
+          data-bs-target="#layer-modal"
+          data-bs-toggle="modal"
+        >
+          Edit
+        </button>
+        <button
+          class="btn btn-light"
+        >
+          <i
+            class="bi me-1 opacity-50 bi-brush-fill"
+          />
+           Draw
+        </button>
+      </div>
+    </div>
+    <div
+      class="row align-items-center"
+    >
+      <label
+        class="col-form-label col-3 text-nowrap lh-sm"
+        for="rotationalangle-quick-1"
+      >
+        Angle 
+        <br />
+        <small
+          class="text-muted"
+        >
+          10 deg
+        </small>
+      </label>
+      <div
+        class="col-9 d-flex align-items-center"
+      >
+        <input
+          class="form-range"
+          id="rotationalangle-quick-1"
+          max="359"
+          min="-359"
+          name="rotationalangle"
+          required=""
+          step="1"
+          type="range"
+          value="10"
+        />
+      </div>
+    </div>
+    <div
+      class="row align-items-center"
+    >
+      <label
+        class="col-form-label col-3"
+        for="rotationaloriginx-quick-1"
+      >
+        OriginX
+      </label>
+      <div
+        class="col-9 d-flex align-items-center"
+      >
+        <input
+          class="form-control form-control-sm"
+          id="rotationaloriginx-quick-1"
+          name="rotationaloriginx"
+          required=""
+          step="1"
+          type="number"
+          value="20"
+        />
+      </div>
+    </div>
+    <div
+      class="row align-items-center"
+    >
+      <label
+        class="col-form-label col-3"
+        for="rotationaloriginy-quick-1"
+      >
+        OriginY
+      </label>
+      <div
+        class="col-9 d-flex align-items-center"
+      >
+        <input
+          class="form-control form-control-sm"
+          id="rotationaloriginy-quick-1"
+          name="rotationaloriginy"
+          required=""
+          step="1"
+          type="number"
+          value="30"
+        />
+      </div>
+    </div>
+  </li>
+</DocumentFragment>
+`;
+
+exports[`layer list item translational layer renders properly 1`] = `
+<DocumentFragment>
+  <li
+    class="py-3 px-2 border-bottom"
+    id="layer-1"
+  >
+    <div
+      class="d-xl-flex justify-content-between align-items-center mb-3"
+    >
+      <div
+        class="text-truncate lh-sm"
+      >
+        <strong>
+          layer name
+        </strong>
+        <br />
+        <span
+          class="text-muted"
+        >
+          translational
+        </span>
+      </div>
+      <div
+        class="text-nowrap mt-xl-0 mt-2"
+      >
+        <button
+          class="btn ms-xl-2 me-2 btn-light"
+          data-bs-layerid="1"
+          data-bs-target="#layer-modal"
+          data-bs-toggle="modal"
+        >
+          Edit
+        </button>
+        <button
+          class="btn btn-light"
+        >
+          <i
+            class="bi me-1 opacity-50 bi-brush-fill"
+          />
+           Draw
+        </button>
+      </div>
+    </div>
+    <div
+      class="row align-items-center"
+    >
+      <label
+        class="col-form-label col-3"
+        for="translationalx-quick-1"
+      >
+        TransX
+      </label>
+      <div
+        class="col-9 d-flex align-items-center"
+      >
+        <input
+          class="form-control form-control-sm"
+          id="translationalx-quick-1"
+          name="translationalx"
+          required=""
+          step="1"
+          type="number"
+          value="20"
+        />
+      </div>
+    </div>
+    <div
+      class="row align-items-center"
+    >
+      <label
+        class="col-form-label col-3"
+        for="translationaly-quick-1"
+      >
+        TransY
+      </label>
+      <div
+        class="col-9 d-flex align-items-center"
+      >
+        <input
+          class="form-control form-control-sm"
+          id="translationaly-quick-1"
+          name="translationaly"
+          required=""
+          step="1"
+          type="number"
+          value="30"
+        />
+      </div>
+    </div>
+  </li>
+</DocumentFragment>
+`;

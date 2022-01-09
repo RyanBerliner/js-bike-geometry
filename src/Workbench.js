@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 
 import Sidebar from './Sidebar';
 import Stage from './Stage';
 import Toolbar from './Toolbar';
+import { reducer, INITIAL_DATA } from './workbenchReducer';
 
 export default function Workbench() {
+  const [data, dispatch] = useReducer(reducer, INITIAL_DATA);
+
   return <div className="vh-100 d-flex" data-testid="workbench">
     <div className="container-fluid flex-grow-1 d-flex">
       <div className="row flex-grow-1">
@@ -18,8 +21,8 @@ export default function Workbench() {
             <Stage />
           </div>
         </div>
-        <div className="col-md-4 col-lg-3 border-start">
-          <Sidebar />
+        <div className="col-md-4 col-lg-3 border-start mh-100 overflow-auto">
+          <Sidebar data={data} dispatch={dispatch} />
         </div>
       </div>
     </div>
