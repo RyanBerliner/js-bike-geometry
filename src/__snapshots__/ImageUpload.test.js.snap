@@ -25,18 +25,18 @@ exports[`image upload renders properly with image details 1`] = `
   <div
     class="d-flex justify-content-between align-items-center"
   >
-    <button
-      class="btn btn-sm btn-link text-danger"
-      data-testid="remove-upload"
-    >
-      Remove
-    </button>
     <span
       class="text-muted small mt-1"
       data-testid="upload-dimensions"
     >
       2 x 1
     </span>
+    <button
+      class="btn btn-sm btn-link text-danger"
+      data-testid="remove-upload"
+    >
+      Remove
+    </button>
   </div>
 </DocumentFragment>
 `;
