@@ -1,12 +1,16 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 
 import Sidebar from './Sidebar';
 import Stage from './Stage';
 import Toolbar from './Toolbar';
 import { reducer, INITIAL_DATA } from './workbenchReducer';
+import { useReducerWithMiddleware, beforeMiddleWare, afterMiddleWare } from './hooks';
 
 export default function Workbench() {
-  const [data, dispatch] = useReducer(reducer, INITIAL_DATA);
+  const [data, dispatch] = useReducerWithMiddleware(reducer, INITIAL_DATA, undefined, [
+    beforeMiddleWare((action, state) => console.log('before', action, state)),
+    afterMiddleWare((actions, state) => console.log('after', actions, state)),
+  ]);
 
   return <div className="vh-100 d-flex" data-testid="workbench">
     <div className="container-fluid flex-grow-1 d-flex">
