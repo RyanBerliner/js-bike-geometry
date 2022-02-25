@@ -1,12 +1,25 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 
 import Sidebar from './Sidebar';
 import Stage from './Stage';
 import Toolbar from './Toolbar';
 import { reducer, INITIAL_DATA } from './workbenchReducer';
+import { useReducerWithMiddleware } from './hooks';
+import { localPersistance } from './localPersistance';
 
 export default function Workbench() {
-  const [data, dispatch] = useReducer(reducer, INITIAL_DATA);
+  const {read, middleware} = localPersistance('__geo_workbench_data__');
+  const [data, dispatch] = useReducerWithMiddleware(
+    reducer,
+    INITIAL_DATA,
+    initialData => ({
+      // This is not perfect... but good enough for now. May need to replace with
+      // a more thought our merge function from the reducer file.
+      ...initialData,
+      ...read()
+    }),
+    [middleware]
+  );
 
   return <div className="vh-100 d-flex" data-testid="workbench">
     <div className="container-fluid flex-grow-1 d-flex">
