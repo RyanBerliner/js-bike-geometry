@@ -1,3 +1,5 @@
+import 'cypress-file-upload';
+
 describe('misc', () => {
   it('workbench data is persistent', () => {
     // we'll test this by uploading an image, refreshing the
