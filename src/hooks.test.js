@@ -19,7 +19,7 @@ describe('middleware helpers', () => {
 });
 
 describe('reducer with middleware hook', () => {
-  it('fires all before and after middlewares with correct args', () => {
+  it('fires all before and after middlewares with correct args', async () => {
     const mock1 = jest.fn();
     const mock2 = jest.fn();
     const mock3 = jest.fn();
@@ -49,13 +49,13 @@ describe('reducer with middleware hook', () => {
 
     render(<Component />);
 
-    userEvent.click(screen.getByText("Button clicked 0 times"));
+    await userEvent.click(screen.getByText("Button clicked 0 times"));
     expect(mock1.mock.calls[0]).toEqual([{"action": "lorem", "payload": "ipsum"}, {"count": 0}]);
     expect(mock2.mock.calls[0]).toEqual([{"action": "lorem", "payload": "ipsum"}, {"count": 0}]);
     expect(mock3.mock.calls[0]).toEqual([[{"action": "lorem", "payload": "ipsum"}], {"count": 1}]);
     expect(mock4.mock.calls[0]).toEqual([[{"action": "lorem", "payload": "ipsum"}], {"count": 1}]);
 
-    userEvent.click(screen.getByText("Button clicked 1 times"));
+    await userEvent.click(screen.getByText("Button clicked 1 times"));
     expect(mock1.mock.calls[1]).toEqual([{"action": "lorem", "payload": "ipsum"}, {"count": 1}]);
     expect(mock2.mock.calls[1]).toEqual([{"action": "lorem", "payload": "ipsum"}, {"count": 1}]);
     expect(mock3.mock.calls[1]).toEqual([[{"action": "lorem", "payload": "ipsum"}], {"count": 2}]);
