@@ -33,12 +33,12 @@ describe('image upload', () => {
     expect(dispatch.mock.calls[1][0]).toStrictEqual(setImgDetails({height:1,width:2}));
   })
 
-  it('properly dispatches on image remove, revokes obj url', () => {
+  it('properly dispatches on image remove, revokes obj url', async () => {
     const dispatch = jest.fn();
     window.URL.revokeObjectURL = jest.fn()
 
     render(<ImageUpload dispatch={dispatch} imageUrl="src" imageDetails={{height:1,width:2}} />)
-    userEvent.click(screen.getByText(/remove/i));
+    await userEvent.click(screen.getByText(/remove/i));
 
     expect(window.URL.revokeObjectURL).toHaveBeenCalled();
     expect(dispatch.mock.calls[0][0]).toStrictEqual(setImgUrl(null));

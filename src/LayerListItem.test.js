@@ -23,7 +23,7 @@ describe('layer list item', () => {
       expect(notDrawing()).toMatchDiffSnapshot(drawing(), {contextLines: 0, stablePatchmarks: true});
     })
 
-    it('properly dispatches change when toggled', () => {
+    it('properly dispatches change when toggled', async () => {
       const dispatch = jest.fn();
 
       const props = {
@@ -38,11 +38,11 @@ describe('layer list item', () => {
       }
 
       const {rerender} = render(<LayerListItem isDrawing={false} {...props} />)
-      userEvent.click(screen.getByText("Draw"))
+      await userEvent.click(screen.getByText("Draw"))
       expect(dispatch.mock.calls[0][0]).toStrictEqual(setDrawingLayer("1"))
 
       rerender(<LayerListItem isDrawing={true} {...props} />)
-      userEvent.click(screen.getByText("Stop"))
+      await userEvent.click(screen.getByText("Stop"))
       expect(dispatch.mock.calls[1][0]).toStrictEqual(setDrawingLayer(null))
     })
   })
