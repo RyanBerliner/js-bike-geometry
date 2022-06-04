@@ -16,7 +16,7 @@ jobs:
       # cypress' github action will install dependencies, which is why we never
       # have to do this manually ourselves
       - name: End-to-End Tests
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         with:
           start: npm start
 
