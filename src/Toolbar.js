@@ -1,7 +1,17 @@
 import React from 'react';
 import {Dropdown} from 'bs5-react-elements';
+import {
+  updateStageZoom,
+  updateBrushSettings
+} from './workbenchReducer';
 
-export default function Toolbar() {
+export default function Toolbar({data, dispatch}) {
+  function brushSetter(field) {
+    return function(event) {
+      dispatch(updateBrushSettings(field, parseInt(event.target.value)));
+    }
+  }
+
   return <>
     <div className="d-lg-none text-center text-muted">
       Please use a larger screen to make adjustments.
@@ -32,15 +42,15 @@ export default function Toolbar() {
           <div className="row g-3">
             <div className="col d-flex align-items-center">
               <label className="form-label me-2 mb-0" htmlFor="brush-size">Size</label>
-              <input value="20" className="form-control form-control-sm" id="brush-size" type="number" style={{width: '4.5em'}} min="0" />
+              <input onChange={brushSetter('size')} value={data.brushSettings.size} className="form-control form-control-sm" id="brush-size" type="number" style={{width: '4.5em'}} min="0" />
             </div>
             <div className="col d-flex align-items-center">
               <label className="form-label me-2 mb-0" htmlFor="brush-opacity">Opacity</label>
-              <input value="100" className="form-control form-control-sm" id="brush-opacity" type="number" style={{width: '4.5em'}} min="0" max="100" />
+              <input onChange={brushSetter('opacity')} value={data.brushSettings.opacity} className="form-control form-control-sm" id="brush-opacity" type="number" style={{width: '4.5em'}} min="0" max="100" />
             </div>
             <div className="col d-flex align-items-center">
               <label className="form-label me-2 mb-0" htmlFor="brush-fade">Fade</label>
-              <input value="0" className="form-control form-control-sm" id="brush-fade" type="number" style={{width: '4.5em'}} min="0" max="100" />
+              <input onChange={brushSetter('fade')} value={data.brushSettings.fade} className="form-control form-control-sm" id="brush-fade" type="number" style={{width: '4.5em'}} min="0" max="100" />
             </div>
           </div>
         </div>
@@ -49,7 +59,9 @@ export default function Toolbar() {
             <span className="visually-hidden">Stage Zoom</span>
             <i className="bi bi-zoom-in" aria-hidden="true" />
           </label>
-          <input value="100" min="10" max="500" type="range" className="form-range" id="stage-zoom" />
+          <input
+            onChange={e => dispatch(updateStageZoom(parseInt(e.target.value)))} value={data.stageZoom}
+            min="10" max="500" type="range" className="form-range" id="stage-zoom" />
         </div>
       </div>
     </div>
