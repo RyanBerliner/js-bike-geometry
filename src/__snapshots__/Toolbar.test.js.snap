@@ -1,0 +1,163 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`toolbar renders properly 1`] = `
+<DocumentFragment>
+  <div
+    class="d-lg-none text-center text-muted"
+  >
+    Please use a larger screen to make adjustments.
+  </div>
+  <div
+    class="d-none d-lg-flex justify-content-between"
+  >
+    <div
+      class="dropdown"
+    >
+      <a
+        aria-expanded="false"
+        class="dropdown-toggle"
+        data-bs-toggle="dropdown"
+        id="toolbar-menu-dropdown"
+        type="button"
+      >
+        Help
+      </a>
+      <ul
+        aria-labelledby="toolbar-menu-dropdown"
+        class="dropdown-menu"
+      >
+        <li>
+          <a
+            class="dropdown-item"
+            href="https://github.com/RyanBerliner/js-bike-geometry/issues"
+            rel="noreferrer"
+            target="_blank"
+          >
+            Report an issue
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div
+      class="d-flex align-items-center"
+    >
+      <div
+        class="d-flex align-items-center border-end pe-3 me-3"
+        style="min-width: 0;"
+      >
+        <div
+          class="me-3 pe-3 border-end"
+        >
+          <label
+            class="visually-hidden"
+            for="brush-mode"
+          >
+            Mode
+          </label>
+          <select
+            class="form-select form-select-sm"
+            id="brush-mode"
+          >
+            <option
+              value="brush"
+            >
+              Brush
+            </option>
+            <option
+              value="eraser"
+            >
+              Eraser
+            </option>
+          </select>
+        </div>
+        <div
+          class="row g-3"
+        >
+          <div
+            class="col d-flex align-items-center"
+          >
+            <label
+              class="form-label me-2 mb-0"
+              for="brush-size"
+            >
+              Size
+            </label>
+            <input
+              class="form-control form-control-sm"
+              id="brush-size"
+              min="0"
+              style="width: 4.5em;"
+              type="number"
+              value="100"
+            />
+          </div>
+          <div
+            class="col d-flex align-items-center"
+          >
+            <label
+              class="form-label me-2 mb-0"
+              for="brush-opacity"
+            >
+              Opacity
+            </label>
+            <input
+              class="form-control form-control-sm"
+              id="brush-opacity"
+              max="100"
+              min="0"
+              style="width: 4.5em;"
+              type="number"
+              value="75"
+            />
+          </div>
+          <div
+            class="col d-flex align-items-center"
+          >
+            <label
+              class="form-label me-2 mb-0"
+              for="brush-fade"
+            >
+              Fade
+            </label>
+            <input
+              class="form-control form-control-sm"
+              id="brush-fade"
+              max="100"
+              min="0"
+              style="width: 4.5em;"
+              type="number"
+              value="50"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="d-flex"
+      >
+        <label
+          class="form-label me-2 mb-0"
+          for="stage-zoom"
+        >
+          <span
+            class="visually-hidden"
+          >
+            Stage Zoom
+          </span>
+          <i
+            aria-hidden="true"
+            class="bi bi-zoom-in"
+          />
+        </label>
+        <input
+          class="form-range"
+          id="stage-zoom"
+          max="500"
+          min="10"
+          type="range"
+          value="25"
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

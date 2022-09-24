@@ -27,7 +27,7 @@ export default function Workbench() {
         <div className="col-md-8 col-lg-9 d-flex flex-column">
           <div className="border-bottom py-2 row">
             <div className="col">
-              <Toolbar />
+              <Toolbar data={data} dispatch={dispatch} />
             </div>
           </div>
           <div className="row flex-grow-1">

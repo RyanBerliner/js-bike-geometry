@@ -6,9 +6,13 @@ const ADD_LAYER = 'add-layer';
 const REMOVE_LAYER = 'remove-layer';
 const UPDATE_LAYER = 'update-layer';
 const SET_DRAWING_LAYER = 'set-drawing-layer';
+const UPDATE_BRUSH_SETTINGS = 'update-brush-settings';
+const UPDATE_STAGE_ZOOM = 'update-stage-zoom';
 
 export const DISTORTION_ROTATIONAL = 'rotational';
 export const DISTORTION_TRANSLATIONAL = 'translational';
+export const BRUSH_MODE_BRUSH = 'brush';
+export const BRUSH_MODE_ERASER = 'eraser';
 
 export const INITIAL_DATA = {
   imageUrl: null,
@@ -16,6 +20,13 @@ export const INITIAL_DATA = {
   layerIds: [],
   layerData: {},
   drawingLayer: null,
+  brushSettings: {
+    fade: 50,
+    size: 50,
+    opacity: 100,
+    mode: BRUSH_MODE_BRUSH,
+  },
+  stageZoom: 100
 };
 
 export const reducer = produce((draft, { type, payload }) => {
@@ -54,6 +65,16 @@ export const reducer = produce((draft, { type, payload }) => {
     case SET_DRAWING_LAYER:
       draft.drawingLayer = payload;
       break;
+    case UPDATE_BRUSH_SETTINGS:
+      if (!['size', 'opacity', 'fade', 'mode'].includes(payload.setting)) {
+        break;
+      }
+
+      draft.brushSettings[payload.setting] = payload.value;
+      break;
+    case UPDATE_STAGE_ZOOM:
+      draft.stageZoom = payload;
+      break;
     default:
       break;
   }
@@ -67,3 +88,5 @@ export const addLayer = details => ({ type: ADD_LAYER, payload: details });
 export const removeLayer = id => ({ type: REMOVE_LAYER, payload: id });
 export const updateLayer = (id, details) => ({ type: UPDATE_LAYER, payload: {id, details} });
 export const setDrawingLayer = id => ({ type: SET_DRAWING_LAYER, payload: id });
+export const updateBrushSettings = (setting, value) => ({ type: UPDATE_BRUSH_SETTINGS, payload: {setting, value}});
+export const updateStageZoom = stageZoom => ({ type: UPDATE_STAGE_ZOOM, payload: stageZoom });
