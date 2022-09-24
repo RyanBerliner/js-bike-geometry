@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { updateBrushSettings, updateStageZoom } from './workbenchReducer';
+import { BRUSH_MODE_ERASER, updateBrushSettings, updateStageZoom } from './workbenchReducer';
 import Toolbar from './Toolbar';
 
 describe('toolbar', () => {
@@ -46,7 +46,10 @@ describe('toolbar', () => {
     fireEvent.change(screen.getByLabelText('Fade'), {target: {value: '25'}});
     expect(dispatch.mock.calls[2][0]).toStrictEqual(updateBrushSettings('fade', 25));
 
+    fireEvent.change(screen.getByLabelText('Mode'), {target: {value: BRUSH_MODE_ERASER}});
+    expect(dispatch.mock.calls[3][0]).toStrictEqual(updateBrushSettings('mode', BRUSH_MODE_ERASER));
+
     fireEvent.change(screen.getByRole('slider'), {target: {value: '15'}});
-    expect(dispatch.mock.calls[3][0]).toStrictEqual(updateStageZoom(15));
+    expect(dispatch.mock.calls[4][0]).toStrictEqual(updateStageZoom(15));
   })
 })

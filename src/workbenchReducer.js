@@ -11,6 +11,8 @@ const UPDATE_STAGE_ZOOM = 'update-stage-zoom';
 
 export const DISTORTION_ROTATIONAL = 'rotational';
 export const DISTORTION_TRANSLATIONAL = 'translational';
+export const BRUSH_MODE_BRUSH = 'brush';
+export const BRUSH_MODE_ERASER = 'eraser';
 
 export const INITIAL_DATA = {
   imageUrl: null,
@@ -21,7 +23,8 @@ export const INITIAL_DATA = {
   brushSettings: {
     fade: 50,
     size: 50,
-    opacity: 100
+    opacity: 100,
+    mode: BRUSH_MODE_BRUSH,
   },
   stageZoom: 100
 };
@@ -63,7 +66,7 @@ export const reducer = produce((draft, { type, payload }) => {
       draft.drawingLayer = payload;
       break;
     case UPDATE_BRUSH_SETTINGS:
-      if (!['size', 'opacity', 'fade'].includes(payload.setting)) {
+      if (!['size', 'opacity', 'fade', 'mode'].includes(payload.setting)) {
         break;
       }
 

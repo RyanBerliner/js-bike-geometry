@@ -2,13 +2,16 @@ import React from 'react';
 import {Dropdown} from 'bs5-react-elements';
 import {
   updateStageZoom,
-  updateBrushSettings
+  updateBrushSettings,
+  BRUSH_MODE_BRUSH,
+  BRUSH_MODE_ERASER,
 } from './workbenchReducer';
 
 export default function Toolbar({data, dispatch}) {
   function brushSetter(field) {
     return function(event) {
-      dispatch(updateBrushSettings(field, parseInt(event.target.value)));
+      const value = field === 'mode' ? event.target.value : parseInt(event.target.value);
+      dispatch(updateBrushSettings(field, value));
     }
   }
 
@@ -38,7 +41,13 @@ export default function Toolbar({data, dispatch}) {
       </div>
       <div className="d-flex align-items-center">
         <div className="d-flex align-items-center border-end pe-3 me-3" style={{minWidth: 0}}>
-          <div className="mb-0 fw-bold me-3 pe-3 border-end">Brush</div>
+          <div className="me-3 pe-3 border-end">
+            <label htmlFor="brush-mode" className="visually-hidden">Mode</label>
+            <select value={data.brushSettings.mode} onChange={brushSetter('mode')} className="form-select form-select-sm" id="brush-mode">
+              <option value={BRUSH_MODE_BRUSH}>Brush</option>
+              <option value={BRUSH_MODE_ERASER}>Eraser</option>
+            </select>
+          </div>
           <div className="row g-3">
             <div className="col d-flex align-items-center">
               <label className="form-label me-2 mb-0" htmlFor="brush-size">Size</label>

@@ -2,6 +2,7 @@ import {
   INITIAL_DATA,
   DISTORTION_ROTATIONAL,
   DISTORTION_TRANSLATIONAL,
+  BRUSH_MODE_ERASER,
   setImgUrl,
   setImgDetails,
   addLayer,
@@ -135,6 +136,9 @@ describe('workbench reducer', () => {
 
     newState = reducer(newState, updateBrushSettings('opacity', 1));
     expect(newState.brushSettings.opacity).toBe(1);
+
+    newState = reducer(newState, updateBrushSettings('mode', BRUSH_MODE_ERASER));
+    expect(newState.brushSettings.mode).toBe(BRUSH_MODE_ERASER);
 
     // ignores bad key
     newState = reducer(newState, updateBrushSettings('invalid', 1));

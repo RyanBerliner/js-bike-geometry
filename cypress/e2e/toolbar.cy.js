@@ -1,3 +1,5 @@
+import { BRUSH_MODE_ERASER } from "../../src/workbenchReducer";
+
 // needs extra help setting range slider value
 // https://github.com/cypress-io/cypress/issues/1570#issuecomment-450966053
 const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
@@ -6,6 +8,11 @@ describe('toolbar brush settings', () => {
   before(() => {
     cy.visit('/');
   });
+
+  it('can change brush mode', () => {
+    cy.get('#brush-mode').select(BRUSH_MODE_ERASER);
+    cy.get('#brush-mode').should('have.value', 'eraser');
+  })
 
   it('can change brush size', () => {
     cy.get('#brush-size').clear().type('20', {delay:0});
