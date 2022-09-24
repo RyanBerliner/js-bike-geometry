@@ -63,6 +63,10 @@ export const reducer = produce((draft, { type, payload }) => {
       draft.drawingLayer = payload;
       break;
     case UPDATE_BRUSH_SETTINGS:
+      if (!['size', 'opacity', 'fade'].includes(payload.setting)) {
+        break;
+      }
+
       draft.brushSettings[payload.setting] = payload.value;
       break;
     case UPDATE_STAGE_ZOOM:

@@ -8,7 +8,9 @@ import {
   removeLayer,
   updateLayer,
   reducer,
-  setDrawingLayer
+  setDrawingLayer,
+  updateBrushSettings,
+  updateStageZoom,
 } from './workbenchReducer';
 
 describe('workbench reducer', () => {
@@ -122,5 +124,25 @@ describe('workbench reducer', () => {
 
     newState = reducer(newState, setDrawingLayer(null));
     expect(newState.drawingLayer).toBe(null);
+  })
+
+  it('has working updateBrushSettings action creator', () => {
+    let newState = reducer(state, updateBrushSettings('fade', 1));
+    expect(newState.brushSettings.fade).toBe(1);
+
+    newState = reducer(newState, updateBrushSettings('size', 1));
+    expect(newState.brushSettings.size).toBe(1);
+
+    newState = reducer(newState, updateBrushSettings('opacity', 1));
+    expect(newState.brushSettings.opacity).toBe(1);
+
+    // ignores bad key
+    newState = reducer(newState, updateBrushSettings('invalid', 1));
+    expect(newState.brushSettings.invalid).toBeUndefined();
+  })
+
+  it('has working updateStageZoom action creator', () => {
+    let newState = reducer(state, updateStageZoom(1));
+    expect(newState.stageZoom).toBe(1);
   })
 });
