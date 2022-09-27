@@ -15,8 +15,12 @@ export const WorkbenchMiddleware = canvasDistort => {
           canvasDistort.zoom = payload;
           break;
         case UPDATE_STAGE_POSITION:
-          canvasDistort.posX = payload[0];
-          canvasDistort.posY = payload[1];
+          canvasDistort.posX = payload[0] >= -50 && payload[0] <= 50
+            ? payload[0]
+            : payload[0] < -50 ? -50 : 50;
+          canvasDistort.posY = payload[1] >= -50 && payload[1] <= 50
+            ? payload[1]
+            : payload[1] < -50 ? -50 : 50;
           break;
         default:
           break;

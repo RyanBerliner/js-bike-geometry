@@ -6,6 +6,7 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
   const inputRef = useRef();
   const viewBox = useRef();
   const clippedImg = useRef();
+  const tweenRaf = useRef();
 
   const onChange = event => {
     const {files} = event.target;
@@ -79,6 +80,7 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
 
   const beginDrag = (e) => {
     e.preventDefault();
+    cancelAnimationFrame(tweenRaf.current);
 
     let startX = null, startY = null, absX = stageX, absY = stageY;
 
@@ -103,12 +105,44 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
     document.addEventListener('mousemove', drag);
   }
 
+  function easeInOutCubic (t, b, c, d) {
+    if ((t /= d / 2) < 1) return c / 2 * t * t * t + b;
+    return c / 2 * ((t -= 2) * t * t + 2) + b;
+}
+
+  const onDoubleClick = () => {
+    const xb = stageX, yb = stageY, xc = -stageX, yc = -stageY;
+    const duration = 500;
+    let start = performance.now();
+
+    function update(timestamp) {
+      const time = timestamp - start;
+      if (time >= duration) {
+        dispatch(updateStagePosition(0, 0));
+        return;
+      }
+
+      dispatch(updateStagePosition(
+        easeInOutCubic(time, xb, xc, duration),
+        easeInOutCubic(time, yb, yc, duration),
+      ));
+
+      tweenRaf.current = requestAnimationFrame(update);
+    }
+
+    tweenRaf.current = requestAnimationFrame(update);
+  }
+
   return <>
     <div className={imageUrl ? 'd-none' : ''}>
       <label htmlFor="image-select-input" className="form-label">Select an image</label>
       <input className="form-control" type="file" id="image-select-input" onChange={onChange} ref={inputRef} />
     </div>
-    <div className={`position-relative overflow-hidden rounded ${imageUrl ? 'mb-3' : 'd-none'}`}>
+    <div
+      className={`position-relative overflow-hidden rounded ${imageUrl ? 'mb-3' : 'd-none'}`}
+      onDoubleClick={onDoubleClick}
+      style={{userSelect: 'none'}}
+    >
       <img src={imageUrl} alt="" className="pe-none w-100" style={{filter: 'brightness(0.6)'}} onLoad={onLoad} />
       <img src={imageUrl} alt="" className="pe-none w-100 position-absolute start-0 top-0" ref={clippedImg} />
       <div

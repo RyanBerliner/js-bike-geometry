@@ -79,12 +79,12 @@ export const reducer = produce((draft, { type, payload }) => {
       draft.stageZoom = payload;
       break;
     case UPDATE_STAGE_POSITION:
-      // draft.stageX = 0;
-      // draft.stageY = 0;
-      // draft.stageX = draft.stageX + payload[0];
-      // draft.stageY = draft.stageY + payload[1];
-      draft.stageX = payload[0];
-      draft.stageY = payload[1];
+      draft.stageX = payload[0] >= -50 && payload[0] <= 50
+        ? payload[0]
+        : payload[0] < -50 ? -50 : 50;
+      draft.stageY = payload[1] >= -50 && payload[1] <= 50
+        ? payload[1]
+        : payload[1] < -50 ? -50 : 50;
       break;
     default:
       break;
