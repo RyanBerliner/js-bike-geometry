@@ -26,6 +26,8 @@ export default function Workbench() {
 
       // Initialize canvas distort with initial values
       canvasDistort.zoom = initial.stageZoom;
+      canvasDistort.posX = initial.stageX;
+      canvasDistort.posY = initial.stageY;
       canvasDistort.imageUrl = initial.imageUrl;
       canvasDistort.imageDetails = initial.imageDetails;
 
