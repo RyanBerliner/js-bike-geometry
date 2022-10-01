@@ -22,9 +22,6 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
       height: event.target.naturalHeight,
       width: event.target.naturalWidth,
     }))
-
-    dispatch(updateStagePosition(0, 0));
-    dispatch(updateStageZoom(100));
   }
 
   const remove = () => {
