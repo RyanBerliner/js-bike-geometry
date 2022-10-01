@@ -1,7 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import {setImgDetails, setImgUrl, updateStageZoom, updateStagePosition } from './workbenchReducer';
 import { getCanvasOcclusion } from './Stage';
-import { bound, normalizeToRange, easeInOutCubic } from './util';
+import { bound, distributeToRange, easeInOutCubic } from './util';
+
+const TWEEN_DURATION = 500;
 
 export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stageX, stageY }) {
   const inputRef = useRef();
@@ -97,28 +99,27 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
     document.addEventListener('mousemove', drag);
   }
 
-  const onClick = event => {
+  const onClickMoveToLocation = event => {
     if (event.target === viewBox.current) {
       return;
     }
 
     const img = clippedImg.current.getBoundingClientRect();
-    const vertical = normalizeToRange((event.clientY - img.top) / img.height, [0, 1], [-50, 50]);
-    const horiz = normalizeToRange((event.clientX - img.left) / img.width, [0, 1], [-50, 50]);
+    const vertical = distributeToRange((event.clientY - img.top) / img.height, [0, 1], [-50, 50]);
+    const horiz = distributeToRange((event.clientX - img.left) / img.width, [0, 1], [-50, 50]);
 
-    const duration = 500;
     const start = performance.now();
 
     function update(timestamp) {
       const time = timestamp - start;
-      if (time > duration) {
+      if (time > TWEEN_DURATION) {
         dispatch(updateStagePosition(horiz, vertical));
         return;
       }
 
       dispatch(updateStagePosition(
-        easeInOutCubic(time, stageX, horiz, duration),
-        easeInOutCubic(time, stageY, vertical, duration),
+        easeInOutCubic(time, stageX, horiz, TWEEN_DURATION),
+        easeInOutCubic(time, stageY, vertical, TWEEN_DURATION),
       ));
 
       tweenRaf.current = requestAnimationFrame(update);
@@ -127,23 +128,22 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
     tweenRaf.current = requestAnimationFrame(update);
   }
 
-  const onDoubleClick = () => {
-    const duration = 500;
-    const scale = getCanvasOcclusion()[2];
+  const onDoubleClickFitInView = () => {
+    const scale = getCanvasOcclusion()[2] - 5; // some padding around exact fit
     const start = performance.now();
 
     function update(timestamp) {
       const time = timestamp - start;
-      if (time > duration) {
+      if (time > TWEEN_DURATION) {
         dispatch(updateStagePosition(0, 0));
         dispatch(updateStageZoom(scale));
         return;
       }
 
-      dispatch(updateStageZoom(easeInOutCubic(time, stageZoom, scale, duration)));
+      dispatch(updateStageZoom(easeInOutCubic(time, stageZoom, scale, TWEEN_DURATION)));
       dispatch(updateStagePosition(
-        easeInOutCubic(time, stageX, 0, duration),
-        easeInOutCubic(time, stageY, 0, duration),
+        easeInOutCubic(time, stageX, 0, TWEEN_DURATION),
+        easeInOutCubic(time, stageY, 0, TWEEN_DURATION),
       ));
 
       tweenRaf.current = requestAnimationFrame(update);
@@ -160,14 +160,14 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
     <div
       className={`position-relative overflow-hidden rounded ${imageUrl ? 'mb-3' : 'd-none'}`}
       style={{userSelect: 'none', cursor: 'crosshair'}}
-      onClick={onClick}
+      onClick={onClickMoveToLocation}
       >
       <img src={imageUrl} alt="" className="pe-none w-100" style={{filter: 'brightness(0.6)'}} onLoad={onLoad} />
       <img src={imageUrl} alt="" className="pe-none w-100 position-absolute start-0 top-0" ref={clippedImg} />
       <div
         ref={viewBox}
         className="border border-danger border-3 position-absolute shadow"
-        onDoubleClick={onDoubleClick}
+        onDoubleClick={onDoubleClickFitInView}
         onMouseDown={beginDrag}
         style={{cursor: 'move'}}
       />

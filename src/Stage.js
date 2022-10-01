@@ -1,5 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 
+const CONTAINER_ID = 'stage-container';
+const IMG_ID = 'stage-img';
+
 export default function Stage({ canvasDistort }) {
   const canvasElement = useRef();
 
@@ -7,16 +10,16 @@ export default function Stage({ canvasDistort }) {
     canvasDistort.initDOM(canvasElement.current);
   }, [canvasDistort]);
 
-  return <div className="bg-secondary bg-opacity-10 position-relative overflow-hidden" id="stage-container">
+  return <div className="bg-secondary bg-opacity-10 position-relative overflow-hidden" id={CONTAINER_ID}>
     <div className="position-absolute start-50 top-50 translate-middle text-muted">
-      <div ref={canvasElement} className="bg-white" id="stage-img" />
+      <div ref={canvasElement} className="bg-white" id={IMG_ID} />
     </div>
   </div>
 }
 
 export function getCanvasOcclusion() {
-  const img = document.getElementById('stage-img');
-  const container = document.getElementById('stage-container');
+  const img = document.getElementById(IMG_ID);
+  const container = document.getElementById(CONTAINER_ID);
 
   const containerBounding = container.getBoundingClientRect();
   const imgBounding = img.getBoundingClientRect();
@@ -29,19 +32,17 @@ export function getCanvasOcclusion() {
   const topLeftRelative = [topLeft[0] / imgBounding.width * 100, topLeft[1] / imgBounding.height * 100];
   const bottomRightRelative = [bottomRight[0] / imgBounding.width * 100, bottomRight[1] / imgBounding.height * 100];
 
-  let scale = 100;
+  let fitScale = 100;
   const nativeHeight = img.offsetHeight;
   const nativeWidth = img.offsetWidth;
   const imageAspect = nativeHeight / nativeWidth;
   const stageAspect = containerBounding.height / containerBounding.width;
 
-  const padding = 5; // give the image some space, not exact fit
-
   if (imageAspect > stageAspect) {
-    scale =  containerBounding.height / nativeHeight * 100 - padding;
+    fitScale =  containerBounding.height / nativeHeight * 100;
   } else {
-    scale =  containerBounding.width / nativeWidth * 100 - padding;
+    fitScale =  containerBounding.width / nativeWidth * 100;
   }
 
-  return [topLeftRelative, bottomRightRelative, scale];
+  return [topLeftRelative, bottomRightRelative, fitScale];
 }
