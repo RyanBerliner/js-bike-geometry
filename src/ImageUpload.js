@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import {setImgDetails, setImgUrl, updateStagePosition } from './workbenchReducer';
+import {setImgDetails, setImgUrl, updateStageZoom, updateStagePosition } from './workbenchReducer';
 import { getCanvasOcclusion } from './Stage';
 import { bound } from './util';
 
@@ -22,6 +22,9 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
       height: event.target.naturalHeight,
       width: event.target.naturalWidth,
     }))
+
+    dispatch(updateStagePosition(0, 0));
+    dispatch(updateStageZoom(100));
   }
 
   const remove = () => {
@@ -65,7 +68,7 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
     window.addEventListener('resize', resize);
 
     return () => window.removeEventListener('resize', resize);
-  }, [stageZoom, stageX, stageY]);
+  }, [stageZoom, stageX, stageY, imageDetails]);
 
   const beginDrag = (e) => {
     if (e.nativeEvent.which !== 1) return;
@@ -105,15 +108,18 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
 
   const onDoubleClick = () => {
     const duration = 500;
-    let start = performance.now();
+    const scale = getCanvasOcclusion()[2];
+    const start = performance.now();
 
     function update(timestamp) {
       const time = timestamp - start;
       if (time > duration) {
         dispatch(updateStagePosition(0, 0));
+        dispatch(updateStageZoom(scale));
         return;
       }
 
+      dispatch(updateStageZoom(easeInOutCubic(time, stageZoom, scale, duration)));
       dispatch(updateStagePosition(
         easeInOutCubic(time, stageX, 0, duration),
         easeInOutCubic(time, stageY, 0, duration),
@@ -133,7 +139,7 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
     <div
       className={`position-relative overflow-hidden rounded ${imageUrl ? 'mb-3' : 'd-none'}`}
       onDoubleClick={onDoubleClick}
-      style={{userSelect: 'none'}}
+      style={{userSelect: 'none', cursor: stageX !== 0 || stageY !== 0 ? 'pointer' : 'default'}}
     >
       <img src={imageUrl} alt="" className="pe-none w-100" style={{filter: 'brightness(0.6)'}} onLoad={onLoad} />
       <img src={imageUrl} alt="" className="pe-none w-100 position-absolute start-0 top-0" ref={clippedImg} />

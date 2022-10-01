@@ -15,8 +15,11 @@ export default function Stage({ canvasDistort }) {
 }
 
 export function getCanvasOcclusion() {
-  const containerBounding = document.getElementById('stage-container').getBoundingClientRect();
-  const imgBounding  =document.getElementById('stage-img').getBoundingClientRect();
+  const img = document.getElementById('stage-img');
+  const container = document.getElementById('stage-container');
+
+  const containerBounding = container.getBoundingClientRect();
+  const imgBounding = img.getBoundingClientRect();
 
   const imgCoords = [imgBounding.top, imgBounding.left, imgBounding.bottom, imgBounding.right];
   const contCoords = [containerBounding.top, containerBounding.left, containerBounding.bottom, containerBounding.right];
@@ -26,5 +29,19 @@ export function getCanvasOcclusion() {
   const topLeftRelative = [topLeft[0] / imgBounding.width * 100, topLeft[1] / imgBounding.height * 100];
   const bottomRightRelative = [bottomRight[0] / imgBounding.width * 100, bottomRight[1] / imgBounding.height * 100];
 
-  return [topLeftRelative, bottomRightRelative];
+  let scale = 100;
+  const nativeHeight = img.offsetHeight;
+  const nativeWidth = img.offsetWidth;
+  const imageAspect = nativeHeight / nativeWidth;
+  const stageAspect = containerBounding.height / containerBounding.width;
+
+  const padding = 5; // give the image some space, not exact fit
+
+  if (imageAspect > stageAspect) {
+    scale =  containerBounding.height / nativeHeight * 100 - padding;
+  } else {
+    scale =  containerBounding.width / nativeWidth * 100 - padding;
+  }
+
+  return [topLeftRelative, bottomRightRelative, scale];
 }
