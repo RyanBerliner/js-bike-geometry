@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import {setImgDetails, setImgUrl, updateStageZoom, updateStagePosition } from './workbenchReducer';
 import { getCanvasOcclusion } from './Stage';
-import { bound } from './util';
+import { bound, normalizeToRange, easeInOutCubic } from './util';
 
 export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stageX, stageY }) {
   const inputRef = useRef();
@@ -100,10 +100,34 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
     document.addEventListener('mousemove', drag);
   }
 
-  function easeInOutCubic (time, startVal, endVal, duration) {
-    const change = endVal - startVal;
-    if ((time /= duration / 2) < 1) return change / 2 * time * time * time + startVal;
-    return change / 2 * ((time -= 2) * time * time + 2) + startVal;
+  const onClick = event => {
+    if (event.target === viewBox.current) {
+      return;
+    }
+
+    const img = clippedImg.current.getBoundingClientRect();
+    const vertical = normalizeToRange((event.clientY - img.top) / img.height, [0, 1], [-50, 50]);
+    const horiz = normalizeToRange((event.clientX - img.left) / img.width, [0, 1], [-50, 50]);
+
+    const duration = 500;
+    const start = performance.now();
+
+    function update(timestamp) {
+      const time = timestamp - start;
+      if (time > duration) {
+        dispatch(updateStagePosition(horiz, vertical));
+        return;
+      }
+
+      dispatch(updateStagePosition(
+        easeInOutCubic(time, stageX, horiz, duration),
+        easeInOutCubic(time, stageY, vertical, duration),
+      ));
+
+      tweenRaf.current = requestAnimationFrame(update);
+    }
+
+    tweenRaf.current = requestAnimationFrame(update);
   }
 
   const onDoubleClick = () => {
@@ -138,14 +162,15 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
     </div>
     <div
       className={`position-relative overflow-hidden rounded ${imageUrl ? 'mb-3' : 'd-none'}`}
-      onDoubleClick={onDoubleClick}
-      style={{userSelect: 'none', cursor: stageX !== 0 || stageY !== 0 ? 'pointer' : 'default'}}
-    >
+      style={{userSelect: 'none', cursor: 'crosshair'}}
+      onClick={onClick}
+      >
       <img src={imageUrl} alt="" className="pe-none w-100" style={{filter: 'brightness(0.6)'}} onLoad={onLoad} />
       <img src={imageUrl} alt="" className="pe-none w-100 position-absolute start-0 top-0" ref={clippedImg} />
       <div
         ref={viewBox}
         className="border border-danger border-3 position-absolute shadow"
+        onDoubleClick={onDoubleClick}
         onMouseDown={beginDrag}
         style={{cursor: 'move'}}
       />
