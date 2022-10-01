@@ -21,6 +21,11 @@ export function getCanvasOcclusion() {
   const img = document.getElementById(IMG_ID);
   const container = document.getElementById(CONTAINER_ID);
 
+  if (!img || !container) {
+    console.warn('Unable to find canvas, cannot compute occlusion');
+    return [0, 0, 0]
+  }
+
   const containerBounding = container.getBoundingClientRect();
   const imgBounding = img.getBoundingClientRect();
 

@@ -53,6 +53,7 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
     const resize = () => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
+        if (!viewBox.current) return;
         const [topLeftRelative, bottomRightRelative] = getCanvasOcclusion();
 
         viewBox.current.style.left = `${topLeftRelative[0]}%`;
@@ -162,7 +163,7 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
       style={{userSelect: 'none', cursor: 'crosshair'}}
       onClick={onClickMoveToLocation}
       >
-      <img src={imageUrl} alt="" className="pe-none w-100" style={{filter: 'brightness(0.6)'}} onLoad={onLoad} />
+      <img src={imageUrl} alt="" className="pe-none w-100" style={{filter: 'brightness(0.6)'}} onLoad={onLoad} data-testid="load-image" />
       <img src={imageUrl} alt="" className="pe-none w-100 position-absolute start-0 top-0" ref={clippedImg} />
       <div
         ref={viewBox}
