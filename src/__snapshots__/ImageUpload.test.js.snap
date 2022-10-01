@@ -17,11 +17,26 @@ exports[`image upload renders properly with image details 1`] = `
       type="file"
     />
   </div>
-  <img
-    alt=""
-    class="w-100 mb-3"
-    src="src"
-  />
+  <div
+    class="position-relative overflow-hidden rounded mb-3"
+    style="user-select: none; cursor: crosshair;"
+  >
+    <img
+      alt=""
+      class="pe-none w-100"
+      src="src"
+      style="filter: brightness(0.6);"
+    />
+    <img
+      alt=""
+      class="pe-none w-100 position-absolute start-0 top-0"
+      src="src"
+    />
+    <div
+      class="border border-danger border-3 position-absolute shadow"
+      style="cursor: move;"
+    />
+  </div>
   <div
     class="d-flex justify-content-between align-items-center"
   >
@@ -58,9 +73,23 @@ exports[`image upload renders properly without image details 1`] = `
       type="file"
     />
   </div>
-  <img
-    alt=""
-    class="w-100 d-none"
-  />
+  <div
+    class="position-relative overflow-hidden rounded d-none"
+    style="user-select: none; cursor: crosshair;"
+  >
+    <img
+      alt=""
+      class="pe-none w-100"
+      style="filter: brightness(0.6);"
+    />
+    <img
+      alt=""
+      class="pe-none w-100 position-absolute start-0 top-0"
+    />
+    <div
+      class="border border-danger border-3 position-absolute shadow"
+      style="cursor: move;"
+    />
+  </div>
 </DocumentFragment>
 `;
