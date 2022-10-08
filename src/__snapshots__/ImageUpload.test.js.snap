@@ -35,7 +35,7 @@ exports[`image upload renders properly with image details 1`] = `
     />
     <div
       class="border border-danger border-3 position-absolute shadow"
-      style="cursor: move;"
+      style="cursor: grab;"
     />
   </div>
   <div
@@ -90,7 +90,7 @@ exports[`image upload renders properly without image details 1`] = `
     />
     <div
       class="border border-danger border-3 position-absolute shadow"
-      style="cursor: move;"
+      style="cursor: grab;"
     />
   </div>
 </DocumentFragment>

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import {setImgDetails, setImgUrl, updateStageZoom, updateStagePosition } from './workbenchReducer';
 import { getCanvasOcclusion } from './Stage';
 import { bound, distributeToRange, easeInOutCubic } from './util';
@@ -10,6 +10,7 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
   const viewBox = useRef();
   const clippedImg = useRef();
   const tweenRaf = useRef();
+  const [dragging, setDragging] = useState(false);
 
   const onChange = event => {
     const {files} = event.target;
@@ -92,9 +93,12 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
     }
 
     function mouseup() {
+      setDragging(false)
       document.removeEventListener('mouseup', mouseup);
       document.removeEventListener('mousemove', drag);
     }
+
+    setDragging(true)
 
     document.addEventListener('mouseup', mouseup);
     document.addEventListener('mousemove', drag);
@@ -170,7 +174,7 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
         className="border border-danger border-3 position-absolute shadow"
         onDoubleClick={onDoubleClickFitInView}
         onMouseDown={beginDrag}
-        style={{cursor: 'move'}}
+        style={{cursor: dragging ? 'grabbing' : 'grab'}}
       />
     </div>
     {imageDetails && <div className="d-flex justify-content-between align-items-center">
