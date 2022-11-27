@@ -24,6 +24,8 @@ describe('stage responsiveness', () => {
     cy.get('[data-testid="bounding-box"]').dblclick();
 
     cy.get('#stage-zoom').should('have.value', '35');
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(1000);
     cy.get('#stage-img')
       .invoke('css', 'transform')
       .should('eq', 'matrix(0.35, 0, 0, 0.35, 0, 0)');
@@ -39,6 +41,8 @@ describe('stage responsiveness', () => {
 
     cy.get('[data-testid="move-by-click-target"]').click(100, 40);
 
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(1000);
     cy.get('#stage-img')
       .invoke('css', 'transform')
       .should('eq', 'matrix(1, 0, 0, 1, 339.785, 386.162)');
@@ -67,6 +71,8 @@ describe('stage responsiveness', () => {
 
     cy.get('[data-testid="bounding-box"]').trigger('mouseup')
 
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(1000);
     cy.get('#stage-img')
       .invoke('css', 'transform')
       .should('eq', 'matrix(1, 0, 0, 1, -163.441, -163.624)');
