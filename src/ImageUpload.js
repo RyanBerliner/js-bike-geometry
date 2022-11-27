@@ -166,6 +166,7 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
     <div
       className={`position-relative overflow-hidden rounded ${imageUrl ? 'mb-3' : 'd-none'}`}
       style={{userSelect: 'none', cursor: 'crosshair'}}
+      data-testid="move-by-click-target"
       onClick={onClickMoveToLocation}
       >
       <img src={imageUrl} alt="" className="pe-none w-100" style={{filter: 'brightness(0.6)'}} onLoad={onLoad} data-testid="load-image" />
@@ -173,6 +174,7 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
       <div
         ref={viewBox}
         className="border border-danger border-3 position-absolute shadow"
+        data-testid="bounding-box"
         onDoubleClick={onDoubleClickFitInView}
         onMouseDown={beginDrag}
         style={{cursor: dragging ? 'grabbing' : 'grab'}}
