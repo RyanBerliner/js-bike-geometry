@@ -56,6 +56,7 @@ export function ImageUpload({ dispatch, imageUrl, imageDetails, stageZoom, stage
       raf = requestAnimationFrame(() => {
         if (!viewBox.current) return;
         const [topLeftRelative, bottomRightRelative] = getCanvasOcclusion();
+        if (topLeftRelative == null && bottomRightRelative == null) return;
 
         viewBox.current.style.left = `${topLeftRelative[0]}%`;
         viewBox.current.style.top = `${topLeftRelative[1]}%`;

@@ -60,7 +60,7 @@ export class CanvasDistort {
 
       image.src = this.imageUrl;
     } catch(e) {
-      console.warn('Unable to render.', e)
+      console.debug('Unable to render.', e)
     }
   }
 }

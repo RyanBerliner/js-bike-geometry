@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
-const CONTAINER_ID = 'stage-container';
-const IMG_ID = 'stage-img';
+export const CONTAINER_ID = 'stage-container';
+export const IMG_ID = 'stage-img';
 
 export default function Stage({ canvasDistort }) {
   const canvasElement = useRef();
@@ -22,8 +22,7 @@ export function getCanvasOcclusion() {
   const container = document.getElementById(CONTAINER_ID);
 
   if (!img || !container) {
-    console.warn('Unable to find canvas, cannot compute occlusion');
-    return [0, 0, 0]
+    return [null, null, null]
   }
 
   const containerBounding = container.getBoundingClientRect();
