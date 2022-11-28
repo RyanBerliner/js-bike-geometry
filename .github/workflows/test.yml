@@ -18,7 +18,7 @@ jobs:
       - name: End-to-End Tests
         uses: cypress-io/github-action@v4
         with:
-          config-file: cypress.config.js
+          browser: chrome
           start: npm start
 
       - name: Javascript Tests
