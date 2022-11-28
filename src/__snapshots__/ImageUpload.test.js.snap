@@ -19,6 +19,7 @@ exports[`image upload renders properly with image details 1`] = `
   </div>
   <div
     class="position-relative overflow-hidden rounded mb-3"
+    data-testid="move-by-click-target"
     style="user-select: none; cursor: crosshair;"
   >
     <img
@@ -35,6 +36,7 @@ exports[`image upload renders properly with image details 1`] = `
     />
     <div
       class="border border-danger border-3 position-absolute shadow"
+      data-testid="bounding-box"
       style="cursor: grab;"
     />
   </div>
@@ -76,6 +78,7 @@ exports[`image upload renders properly without image details 1`] = `
   </div>
   <div
     class="position-relative overflow-hidden rounded d-none"
+    data-testid="move-by-click-target"
     style="user-select: none; cursor: crosshair;"
   >
     <img
@@ -90,6 +93,7 @@ exports[`image upload renders properly without image details 1`] = `
     />
     <div
       class="border border-danger border-3 position-absolute shadow"
+      data-testid="bounding-box"
       style="cursor: grab;"
     />
   </div>
