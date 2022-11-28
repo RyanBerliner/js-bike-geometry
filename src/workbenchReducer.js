@@ -1,13 +1,14 @@
 import {produce} from 'immer';
 
-const SET_IMG_URL = 'set-image-url';
-const SET_IMG_DETAILS = 'set-image-details';
+export const SET_IMG_URL = 'set-image-url';
+export const SET_IMG_DETAILS = 'set-image-details';
 const ADD_LAYER = 'add-layer';
 const REMOVE_LAYER = 'remove-layer';
 const UPDATE_LAYER = 'update-layer';
 const SET_DRAWING_LAYER = 'set-drawing-layer';
 const UPDATE_BRUSH_SETTINGS = 'update-brush-settings';
-const UPDATE_STAGE_ZOOM = 'update-stage-zoom';
+export const UPDATE_STAGE_ZOOM = 'update-stage-zoom';
+export const UPDATE_STAGE_POSITION = 'update-stage-position';
 
 export const DISTORTION_ROTATIONAL = 'rotational';
 export const DISTORTION_TRANSLATIONAL = 'translational';
@@ -26,7 +27,9 @@ export const INITIAL_DATA = {
     opacity: 100,
     mode: BRUSH_MODE_BRUSH,
   },
-  stageZoom: 100
+  stageZoom: 100,
+  stageX: 0,
+  stageY: 0,
 };
 
 export const reducer = produce((draft, { type, payload }) => {
@@ -75,6 +78,10 @@ export const reducer = produce((draft, { type, payload }) => {
     case UPDATE_STAGE_ZOOM:
       draft.stageZoom = payload;
       break;
+    case UPDATE_STAGE_POSITION:
+      draft.stageX = payload[0]
+      draft.stageY = payload[1]
+      break;
     default:
       break;
   }
@@ -90,3 +97,4 @@ export const updateLayer = (id, details) => ({ type: UPDATE_LAYER, payload: {id,
 export const setDrawingLayer = id => ({ type: SET_DRAWING_LAYER, payload: id });
 export const updateBrushSettings = (setting, value) => ({ type: UPDATE_BRUSH_SETTINGS, payload: {setting, value}});
 export const updateStageZoom = stageZoom => ({ type: UPDATE_STAGE_ZOOM, payload: stageZoom });
+export const updateStagePosition = (x, y) => ({ type: UPDATE_STAGE_POSITION, payload: [x, y] });

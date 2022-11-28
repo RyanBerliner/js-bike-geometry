@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`stage renders properly and inits canvas distort in dom 1`] = `
+<DocumentFragment>
+  <div
+    class="bg-secondary bg-opacity-10 position-relative overflow-hidden"
+    id="stage-container"
+  >
+    <div
+      class="position-absolute start-50 top-50 translate-middle text-muted"
+    >
+      <div
+        class="bg-white"
+        id="stage-img"
+      >
+        <canvas />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -12,6 +12,7 @@ import {
   setDrawingLayer,
   updateBrushSettings,
   updateStageZoom,
+  updateStagePosition,
 } from './workbenchReducer';
 
 describe('workbench reducer', () => {
@@ -148,5 +149,12 @@ describe('workbench reducer', () => {
   it('has working updateStageZoom action creator', () => {
     let newState = reducer(state, updateStageZoom(1));
     expect(newState.stageZoom).toBe(1);
+  })
+
+  it('has working updateStagePosition action creator', () => {
+    let newState = reducer(state, updateStagePosition(1, 2));
+    expect(newState.stageX).toBe(1);
+    expect(newState.stageY).toBe(2);
+    
   })
 });

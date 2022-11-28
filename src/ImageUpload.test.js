@@ -28,7 +28,7 @@ describe('image upload', () => {
     Simulate.change(input, { target: { files: [file] } })
     expect(dispatch.mock.calls[0][0]).toStrictEqual(setImgUrl('blob-url'));
 
-    const image = screen.getByRole('img');
+    const image = screen.getByTestId('load-image');
     Simulate.load(image, { target: { naturalHeight: 1, naturalWidth: 2, } });
     expect(dispatch.mock.calls[1][0]).toStrictEqual(setImgDetails({height:1,width:2}));
   })
