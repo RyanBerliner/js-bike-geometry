@@ -47,6 +47,7 @@ export default function Workbench() {
           </div>
           <div className="row flex-grow-1">
             <Stage
+              drawingLayer={data.drawingLayer}
               brushSettings={data.brushSettings}
               stageZoom={data.stageZoom}
               canvasDistort={canvasDistort}

@@ -7,14 +7,18 @@ export default function Brush({ settings: {fade, size, opacity}, zoom, dispatch 
   const el = useRef();
   const adjustingFrom = useRef({rel: null, from: null, live: {fade, size}});
 
-  const [position, setPosition] = useState({x: 0, y: 0});
+  const [position, setPosition] = useState({x: -999, y: -999});
+  const [hidden, setHidden] = useState(true);
 
   const mouseMove = useCallback((event) => {
     cancelAnimationFrame(raf.current);
-    const { top, left } = el.current.parentNode.getBoundingClientRect();
+    const { top, left, right, bottom } = el.current.parentNode.getBoundingClientRect();
 
-    const x = event.clientX - left;
-    const y = event.clientY - top;
+    const cX = event.clientX;
+    const cY = event.clientY;
+    const x = cX - left;
+    const y = cY - top;
+
     if (event.metaKey) {
       if (adjustingFrom.current.rel === null) {
         adjustingFrom.current.rel = {x, y};
@@ -33,10 +37,27 @@ export default function Brush({ settings: {fade, size, opacity}, zoom, dispatch 
       return;
     }
 
+    let newHidden = false;
+
+    if (
+      cX <= left ||
+      cX >= right ||
+      cY <= top ||
+      cY >= bottom
+    ) {
+      newHidden = true;
+    }
+
+    // if actually above (z axis) in a modal or dropdown or something
+    if (document.elementFromPoint(cX, cY) !== el.current) {
+      newHidden = true;
+    }
+
     adjustingFrom.current.rel = null;
     adjustingFrom.current.from = null;
 
     raf.current = requestAnimationFrame(() => {
+      setHidden(newHidden);
       setPosition({x, y});
     });
   }, [raf, dispatch]);
@@ -61,14 +82,15 @@ export default function Brush({ settings: {fade, size, opacity}, zoom, dispatch 
     style={{
       left: position.x,
       top: position.y,
-      cursor: 'crosshair',
+      cursor: 'none',
       zIndex: 1,
       width: size,
       height: size,
       border: '1px solid black',
       borderRadius: '50%',
       display: 'block',
-      opacity: opacity / 100,
+      opacity: hidden ? 0 : opacity / 100,
+      transition: '0.1s opacity',
       backgroundImage:`radial-gradient(red ${fade}%, transparent)`,
       transform: `scale(${zoom / 100}) translate(-${size*(100/zoom) / 2}px, -${size*(100/zoom) / 2}px)`,
     }}
