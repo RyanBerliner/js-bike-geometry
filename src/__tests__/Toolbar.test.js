@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { BRUSH_MODE_ERASER, updateBrushSettings, updateStageZoom } from './workbenchReducer';
-import Toolbar from './Toolbar';
+import { BRUSH_MODE_ERASER, updateBrushSettings, updateStageZoom } from '../workbenchReducer';
+import Toolbar from '../Toolbar';
 
 describe('toolbar', () => {
   it('renders properly', () => {

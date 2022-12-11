@@ -3,10 +3,10 @@ import {
   setImgDetails,
   updateStageZoom,
   updateStagePosition,
-} from '../workbenchReducer';
+} from '../../workbenchReducer';
 
-import { CanvasDistort } from './CanvasDistort';
-import { WorkbenchMiddleware } from './CanvasDistortMiddleware';
+import { CanvasDistort } from '../../lib/CanvasDistort';
+import { WorkbenchMiddleware } from '../../lib/CanvasDistortMiddleware';
 
 describe('canvas distort middleware', () => {
   let canvasDistort;

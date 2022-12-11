@@ -1,8 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {LayerListItem} from './LayerListItem';
-import { updateLayer, setDrawingLayer } from './workbenchReducer';
-import { DISTORTION_ROTATIONAL, DISTORTION_TRANSLATIONAL } from './workbenchReducer';
+import {LayerListItem} from '../LayerListItem';
+import { updateLayer, setDrawingLayer } from '../workbenchReducer';
+import { DISTORTION_ROTATIONAL, DISTORTION_TRANSLATIONAL } from '../workbenchReducer';
 
 describe('layer list item', () => {
   describe('drawing control', () => {

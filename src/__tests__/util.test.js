@@ -1,4 +1,4 @@
-import { bound, distributeToRange, easeInOutCubic } from "./util"
+import { bound, distributeToRange, easeInOutCubic } from "../util"
 
 describe('bound', () => {
   it('returns the value if its within the range', () => {

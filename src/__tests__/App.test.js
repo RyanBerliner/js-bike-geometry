@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import App from './App';
+import App from '../App';
 
 describe('app', () => {
   it('renders new workbench by default', () => {

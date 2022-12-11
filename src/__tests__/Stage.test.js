@@ -1,7 +1,7 @@
 
 import { render } from '@testing-library/react';
-import { CanvasDistort } from './lib/CanvasDistort';
-import Stage, { CONTAINER_ID, getCanvasOcclusion, IMG_ID } from './Stage';
+import { CanvasDistort } from '../lib/CanvasDistort';
+import Stage, { CONTAINER_ID, getCanvasOcclusion, IMG_ID } from '../Stage';
 
 describe('stage', () => {
   it('renders properly and inits canvas distort in dom', () => {

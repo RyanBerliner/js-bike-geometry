@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
-import {ImageUpload} from './ImageUpload';
+import {ImageUpload} from '../ImageUpload';
 import {Simulate} from 'react-dom/test-utils';
 import userEvent from '@testing-library/user-event';
 
-import {setImgDetails, setImgUrl} from './workbenchReducer';
+import {setImgDetails, setImgUrl} from '../workbenchReducer';
 
 describe('image upload', () => {
   it('renders properly without image details', () => {

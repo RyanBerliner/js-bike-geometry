@@ -13,7 +13,7 @@ import {
   updateBrushSettings,
   updateStageZoom,
   updateStagePosition,
-} from './workbenchReducer';
+} from '../workbenchReducer';
 
 describe('workbench reducer', () => {
   let state;

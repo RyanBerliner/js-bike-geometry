@@ -4,7 +4,7 @@ import {
   beforeMiddleWare,
   afterMiddleWare,
   useReducerWithMiddleware
-} from './hooks';
+} from '../hooks';
 
 describe('middleware helpers', () => {
   it('generate proper before middleware', () => {
