@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
+import Brush from './Brush';
 
 export const CONTAINER_ID = 'stage-container';
 export const IMG_ID = 'stage-img';
 
-export default function Stage({ canvasDistort }) {
+export default function Stage({ brushSettings, stageZoom, canvasDistort, dispatch }) {
   const canvasElement = useRef();
 
   useEffect(() => {
@@ -11,6 +12,7 @@ export default function Stage({ canvasDistort }) {
   }, [canvasDistort]);
 
   return <div className="bg-secondary bg-opacity-10 position-relative overflow-hidden" id={CONTAINER_ID}>
+    <Brush settings={brushSettings} zoom={stageZoom} dispatch={dispatch} />
     <div className="position-absolute start-50 top-50 translate-middle text-muted">
       <div ref={canvasElement} className="bg-white" id={IMG_ID} />
     </div>

@@ -46,7 +46,12 @@ export default function Workbench() {
             </div>
           </div>
           <div className="row flex-grow-1">
-            <Stage canvasDistort={canvasDistort} />
+            <Stage
+              brushSettings={data.brushSettings}
+              stageZoom={data.stageZoom}
+              canvasDistort={canvasDistort}
+              dispatch={dispatch}
+            />
           </div>
         </div>
         <div className="col-md-4 col-lg-3 border-start mh-100 overflow-auto">
