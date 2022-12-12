@@ -2,6 +2,7 @@ export class CanvasDistort {
   element;
   canvas;
   shownImage;
+  tempStroke;
 
   get zoom() { return this._zoom; }
   set zoom(zoom) { this._zoom = zoom; this.render(); }
@@ -25,6 +26,32 @@ export class CanvasDistort {
     this.element.appendChild(this.canvas);
 
     this.render();
+  }
+
+  addStrokePoint(rawX, rawY, width) {
+    // use width on first point of stroke
+    const { context, offsetX, offsetY } = width == null
+      ? this.tempStroke
+      : (() => {
+        this.tempStroke = {};
+        this.tempStroke.context = this.canvas.getContext('2d')
+        this.tempStroke.context.lineWidth = width;
+        this.tempStroke.context.lineCap = 'round';
+        this.tempStroke.context.strokeStyle = 'rgba(255, 0, 0, 1)';
+        this.tempStroke.context.beginPath();
+
+        const {top, left} = this.element.getBoundingClientRect();
+
+        this.tempStroke.offsetX = left;
+        this.tempStroke.offsetY = top;
+
+        return this.tempStroke;
+      })();
+
+    const pos = [(rawX - offsetX) * (100/this.zoom), (rawY - offsetY) * (100/this.zoom)];
+    context.moveTo(...pos);
+    context.lineTo(...pos);
+    context.stroke()
   }
 
   render() {

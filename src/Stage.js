@@ -18,7 +18,13 @@ export default function Stage({ drawingLayer, brushSettings, stageZoom, canvasDi
     id={CONTAINER_ID}
     style={{cursor: drawingLayer == null ? 'default' : 'none'}}
   >
-    {drawingLayer != null && <Brush settings={brushSettings} zoom={stageZoom} dispatch={dispatch} container={container} />}
+    {drawingLayer != null && <Brush
+      settings={brushSettings}
+      zoom={stageZoom}
+      dispatch={dispatch}
+      container={container}
+      canvasDistort={canvasDistort}
+    />}
     <div className="position-absolute start-50 top-50 translate-middle text-muted">
       <div ref={canvasElement} className="bg-white" id={IMG_ID} />
     </div>
