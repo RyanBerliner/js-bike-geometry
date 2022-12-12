@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { bound } from './util';
 import { updateBrushSettings } from './workbenchReducer';
 
-export default function Brush({ settings: {fade, size, opacity}, zoom, dispatch }) {
+export default function Brush({ settings: {fade, size, opacity}, zoom, dispatch, container }) {
   const raf = useRef();
   const el = useRef();
   const adjustingFrom = useRef({rel: null, from: null, live: {fade, size}});
@@ -12,55 +12,45 @@ export default function Brush({ settings: {fade, size, opacity}, zoom, dispatch 
 
   const mouseMove = useCallback((event) => {
     cancelAnimationFrame(raf.current);
-    const { top, left, right, bottom } = el.current.parentNode.getBoundingClientRect();
-
-    const cX = event.clientX;
-    const cY = event.clientY;
-    const x = cX - left;
-    const y = cY - top;
-
-    if (event.metaKey) {
-      if (adjustingFrom.current.rel === null) {
-        adjustingFrom.current.rel = {x, y};
-        adjustingFrom.current.from = {...adjustingFrom.current.live};
-      }
-
-      const diffX = x - adjustingFrom.current.rel.x;
-      const diffY = y - adjustingFrom.current.rel.y;
-
-      const newFade = Math.ceil(bound(adjustingFrom.current.from.fade + (diffX / 2), 0, 100));
-      const newSize = Math.ceil(bound(adjustingFrom.current.from.size + (diffY / 2), 1, 200));
-
-      dispatch(updateBrushSettings('fade', newFade));
-      dispatch(updateBrushSettings('size', newSize));
-
-      return;
-    }
-
-    let newHidden = false;
-
-    if (
-      cX <= left ||
-      cX >= right ||
-      cY <= top ||
-      cY >= bottom
-    ) {
-      newHidden = true;
-    }
-
-    // if actually above (z axis) in a modal or dropdown or something
-    if (document.elementFromPoint(cX, cY) !== el.current) {
-      newHidden = true;
-    }
-
-    adjustingFrom.current.rel = null;
-    adjustingFrom.current.from = null;
 
     raf.current = requestAnimationFrame(() => {
+      const { top, left } = el.current.parentNode.getBoundingClientRect();
+
+      let newHidden = false;
+      const cX = event.clientX;
+      const cY = event.clientY;
+      const x = cX - left;
+      const y = cY - top;
+
+      if (!container.current.contains(document.elementFromPoint(cX, cY))) {
+        newHidden = true;
+      }
+
+      if (event.metaKey) {
+        if (adjustingFrom.current.rel === null) {
+          adjustingFrom.current.rel = {x, y};
+          adjustingFrom.current.from = {...adjustingFrom.current.live};
+        } 
+
+        const diffX = x - adjustingFrom.current.rel.x;
+        const diffY = y - adjustingFrom.current.rel.y;
+
+        const newFade = Math.ceil(bound(adjustingFrom.current.from.fade + (diffX / 2), 0, 100));
+        const newSize = Math.ceil(bound(adjustingFrom.current.from.size + (diffY / 2), 1, 200));
+
+        dispatch(updateBrushSettings('fade', newFade));
+        dispatch(updateBrushSettings('size', newSize));
+
+        return;
+      }
+
+      adjustingFrom.current.rel = null;
+      adjustingFrom.current.from = null;
+
       setHidden(newHidden);
       setPosition({x, y});
     });
-  }, [raf, dispatch]);
+  }, [raf, container, dispatch]);
 
   useEffect(() => {
     document.addEventListener('mousemove', mouseMove);
@@ -82,7 +72,6 @@ export default function Brush({ settings: {fade, size, opacity}, zoom, dispatch 
     style={{
       left: position.x,
       top: position.y,
-      cursor: 'none',
       zIndex: 1,
       width: size,
       height: size,
