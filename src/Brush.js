@@ -19,6 +19,10 @@ export default function Brush({
   const [hidden, setHidden] = useState(true);
 
   const startStroke = (event) => {
+    if (event.button !== 0) {
+      return;
+    }
+
     const point = [event.clientX, event.clientY];
     stroke.current = [point];
     canvasDistort.addStrokePoint(...point, size);
@@ -82,7 +86,7 @@ export default function Brush({
       setHidden(newHidden);
       setPosition({x, y});
     });
-  }, [raf, container, dispatch]);
+  }, [raf, container, dispatch, canvasDistort]);
 
   useEffect(() => {
     document.addEventListener('mousemove', mouseMove);
