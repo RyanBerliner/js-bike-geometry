@@ -24,12 +24,20 @@ export default function Workbench() {
       ...read()
       };
 
+      // This is to prevent StrictMode from setting up twice
+      if (canvasDistort.setUp) return initial;
+
       // Initialize canvas distort with initial values
       canvasDistort.zoom = initial.stageZoom;
       canvasDistort.posX = initial.stageX;
       canvasDistort.posY = initial.stageY;
       canvasDistort.imageUrl = initial.imageUrl;
       canvasDistort.imageDetails = initial.imageDetails;
+      canvasDistort.setUp = true;
+
+      initial.layerIds.forEach(id => {
+        canvasDistort.addLayer({ id });
+      });
 
       return initial;
     },

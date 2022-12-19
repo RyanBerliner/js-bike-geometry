@@ -2,7 +2,7 @@ import {produce} from 'immer';
 
 export const SET_IMG_URL = 'set-image-url';
 export const SET_IMG_DETAILS = 'set-image-details';
-const ADD_LAYER = 'add-layer';
+export const ADD_LAYER = 'add-layer';
 const REMOVE_LAYER = 'remove-layer';
 const UPDATE_LAYER = 'update-layer';
 const SET_DRAWING_LAYER = 'set-drawing-layer';

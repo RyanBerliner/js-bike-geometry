@@ -18,3 +18,18 @@ export function easeInOutCubic(time, startVal, endVal, duration) {
   if ((time /= duration / 2) < 1) return change / 2 * time * time * time + startVal;
   return change / 2 * ((time -= 2) * time * time + 2) + startVal;
 }
+
+export function hash(string) {
+  // https://stackoverflow.com/q/7616461/
+
+  let hash = 0;
+  let i, chr;
+  if (string.length === 0) return hash;
+  for (i = 0; i < string.length; i++) {
+    chr = string.charCodeAt(i);
+    hash = ((hash << 5) - hash) + chr;
+    hash |= 0;
+  }
+
+  return hash;
+}

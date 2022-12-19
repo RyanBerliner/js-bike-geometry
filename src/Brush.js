@@ -25,13 +25,13 @@ export default function Brush({
 
     const point = [event.clientX, event.clientY];
     stroke.current = [point];
-    canvasDistort.addStrokePoint(...point, size);
+    canvasDistort.addTempStrokePoint(...point, size);
   }
 
   const endStroke = (event) => {
     const point = [event.clientX, event.clientY];
     stroke.current.push(point);
-    canvasDistort.addStrokePoint(...point);
+    canvasDistort.addTempStrokePoint(...point);
 
     // TODO: dispatch the final (complete) update before clearing
     //       so it can be processed in in entirely and the temporary
@@ -48,7 +48,7 @@ export default function Brush({
     if (stroke.current.length > 0) {
       const point = [cX, cY];
       stroke.current.push(point);
-      canvasDistort.addStrokePoint(...point);
+      canvasDistort.addTempStrokePoint(...point);
     }
 
     raf.current = requestAnimationFrame(() => {
