@@ -4,6 +4,7 @@ import {
   UPDATE_STAGE_POSITION,
   UPDATE_STAGE_ZOOM,
   ADD_LAYER,
+  MAP_MERGE_LAYER,
 } from "../workbenchReducer";
 import { afterMiddleWare } from "../hooks";
 
@@ -30,6 +31,12 @@ export const WorkbenchMiddleware = canvasDistort => {
           canvasDistort.addLayer({
             id: state.layerIds.slice(-1)[0],
           });
+          break;
+        case MAP_MERGE_LAYER:
+          canvasDistort.updateLayerMap(
+            payload.id,
+            state.layerData[payload.id].map,
+          );
           break;
         default:
           break;

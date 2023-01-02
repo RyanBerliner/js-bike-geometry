@@ -24,6 +24,7 @@ export default function Stage({ drawingLayer, brushSettings, stageZoom, canvasDi
       dispatch={dispatch}
       container={container}
       canvasDistort={canvasDistort}
+      layer={drawingLayer}
     />}
     <div className="position-absolute start-50 top-50 translate-middle text-muted">
       <div ref={canvasElement} className="bg-white" id={IMG_ID} />

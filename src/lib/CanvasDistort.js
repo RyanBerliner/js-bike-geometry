@@ -53,7 +53,7 @@ export class CanvasDistort {
 
   addTempStrokePoint(rawX, rawY, width) {
     // use width on first point of stroke
-    const { context, offsetX, offsetY } = width == null
+    const { context } = width == null
       ? this.tempStroke
       : (() => {
         this.tempStroke = {};
@@ -63,18 +63,25 @@ export class CanvasDistort {
         this.tempStroke.context.strokeStyle = 'rgba(255, 0, 0, 1)';
         this.tempStroke.context.beginPath();
 
-        const {top, left} = this.element.getBoundingClientRect();
-
-        this.tempStroke.offsetX = left;
-        this.tempStroke.offsetY = top;
-
         return this.tempStroke;
       })();
 
-    const pos = [(rawX - offsetX) * (100/this.zoom), (rawY - offsetY) * (100/this.zoom)];
-    context.moveTo(...pos);
-    context.lineTo(...pos);
+    context.moveTo(rawX, rawY);
+    context.lineTo(rawX, rawY);
     context.stroke()
+  }
+
+  updateLayerMap(layer, map) {
+    for (let i = 0; i < this.layers.length; i++) {
+      if (this.layers[i].id !== layer) {
+        continue;
+      }
+
+      this.layers[i].map = map;
+      this.updateHash();
+      this.render();
+      break;
+    }
   }
 
   updateHash() {
@@ -115,9 +122,12 @@ export class CanvasDistort {
 
         // TODO can cache lower level layers?
         let imageData = ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+
         this.layers.forEach(l => {
-          imageData = l.applyToImageData(imageData);
+          imageData = l.applyToImageData(ctx, imageData);
         });
+
+        // ctx.putImageData(imageData, 0, 0);
       }
 
       image.src = this.imageUrl;

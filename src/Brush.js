@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { bound } from './util';
-import { updateBrushSettings } from './workbenchReducer';
+import { updateBrushSettings, mapMergeLayer } from './workbenchReducer';
 
 export default function Brush({
   settings: {fade, size, opacity},
@@ -8,6 +8,7 @@ export default function Brush({
   dispatch,
   container,
   canvasDistort,
+  layer,
 }) {
   const raf = useRef();
   const el = useRef();
@@ -23,19 +24,24 @@ export default function Brush({
       return;
     }
 
-    const point = [event.clientX, event.clientY];
+    const {top, left} = canvasDistort.element.getBoundingClientRect();
+    const point = [(event.clientX - left) * (100/zoom), (event.clientY - top) * (100/zoom)];
     stroke.current = [point];
     canvasDistort.addTempStrokePoint(...point, size);
   }
 
   const endStroke = (event) => {
-    const point = [event.clientX, event.clientY];
+    const {top, left} = canvasDistort.element.getBoundingClientRect();
+    const point = [(event.clientX - left) * (100/zoom), (event.clientY - top) * (100/zoom)];
+
     stroke.current.push(point);
     canvasDistort.addTempStrokePoint(...point);
 
-    // TODO: dispatch the final (complete) update before clearing
-    //       so it can be processed in in entirely and the temporary
-    //       stroke can be cleared
+    dispatch(mapMergeLayer(
+      layer,
+      stroke.current,
+    ));
+
     stroke.current = [];
   }
 
@@ -46,7 +52,9 @@ export default function Brush({
     const cY = event.clientY;
 
     if (stroke.current.length > 0) {
-      const point = [cX, cY];
+      const {top, left} = canvasDistort.element.getBoundingClientRect();
+      const point = [(event.clientX - left) * (100/canvasDistort.zoom), (event.clientY - top) * (100/canvasDistort.zoom)];
+
       stroke.current.push(point);
       canvasDistort.addTempStrokePoint(...point);
     }

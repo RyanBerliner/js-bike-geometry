@@ -1,10 +1,12 @@
 import {produce} from 'immer';
+import { mapMerge } from './lib/DistortionMap';
 
 export const SET_IMG_URL = 'set-image-url';
 export const SET_IMG_DETAILS = 'set-image-details';
 export const ADD_LAYER = 'add-layer';
 const REMOVE_LAYER = 'remove-layer';
 const UPDATE_LAYER = 'update-layer';
+export const MAP_MERGE_LAYER = 'map-merge-layer';
 const SET_DRAWING_LAYER = 'set-drawing-layer';
 const UPDATE_BRUSH_SETTINGS = 'update-brush-settings';
 export const UPDATE_STAGE_ZOOM = 'update-stage-zoom';
@@ -65,6 +67,12 @@ export const reducer = produce((draft, { type, payload }) => {
         ...payload.details,
       }
       break;
+    case MAP_MERGE_LAYER:
+      draft.layerData[payload.id] = {
+        ...draft.layerData[payload.id],
+        map: mapMerge(draft.layerData[payload.id].map, payload.points, draft.brushSettings),
+      }
+      break;
     case SET_DRAWING_LAYER:
       draft.drawingLayer = payload;
       break;
@@ -94,6 +102,7 @@ export const setImgDetails = details => ({ type: SET_IMG_DETAILS, payload: detai
 export const addLayer = details => ({ type: ADD_LAYER, payload: details });
 export const removeLayer = id => ({ type: REMOVE_LAYER, payload: id });
 export const updateLayer = (id, details) => ({ type: UPDATE_LAYER, payload: {id, details} });
+export const mapMergeLayer = (id, points) => ({ type: MAP_MERGE_LAYER, payload: {id, points} });
 export const setDrawingLayer = id => ({ type: SET_DRAWING_LAYER, payload: id });
 export const updateBrushSettings = (setting, value) => ({ type: UPDATE_BRUSH_SETTINGS, payload: {setting, value}});
 export const updateStageZoom = stageZoom => ({ type: UPDATE_STAGE_ZOOM, payload: stageZoom });
