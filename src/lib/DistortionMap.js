@@ -12,11 +12,40 @@ import {
 
 export class DistortionMap {
   constructor(layerId) {
+    this.id = `__geo_map_${layerId}__`;
     this.layerId = layerId;
+
+    if (!this.map) {
+      this.map = {};
+    }
   }
 
-  get map() { return this._map; }
-  set map(points) { this._map = points; }
+  get map() { return JSON.parse(window.localStorage.getItem(this.id)); }
+  set map(value) {
+    window.localStorage.setItem(this.id, JSON.stringify(value));
+  }
+
+  mapMerge(newPoints, brushSettings) {
+    const map = this.map;
+
+    const points = pointsToBrushFill(newPoints, brushSettings)
+    const {mode} = brushSettings;
+
+    Object.keys(points).forEach((y) => {
+      Object.keys(points[y]).forEach((x) => {
+        ensurePoint(map, x, y);
+        map[y][x] = mode === 'brush'
+          ? Math.min(1, map[y][x] + points[y][x])
+          : Math.max(0, map[y][x] - points[y][x]);
+
+        if (map[y][x] === 0) {
+          delete map[y][x];
+        }
+      });
+    });
+
+    this.map = map;
+  }
 }
 
 function ensurePoint(points, x, y) {
@@ -92,27 +121,3 @@ export function pointsToBrushFill(points, brushSettings) {
 
   return finalPoints;
 }
-
-export function mapMerge(map, points, brushSettings) {
-  if (!map) {
-    map = {}
-  }
-
-  points = pointsToBrushFill(points, brushSettings)
-  const {mode} = brushSettings;
-
-  Object.keys(points).forEach((y) => {
-    Object.keys(points[y]).forEach((x) => {
-      ensurePoint(map, x, y);
-      map[y][x] = mode === 'brush'
-        ? Math.min(1, map[y][x] + points[y][x])
-        : Math.max(0, map[y][x] - points[y][x]);
-
-      if (map[y][x] === 0) {
-        delete map[y][x];
-      }
-    });
-  });
-
-  return map;
-};

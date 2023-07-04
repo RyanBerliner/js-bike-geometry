@@ -1,5 +1,5 @@
 import {produce} from 'immer';
-import { mapMerge } from './lib/DistortionMap';
+import { DistortionMap } from './lib/DistortionMap';
 
 export const SET_IMG_URL = 'set-image-url';
 export const SET_IMG_DETAILS = 'set-image-details';
@@ -68,9 +68,13 @@ export const reducer = produce((draft, { type, payload }) => {
       }
       break;
     case MAP_MERGE_LAYER:
+      console.log('here in the map merge layer reducer')
+      const map = new DistortionMap(payload.id);
+      map.mapMerge(payload.points, draft.brushSettings);
+
       draft.layerData[payload.id] = {
         ...draft.layerData[payload.id],
-        map: mapMerge(draft.layerData[payload.id].map, payload.points, draft.brushSettings),
+        map: map.id,
       }
       break;
     case SET_DRAWING_LAYER:
