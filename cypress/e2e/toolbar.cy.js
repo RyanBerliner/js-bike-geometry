@@ -5,7 +5,7 @@ import { BRUSH_MODE_ERASER } from "../../src/workbenchReducer";
 const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
 
 describe('toolbar brush settings', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit('/');
   });
 
@@ -31,7 +31,7 @@ describe('toolbar brush settings', () => {
 });
 
 describe('stage zoom', () => {
-  before(() => {
+  beforeEach(() => {
     cy.visit('/');
   });
 
